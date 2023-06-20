@@ -1,7 +1,12 @@
 import "./App.css";
+import SignUp from "./pages/SignUp.jsx";
 
 function App() {
-  return <div> Welcome to canteen management system</div>;
+  return (
+    <>
+      <SignUp />
+    </>
+  );
 }
 
 export default App;
