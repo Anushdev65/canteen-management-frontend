@@ -10,9 +10,10 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { useFormik } from "formik";
-import DropZoneComp from "./DropZoneComp";
+import DropZoneComp from "../component/DropZoneComp";
 import { userRegistrationSchema } from "./SignInSchema";
-import MUIMultiSelect from "./MUIMultiSelect";
+import MUIMultiSelect from "../component/MUIMultiSelect";
+import MUIError from "../component/MUIError";
 
 const initialValues = {
   firstName: "",
@@ -23,11 +24,7 @@ const initialValues = {
 };
 
 export default function SignUp() {
-  const [userImage, setUserImage] = React.useState(null);
-
   const handleImageUpload = (image) => {
-    setUserImage(image);
-    values.userImage = image;
     handleChange({
       target: {
         name: "userImage",
@@ -84,11 +81,11 @@ export default function SignUp() {
                 onChange={handleChange}
                 onBlur={handleBlur}
               />
-              {touched.firstName && errors.firstName && (
-                <Typography variant="body2" color="error">
-                  {errors.firstName}
-                </Typography>
-              )}
+              <MUIError
+                touch={touched.firstName}
+                error={errors.firstName}
+                value={values.firstName}
+              />
             </Grid>
             <Grid item xs={12} sm={6}>
               <TextField
@@ -103,11 +100,11 @@ export default function SignUp() {
                 onChange={handleChange}
                 onBlur={handleBlur}
               />
-              {touched.lastName && errors.lastName && (
-                <Typography variant="body2" color="error">
-                  {errors.lastName}
-                </Typography>
-              )}
+              <MUIError
+                touch={touched.lastName}
+                error={errors.lastName}
+                value={values.lastName}
+              />
             </Grid>
             <Grid item xs={12}>
               <TextField
@@ -122,11 +119,11 @@ export default function SignUp() {
                 onChange={handleChange}
                 onBlur={handleBlur}
               />
-              {touched.email && errors.email && (
-                <Typography variant="body2" color="error">
-                  {errors.email}
-                </Typography>
-              )}
+              <MUIError
+                touch={touched.email}
+                error={errors.email}
+                value={values.email}
+              />
             </Grid>
             {/* <Grid item xs={12}>
               <TextField
@@ -182,11 +179,11 @@ export default function SignUp() {
                 onChange={handleChange}
                 onBlur={handleBlur}
               />
-              {touched.userType && errors.userType && (
-                <Typography variant="body2" color="error">
-                  {errors.userType}
-                </Typography>
-              )}
+              <MUIError
+                touch={touched.userType}
+                error={errors.userType}
+                value={values.userType}
+              />
             </Grid>
             <Grid item xs={12}>
               <DropZoneComp
@@ -201,11 +198,11 @@ export default function SignUp() {
                 onBlur={handleBlur}
                 handleImageUpload={handleImageUpload}
               />
-              {touched.userImage && errors.userImage && (
-                <Typography variant="body2" color="error">
-                  {errors.userImage}
-                </Typography>
-              )}
+              <MUIError
+                touch={touched.userImage}
+                error={errors.userImage}
+                value={values.userImage}
+              />
             </Grid>
           </Grid>
           <Button

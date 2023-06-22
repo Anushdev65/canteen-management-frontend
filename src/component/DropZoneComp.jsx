@@ -29,7 +29,7 @@ const rejectStyle = {
   borderColor: "#ff1744",
 };
 
-function DropZoneComp({ handleImageUpload }) {
+function DropZoneComp({ handleImageUpload, value }) {
   const [userImage, setUserImage] = useState(null);
 
   const { getRootProps, getInputProps, isFocused, isDragAccept, isDragReject } =
@@ -67,7 +67,7 @@ function DropZoneComp({ handleImageUpload }) {
         <input {...getInputProps()} />
         <p>Drag 'n' drop your image here, or click to select image</p>
       </div>
-      {userImage && (
+      {userImage && value && (
         <div
           style={{
             marginTop: "20px",
