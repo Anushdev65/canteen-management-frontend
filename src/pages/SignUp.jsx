@@ -11,9 +11,10 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { useFormik } from "formik";
 import DropZoneComp from "../component/DropZoneComp";
-import { userRegistrationSchema } from "./SignInSchema";
+import { userRegistrationSchema } from "../schema/SignInSchema";
 import MUIMultiSelect from "../component/MUIMultiSelect";
 import MUIError from "../component/MUIError";
+import MUIRadioGroup from "../component/MUIRadioGroup";
 
 const initialValues = {
   firstName: "",
@@ -21,6 +22,8 @@ const initialValues = {
   email: "",
   userType: [],
   userImage: "",
+  phoneNumber: "",
+  gender: "",
 };
 
 export default function SignUp() {
@@ -84,7 +87,7 @@ export default function SignUp() {
               <MUIError
                 touch={touched.firstName}
                 error={errors.firstName}
-                value={values.firstName}
+                value={false}
               />
             </Grid>
             <Grid item xs={12} sm={6}>
@@ -103,7 +106,7 @@ export default function SignUp() {
               <MUIError
                 touch={touched.lastName}
                 error={errors.lastName}
-                value={values.lastName}
+                value={false}
               />
             </Grid>
             <Grid item xs={12}>
@@ -122,50 +125,9 @@ export default function SignUp() {
               <MUIError
                 touch={touched.email}
                 error={errors.email}
-                value={values.email}
+                value={false}
               />
             </Grid>
-            {/* <Grid item xs={12}>
-              <TextField
-                error={touched.password && errors.password}
-                required
-                fullWidth
-                name="password"
-                label="Password"
-                type="password"
-                id="password"
-                autoComplete="new-password"
-                value={values.password}
-                onChange={handleChange}
-                onBlur={handleBlur}
-              />
-              {touched.password && errors.password && (
-                <Typography variant="body2" color="error">
-                  {errors.password}
-                </Typography>
-              )}
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                error={touched.confirmPassword && errors.confirmPassword}
-                required
-                fullWidth
-                name="confirmPassword"
-                label="ConfirmPassword"
-                defaultValue={"CP"}
-                type="confirmPassword"
-                id="confirmPassword"
-                autoComplete="ConfirmPassword"
-                value={values.confirmPassword}
-                onChange={handleChange}
-                onBlur={handleBlur}
-              />
-              {touched.confirmPassword && errors.confirmPassword && (
-                <Typography variant="body2" color="error">
-                  {errors.confirmPassword}
-                </Typography>
-              )}
-            </Grid> */}
             <Grid item xs={12}>
               <MUIMultiSelect
                 error={touched.userType && errors.userType}
@@ -182,7 +144,45 @@ export default function SignUp() {
               <MUIError
                 touch={touched.userType}
                 error={errors.userType}
-                value={values.userType}
+                value={false}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                error={touched.phoneNumber && errors.phoneNumber}
+                required
+                fullWidth
+                id="phoneNumber"
+                label="Phone Number"
+                name="phoneNumber"
+                autoComplete="off"
+                value={values.phoneNumber}
+                onChange={handleChange}
+                onBlur={handleBlur}
+              />
+              <MUIError
+                touch={touched.phoneNumber}
+                error={errors.phoneNumber}
+                value={false}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <MUIRadioGroup
+                error={touched.gender && errors.gender}
+                required
+                fullWidth
+                id="gender"
+                label="Gender"
+                name="gender"
+                autoComplete="off"
+                value={values.gender}
+                onChange={handleChange}
+                onBlur={handleBlur}
+              />
+              <MUIError
+                touch={touched.gender}
+                error={errors.gender}
+                value={false}
               />
             </Grid>
             <Grid item xs={12}>

@@ -13,17 +13,22 @@ export const userRegistrationSchema = Yup.object({
         );
       }
     ),
-  // password: Yup.string().min(6).max(15).required("Password required."),
   firstName: Yup.string().required("First Name required."),
   lastName: Yup.string().required("Last Name required."),
   userImage: Yup.string().required("Upload Picture"),
-  // confirmPassword: Yup.string()
-  //   .required("Confirm Password Required")
-  //   .oneOf(
-  //     [Yup.ref("password"), null],
-  //     "Password and Confirm Password mis-match."
-  //   ),
   userType: Yup.array()
     .min(1, "Select at least one user type")
     .required("Select user type"),
+  phoneNumber: Yup.string().length(10).required("Phone numbe rrequired."),
+  gender: Yup.string().required("Gender required."),
+});
+
+export const userPasswordSchema = Yup.object({
+  password: Yup.string().min(6).max(15).required("Password required."),
+  confirmPassword: Yup.string()
+    .required("Confirm Password Required")
+    .oneOf(
+      [Yup.ref("password"), null],
+      "Password and Confirm Password mis-match."
+    ),
 });
