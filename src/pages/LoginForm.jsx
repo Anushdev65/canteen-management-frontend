@@ -1,58 +1,65 @@
 import * as React from "react";
+import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
+import Link from "@mui/material/Link";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
+import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { useFormik } from "formik";
-import { userPasswordSchema } from "../schema/SignInSchema";
+import { userLoginSchema } from "../schema/SignInSchema";
 import MUIError from "../component/MUIError";
-import { useVerifyUserMutation } from "../services/api/admin/auth";
-import { useSearchParams } from "react-router-dom";
-import { setLevelInfo } from "../localStorage/localStorage";
-import MUILoading from "../component/MUILoading";
+import { useLoginUserMutation } from "../services/api/admin/auth";
 import MUIToast from "../component/MUIToast";
+import { setLevelInfo } from "../localStorage/localStorage";
+import { useNavigate } from "react-router-dom";
+import MUILoading from "../component/MUILoading";
 
 const initialValues = {
   password: "",
-  confirmPassword: "",
+  email: "",
 };
 
-export default function ConfirmPassword() {
+export default function LoginForm() {
   const [open, setOpen] = React.useState(true);
-  const [verifyUser, { isLoading, data }] = useVerifyUserMutation();
-  const [searchparams] = useSearchParams();
-
+  const navigate = useNavigate();
+  const [loginUser, { data, isSuccess }] = useLoginUserMutation();
   const { handleBlur, touched, errors, handleChange, handleSubmit, values } =
     useFormik({
       initialValues,
-      validationSchema: userPasswordSchema,
+      validationSchema: userLoginSchema,
       onSubmit: (values, action) => {
-        console.log(values);
-        verifyUser({ password: values.password });
+        loginUser(values);
         action.resetForm();
+        return false;
       },
     });
 
   React.useEffect(() => {
+    console.log("response", data);
+  }, [data]);
+
+  React.useEffect(() => {
     setLevelInfo({
-      token: searchparams.get("token"),
+      token: data?.data.token,
     });
-  }, [searchparams]);
+    if (data?.data.token) {
+      setTimeout(() => {
+        navigate("/");
+      }, 1000);
+    }
+  }, [data, navigate]);
 
   return (
     <>
-      {data ? (
-        <MUIToast open={open} setOpen={setOpen} message={data.message} />
-      ) : (
-        <></>
-      )}
-      {isLoading ? (
+      {data ? <MUIToast initialValue={true} message={data.message} /> : <></>}
+      {isSuccess ? (
         <MUILoading />
       ) : (
-        <Container component="main" maxWidth="xs" sx={{ mt: "5rem" }}>
+        <Container component="main" maxWidth="xs">
           <CssBaseline />
           <Box
             sx={{
@@ -63,12 +70,11 @@ export default function ConfirmPassword() {
               marginBottom: 8,
             }}
           >
-            <Typography
-              component="h6"
-              variant="h6"
-              sx={{ fontWeight: "bold", fontSize: 12 }}
-            >
-              Password must be minimum 6 character and maximum 15 character.
+            <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
+              <LockOutlinedIcon />
+            </Avatar>
+            <Typography component="h1" variant="h5">
+              Login
             </Typography>
             <Box
               component="form"
@@ -77,6 +83,25 @@ export default function ConfirmPassword() {
               sx={{ mt: 3 }}
             >
               <Grid container spacing={2}>
+                <Grid item xs={12}>
+                  <TextField
+                    error={touched.email && errors.email}
+                    required
+                    fullWidth
+                    id="email"
+                    label="Email Address"
+                    name="email"
+                    autoComplete="off"
+                    value={values.email}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                  />
+                  <MUIError
+                    touch={touched.email}
+                    error={errors.email}
+                    value={false}
+                  />
+                </Grid>
                 <Grid item xs={12}>
                   <TextField
                     error={touched.password && errors.password}
@@ -97,26 +122,6 @@ export default function ConfirmPassword() {
                     value={false}
                   />
                 </Grid>
-                <Grid item xs={12}>
-                  <TextField
-                    error={touched.confirmPassword && errors.confirmPassword}
-                    required
-                    fullWidth
-                    name="confirmPassword"
-                    label="ConfirmPassword"
-                    type="password"
-                    id="confirmPassword"
-                    autoComplete="ConfirmPassword"
-                    value={values.confirmPassword}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                  />
-                  <MUIError
-                    touch={touched.confirmPassword}
-                    error={errors.confirmPassword}
-                    value={false}
-                  />
-                </Grid>
               </Grid>
               <Button
                 type="submit"
@@ -124,8 +129,15 @@ export default function ConfirmPassword() {
                 variant="contained"
                 sx={{ mt: 3, mb: 2 }}
               >
-                Submit
+                Login
               </Button>
+              <Grid container justifyContent="flex-end">
+                <Grid item>
+                  <Link href="#" variant="body2">
+                    Forgot Password?
+                  </Link>
+                </Grid>
+              </Grid>
             </Box>
           </Box>
         </Container>

@@ -19,12 +19,12 @@ const MenuProps = {
   },
 };
 
-const names = ["Admin", "Staff", "Student"];
+const names = ["admin", "staff", "canteen"];
 
-function getStyles(name, userType, theme) {
+function getStyles(name, role, theme) {
   return {
     fontWeight:
-      userType.indexOf(name) === -1
+      role.indexOf(name) === -1
         ? theme.typography.fontWeightRegular
         : theme.typography.fontWeightMedium,
   };
@@ -32,13 +32,13 @@ function getStyles(name, userType, theme) {
 
 export default function MUIMultiSelect({ error, ...props }) {
   const theme = useTheme();
-  const [userType, setUserType] = React.useState([]);
+  const [role, setRole] = React.useState([]);
 
   const handleChange = (event) => {
     const {
       target: { value },
     } = event;
-    setUserType(
+    setRole(
       // On autofill we get a stringified value.
       typeof value === "string" ? value.split(",") : value
     );
@@ -55,7 +55,7 @@ export default function MUIMultiSelect({ error, ...props }) {
           id="demo-multiple-chip"
           required
           multiple
-          value={userType}
+          value={role}
           onChange={handleChange}
           input={<OutlinedInput id="select-multiple-chip" label="User Type" />}
           renderValue={(selected) => (
@@ -72,7 +72,7 @@ export default function MUIMultiSelect({ error, ...props }) {
             <MenuItem
               key={name}
               value={name}
-              style={getStyles(name, userType, theme)}
+              style={getStyles(name, role, theme)}
             >
               {name}
             </MenuItem>
