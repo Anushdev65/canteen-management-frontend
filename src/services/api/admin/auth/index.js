@@ -60,6 +60,24 @@ export const adminApi = createApi({
         };
       },
     }),
+    forgotPassword: builder.mutation({
+      query: (body) => {
+        return {
+          url: `/auths/forgot-password`,
+          method: "POST",
+          body: body,
+        };
+      },
+    }),
+    resetPassword: builder.mutation({
+      query: (body) => {
+        return {
+          url: `/auths/reset-password`,
+          method: "POST",
+          body: body,
+        };
+      },
+    }),
   }),
 });
 
@@ -69,4 +87,6 @@ export const {
   useLoginUserMutation,
   useGetMyProfileQuery,
   useLogOutMutation,
+  useForgotPasswordMutation,
+  useResetPasswordMutation,
 } = adminApi;

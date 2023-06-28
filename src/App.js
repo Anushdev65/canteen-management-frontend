@@ -6,6 +6,8 @@ import { Route, Routes } from "react-router-dom";
 import MUINavbar from "./component/MUINavbar";
 import ProtectedRoutes from "./utils/ProtectedRoutes";
 import MyProfile from "./component/MyProfile";
+import ForgotPassword from "./pages/ForgotPassword";
+import ResetPassword from "./pages/ResetPassword";
 
 function App() {
   return (
@@ -19,6 +21,8 @@ function App() {
       <Route path="/register" element={<SignUp />} />
       <Route path="/login" element={<LoginForm />} />
       <Route path="/confirm-email" element={<ConfirmPassword />} />
+      <Route path="/auth/reset-password" element={<ResetPassword />} />
+      <Route path="/forgot-password" element={<ForgotPassword />} />
     </Routes>
   );
 }

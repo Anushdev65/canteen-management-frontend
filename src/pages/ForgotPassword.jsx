@@ -1,51 +1,44 @@
 import * as React from "react";
-import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
-import Link from "@mui/material/Link";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
-import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { useFormik } from "formik";
-import { userLoginSchema } from "../schema/SignInSchema";
+import { forgotPasswordSchema } from "../schema/SignInSchema";
 import MUIError from "../component/MUIError";
-import { useLoginUserMutation } from "../services/api/admin/auth";
-import MUIToast from "../component/MUIToast";
-import { setLevelInfo } from "../localStorage/localStorage";
+import { useForgotPasswordMutation } from "../services/api/admin/auth";
 import { useNavigate } from "react-router-dom";
 import MUILoading from "../component/MUILoading";
+import MUIToast from "../component/MUIToast";
 
 const initialValues = {
-  password: "",
   email: "",
+  confirmEmail: "",
 };
 
-export default function LoginForm() {
+export default function ForgotPassword() {
+  const [forgotPassword, { isLoading, data, error }] =
+    useForgotPasswordMutation();
   const navigate = useNavigate();
-  const [loginUser, { data, isLoading, error }] = useLoginUserMutation();
+
   const { handleBlur, touched, errors, handleChange, handleSubmit, values } =
     useFormik({
       initialValues,
-      validationSchema: userLoginSchema,
+      validationSchema: forgotPasswordSchema,
       onSubmit: (values, action) => {
-        loginUser(values);
+        forgotPassword({ email: values.email });
         action.resetForm();
-        return false;
       },
     });
 
   React.useEffect(() => {
-    console.log(data?.message);
-    setLevelInfo({
-      token: data?.data.token,
-    });
-    if (data?.data.token) {
+    if (data) {
       setTimeout(() => {
-        navigate("/");
-      }, 1000);
+        navigate("/login");
+      }, 3000);
     }
   }, [data, navigate]);
 
@@ -66,10 +59,10 @@ export default function LoginForm() {
       ) : (
         <></>
       )}
-      {isLoading || data ? (
+      {isLoading ? (
         <MUILoading />
       ) : (
-        <Container component="main" maxWidth="xs">
+        <Container component="main" maxWidth="xs" sx={{ mt: "5rem" }}>
           <CssBaseline />
           <Box
             sx={{
@@ -80,11 +73,12 @@ export default function LoginForm() {
               marginBottom: 8,
             }}
           >
-            <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
-              <LockOutlinedIcon />
-            </Avatar>
-            <Typography component="h1" variant="h5">
-              Login
+            <Typography
+              component="h6"
+              variant="h6"
+              sx={{ fontWeight: "bold", fontSize: 14 }}
+            >
+              Fill up your email.
             </Typography>
             <Box
               component="form"
@@ -98,10 +92,11 @@ export default function LoginForm() {
                     error={touched.email && errors.email}
                     required
                     fullWidth
-                    id="email"
-                    label="Email Address"
                     name="email"
-                    autoComplete="off"
+                    label="Email"
+                    type="email"
+                    id="email"
+                    autoComplete="new-email"
                     value={values.email}
                     onChange={handleChange}
                     onBlur={handleBlur}
@@ -114,21 +109,21 @@ export default function LoginForm() {
                 </Grid>
                 <Grid item xs={12}>
                   <TextField
-                    error={touched.password && errors.password}
+                    error={touched.confirmEmail && errors.confirmEmail}
                     required
                     fullWidth
-                    name="password"
-                    label="Password"
-                    type="password"
-                    id="password"
-                    autoComplete="new-password"
-                    value={values.password}
+                    name="confirmEmail"
+                    label="Confirm Email"
+                    type="email"
+                    id="confirmEmail"
+                    autoComplete="ConfirmEmail"
+                    value={values.confirmEmail}
                     onChange={handleChange}
                     onBlur={handleBlur}
                   />
                   <MUIError
-                    touch={touched.password}
-                    error={errors.password}
+                    touch={touched.confirmEmail}
+                    error={errors.confirmEmail}
                     value={false}
                   />
                 </Grid>
@@ -139,15 +134,8 @@ export default function LoginForm() {
                 variant="contained"
                 sx={{ mt: 3, mb: 2 }}
               >
-                Login
+                Submit
               </Button>
-              <Grid container justifyContent="flex-end" spacing={1}>
-                <Grid item>
-                  <Link href="/forgot-password" variant="body2">
-                    Forgot Password?
-                  </Link>
-                </Grid>
-              </Grid>
             </Box>
           </Box>
         </Container>
