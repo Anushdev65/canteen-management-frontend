@@ -27,6 +27,8 @@ import { useLogOutMutation } from "../services/api/admin/auth";
 import { removeLevelInfo } from "../localStorage/localStorage";
 import MUIToast from "./MUIToast";
 import MUILoading from "./MUILoading";
+import PeopleAltOutlinedIcon from "@mui/icons-material/PeopleAltOutlined";
+import EnhancedEncryptionOutlinedIcon from "@mui/icons-material/EnhancedEncryptionOutlined";
 
 const drawerWidth = 240;
 
@@ -52,9 +54,19 @@ const navData = [
     link: "https://deerwalkfoods.com/",
   },
   {
-    name: "MyAccount",
+    name: "All Users",
+    icon: <PeopleAltOutlinedIcon />,
+    link: "/allusers",
+  },
+  {
+    name: "My Profile",
     icon: <AccountBoxIcon />,
     link: "/myprofile",
+  },
+  {
+    name: "Update Password",
+    icon: <EnhancedEncryptionOutlinedIcon />,
+    link: "/auth/update-password",
   },
 ];
 
@@ -178,7 +190,7 @@ export default function MUINavbar() {
               </Typography>
               <img
                 src="smile.png"
-                alt="Profile Picture"
+                alt="Your Picture"
                 style={{
                   height: "40px",
                   width: "40px",

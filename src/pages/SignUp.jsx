@@ -2,7 +2,7 @@ import CssBaseline from "@mui/material/CssBaseline";
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 import { useFormik } from "formik";
-import { userRegistrationSchema } from "../schema/SignInSchema";
+import { userRegistrationSchema } from "../schema/YupSchema";
 import { useRegisterUserMutation } from "../services/api/admin/auth";
 import MUILoading from "../component/MUILoading";
 import MUIToast from "../component/MUIToast";

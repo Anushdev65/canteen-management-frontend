@@ -1,9 +1,9 @@
 import * as React from "react";
 import { useFormik } from "formik";
-import { userPasswordSchema } from "../schema/SignInSchema";
+import { userPasswordSchema } from "../schema/YupSchema";
 import { useVerifyUserMutation } from "../services/api/admin/auth";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { setLevelInfo } from "../localStorage/localStorage";
+import { removeLevelInfo, setLevelInfo } from "../localStorage/localStorage";
 import MUILoading from "../component/MUILoading";
 import MUIToast from "../component/MUIToast";
 import PasswordForm from "../component/PasswordForm";
@@ -25,6 +25,7 @@ export default function ConfirmPassword() {
       onSubmit: (values, action) => {
         verifyUser({ password: values.password });
         action.resetForm();
+        removeLevelInfo();
       },
     });
 

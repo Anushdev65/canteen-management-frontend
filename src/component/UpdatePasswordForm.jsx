@@ -1,4 +1,10 @@
 import * as React from "react";
+import { useFormik } from "formik";
+import { userResetPasswordSchema } from "../schema/YupSchema";
+import { useUpdatePasswordMutation } from "../services/api/admin/auth";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import MUILoading from "../component/MUILoading";
+import MUIToast from "../component/MUIToast";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
@@ -6,30 +12,29 @@ import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
-import { useFormik } from "formik";
-import { forgotPasswordSchema } from "../schema/YupSchema";
 import MUIError from "../component/MUIError";
-import { useForgotPasswordMutation } from "../services/api/admin/auth";
-import { useNavigate } from "react-router-dom";
-import MUILoading from "../component/MUILoading";
-import MUIToast from "../component/MUIToast";
+import { removeLevelInfo, setLevelInfo } from "../localStorage/localStorage";
 
 const initialValues = {
-  email: "",
-  confirmEmail: "",
+  oldPassword: "",
+  password: "",
+  confirmPassword: "",
 };
 
-export default function ForgotPassword() {
-  const [forgotPassword, { isLoading, data, error }] =
-    useForgotPasswordMutation();
+export default function UpdatePasswordForm() {
+  const [updatePassword, { isLoading, data, error }] =
+    useUpdatePasswordMutation();
   const navigate = useNavigate();
 
   const { handleBlur, touched, errors, handleChange, handleSubmit, values } =
     useFormik({
       initialValues,
-      validationSchema: forgotPasswordSchema,
+      validationSchema: userResetPasswordSchema,
       onSubmit: (values, action) => {
-        forgotPassword({ email: values.email });
+        updatePassword({
+          password: values.password,
+          oldPassword: values.oldPassword,
+        });
         action.resetForm();
       },
     });
@@ -38,9 +43,10 @@ export default function ForgotPassword() {
     if (data) {
       setTimeout(() => {
         navigate("/login");
+        removeLevelInfo();
       }, 3000);
     }
-  }, [data, navigate]);
+  }, [navigate, data]);
 
   return (
     <>
@@ -59,7 +65,7 @@ export default function ForgotPassword() {
       ) : (
         <></>
       )}
-      {isLoading ? (
+      {isLoading || data ? (
         <MUILoading />
       ) : (
         <Container component="main" maxWidth="xs" sx={{ mt: "5rem" }}>
@@ -76,9 +82,11 @@ export default function ForgotPassword() {
             <Typography
               component="h6"
               variant="h6"
-              sx={{ fontWeight: "bold", fontSize: 14 }}
+              sx={{ fontWeight: "bold", fontSize: 12 }}
             >
-              Fill up your email.
+              Password must be minimum 6 character and maximum 15 character.{" "}
+              <br />
+              Old password cannot be used again.
             </Typography>
             <Box
               component="form"
@@ -89,41 +97,61 @@ export default function ForgotPassword() {
               <Grid container spacing={2}>
                 <Grid item xs={12}>
                   <TextField
-                    error={touched.email && errors.email}
+                    error={touched.oldPassword && errors.oldPassword}
                     required
                     fullWidth
-                    name="email"
-                    label="Email"
-                    type="email"
-                    id="email"
-                    autoComplete="new-email"
-                    value={values.email}
+                    name="oldPassword"
+                    label="Password"
+                    type="password"
+                    id="oldPassword"
+                    autoComplete="oldPassword"
+                    value={values.oldPassword}
                     onChange={handleChange}
                     onBlur={handleBlur}
                   />
                   <MUIError
-                    touch={touched.email}
-                    error={errors.email}
+                    touch={touched.oldPassword}
+                    error={errors.oldPassword}
                     value={false}
                   />
                 </Grid>
                 <Grid item xs={12}>
                   <TextField
-                    error={touched.confirmEmail && errors.confirmEmail}
+                    error={touched.password && errors.password}
                     required
                     fullWidth
-                    name="confirmEmail"
-                    label="Confirm Email"
-                    type="email"
-                    id="confirmEmail"
-                    autoComplete="ConfirmEmail"
-                    value={values.confirmEmail}
+                    name="password"
+                    label="New-Password"
+                    type="password"
+                    id="password"
+                    autoComplete="new-password"
+                    value={values.password}
                     onChange={handleChange}
                     onBlur={handleBlur}
                   />
                   <MUIError
-                    touch={touched.confirmEmail}
-                    error={errors.confirmEmail}
+                    touch={touched.password}
+                    error={errors.password}
+                    value={false}
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <TextField
+                    error={touched.confirmPassword && errors.confirmPassword}
+                    required
+                    fullWidth
+                    name="confirmPassword"
+                    label="Confirm-Password"
+                    type="password"
+                    id="confirmPassword"
+                    autoComplete="ConfirmPassword"
+                    value={values.confirmPassword}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                  />
+                  <MUIError
+                    touch={touched.confirmPassword}
+                    error={errors.confirmPassword}
                     value={false}
                   />
                 </Grid>

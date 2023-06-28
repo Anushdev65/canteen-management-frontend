@@ -10,7 +10,7 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { useFormik } from "formik";
-import { userLoginSchema } from "../schema/SignInSchema";
+import { userLoginSchema } from "../schema/YupSchema";
 import MUIError from "../component/MUIError";
 import { useLoginUserMutation } from "../services/api/admin/auth";
 import MUIToast from "../component/MUIToast";

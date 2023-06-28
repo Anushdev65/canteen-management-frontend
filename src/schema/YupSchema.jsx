@@ -76,3 +76,16 @@ export const forgotPasswordSchema = Yup.object({
     )
     .oneOf([Yup.ref("email"), null], "Email and Confirm Email mis-match."),
 });
+
+export const userResetPasswordSchema = Yup.object({
+  oldPassword: Yup.string()
+    .notOneOf([Yup.ref("password")], "Old and new password must be different.")
+    .required("Password required."),
+  password: Yup.string().min(6).max(15).required("Password required."),
+  confirmPassword: Yup.string()
+    .required("Confirm Password Required")
+    .oneOf(
+      [Yup.ref("password"), null],
+      "Password and Confirm Password mis-match."
+    ),
+});

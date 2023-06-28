@@ -78,6 +78,23 @@ export const adminApi = createApi({
         };
       },
     }),
+    getAllUsers: builder.query({
+      query: () => {
+        return {
+          url: `/auths`,
+          method: "GET",
+        };
+      },
+    }),
+    updatePassword: builder.mutation({
+      query: (body) => {
+        return {
+          url: `/auths/update-password`,
+          method: "PATCH",
+          body: body,
+        };
+      },
+    }),
   }),
 });
 
@@ -89,4 +106,6 @@ export const {
   useLogOutMutation,
   useForgotPasswordMutation,
   useResetPasswordMutation,
+  useGetAllUsersQuery,
+  useUpdatePasswordMutation,
 } = adminApi;
