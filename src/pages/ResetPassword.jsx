@@ -1,7 +1,7 @@
 import * as React from "react";
 import { useFormik } from "formik";
 import { userPasswordSchema } from "../schema/YupSchema";
-import { useVerifyUserMutation } from "../services/api/admin/auth";
+import { useResetPasswordMutation } from "../services/api/admin/auth";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { removeLevelInfo, setLevelInfo } from "../localStorage/localStorage";
 import MUILoading from "../component/MUILoading";
@@ -13,8 +13,9 @@ const initialValues = {
   confirmPassword: "",
 };
 
-export default function ConfirmPassword() {
-  const [verifyUser, { isLoading, data, error }] = useVerifyUserMutation();
+export default function ResetPassword() {
+  const [resetPassword, { data, isLoading, error }] =
+    useResetPasswordMutation();
   const [searchparams] = useSearchParams();
   const navigate = useNavigate();
 
@@ -23,7 +24,7 @@ export default function ConfirmPassword() {
       initialValues,
       validationSchema: userPasswordSchema,
       onSubmit: (values, action) => {
-        verifyUser({ password: values.password });
+        resetPassword({ password: values.password });
         action.resetForm();
         removeLevelInfo();
       },
@@ -36,7 +37,8 @@ export default function ConfirmPassword() {
   }, [searchparams]);
 
   React.useEffect(() => {
-    if (data) {
+    console.log(data);
+    if (data?.success) {
       setTimeout(() => {
         navigate("/login");
       }, 3000);
