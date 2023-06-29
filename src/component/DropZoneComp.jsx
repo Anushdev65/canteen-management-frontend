@@ -1,5 +1,6 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import { useDropzone } from "react-dropzone";
+import { useUploadImageMutation } from "../services/api/imageUpload";
 
 const baseStyle = {
   flex: 1,
@@ -31,6 +32,7 @@ const rejectStyle = {
 
 function DropZoneComp({ handleImageUpload, value }) {
   const [userImage, setUserImage] = useState(null);
+  const [uploadImage, { data }] = useUploadImageMutation();
 
   const { getRootProps, getInputProps, isFocused, isDragAccept, isDragReject } =
     useDropzone({
@@ -38,18 +40,23 @@ function DropZoneComp({ handleImageUpload, value }) {
       onDrop: (acceptedFiles) => {
         const file = acceptedFiles[0];
         const reader = new FileReader();
-
-        reader.onload = (e) => {
-          setUserImage(e.target.result);
-          handleImageUpload(file.name);
-        };
-
         reader.readAsDataURL(file);
 
         const formData = new FormData();
-        formData.append("image", file);
+        formData.append("file", file);
+        uploadImage(formData);
+
+        reader.onload = (e) => {
+          setUserImage(e.target.result);
+        };
       },
     });
+
+  useEffect(() => {
+    if (data) {
+      handleImageUpload(data.data.path);
+    }
+  }, [data]);
 
   const style = useMemo(
     () => ({

@@ -10,6 +10,7 @@ import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
 import AllUsers from "./component/AllUsers";
 import UpdatePasswordForm from "./component/UpdatePasswordForm";
+import CreateUser from "./component/CreateUser";
 
 function App() {
   return (
@@ -22,14 +23,13 @@ function App() {
             path="/auth/update-password"
             element={<UpdatePasswordForm />}
           />
+          <Route path="/create-user" element={<CreateUser />} />
         </Route>
       </Route>
-
       <Route path="/register" element={<SignUp />} />
       <Route path="/login" element={<LoginForm />} />
       <Route path="/confirm-email" element={<ConfirmPassword />} />
       <Route path="/auth/reset-password" element={<ResetPassword />} />
-
       <Route path="/forgot-password" element={<ForgotPassword />} />
     </Routes>
   );

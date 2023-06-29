@@ -6,7 +6,7 @@ import Grid from "@mui/material/Grid";
 import Button from "@mui/material/Button";
 import DropZoneComp from "../component/DropZoneComp";
 import Box from "@mui/material/Box";
-import Link from "@mui/material/Link";
+// import Link from "@mui/material/Link";
 
 const SigninForm = ({
   handleBlur,
@@ -159,15 +159,15 @@ const SigninForm = ({
         </Grid>
       </Grid>
       <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
-        Sign Up
+        Register
       </Button>
-      <Grid container justifyContent="flex-end" spacing={1}>
+      {/* <Grid container justifyContent="flex-end" spacing={1}>
         <Grid item>
-          <Link href="/forgot-password" variant="body2">
+          <Link href="/login" variant="body2">
             Already have an aacount? Sign in?
           </Link>
         </Grid>
-      </Grid>
+      </Grid> */}
     </Box>
   );
 };
