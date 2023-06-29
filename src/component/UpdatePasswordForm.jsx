@@ -1,53 +1,52 @@
 import * as React from "react";
-import Avatar from "@mui/material/Avatar";
+import { useFormik } from "formik";
+import { userResetPasswordSchema } from "../schema/YupSchema";
+import { useUpdatePasswordMutation } from "../services/api/admin/auth";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import MUILoading from "../component/MUILoading";
+import MUIToast from "../component/MUIToast";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
-import Link from "@mui/material/Link";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
-import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
-import { useFormik } from "formik";
-import { userLoginSchema } from "../schema/YupSchema";
 import MUIError from "../component/MUIError";
-import { useLoginUserMutation } from "../services/api/admin/auth";
-import MUIToast from "../component/MUIToast";
-import { setLevelInfo } from "../localStorage/localStorage";
-import { useNavigate } from "react-router-dom";
-import MUILoading from "../component/MUILoading";
+import { removeLevelInfo, setLevelInfo } from "../localStorage/localStorage";
 
 const initialValues = {
+  oldPassword: "",
   password: "",
-  email: "",
+  confirmPassword: "",
 };
 
-export default function LoginForm() {
+export default function UpdatePasswordForm() {
+  const [updatePassword, { isLoading, data, error }] =
+    useUpdatePasswordMutation();
   const navigate = useNavigate();
-  const [loginUser, { data, isLoading, error }] = useLoginUserMutation();
+
   const { handleBlur, touched, errors, handleChange, handleSubmit, values } =
     useFormik({
       initialValues,
-      validationSchema: userLoginSchema,
+      validationSchema: userResetPasswordSchema,
       onSubmit: (values, action) => {
-        loginUser(values);
+        updatePassword({
+          password: values.password,
+          oldPassword: values.oldPassword,
+        });
         action.resetForm();
-        return false;
       },
     });
 
   React.useEffect(() => {
-    console.log(data?.message);
-    setLevelInfo({
-      token: data?.data.token,
-    });
-    if (data?.data.token) {
+    if (data) {
       setTimeout(() => {
-        navigate("/");
-      }, 1000);
+        navigate("/login");
+        removeLevelInfo();
+      }, 3000);
     }
-  }, [data, navigate]);
+  }, [navigate, data]);
 
   return (
     <>
@@ -69,7 +68,7 @@ export default function LoginForm() {
       {isLoading || data ? (
         <MUILoading />
       ) : (
-        <Container component="main" maxWidth="xs">
+        <Container component="main" maxWidth="xs" sx={{ mt: "5rem" }}>
           <CssBaseline />
           <Box
             sx={{
@@ -80,11 +79,14 @@ export default function LoginForm() {
               marginBottom: 8,
             }}
           >
-            <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
-              <LockOutlinedIcon />
-            </Avatar>
-            <Typography component="h1" variant="h5">
-              Login
+            <Typography
+              component="h6"
+              variant="h6"
+              sx={{ fontWeight: "bold", fontSize: 12 }}
+            >
+              Password must be minimum 6 character and maximum 15 character.{" "}
+              <br />
+              Old password cannot be used again.
             </Typography>
             <Box
               component="form"
@@ -95,20 +97,21 @@ export default function LoginForm() {
               <Grid container spacing={2}>
                 <Grid item xs={12}>
                   <TextField
-                    error={touched.email && errors.email}
+                    error={touched.oldPassword && errors.oldPassword}
                     required
                     fullWidth
-                    id="email"
-                    label="Email Address"
-                    name="email"
-                    autoComplete="off"
-                    value={values.email}
+                    name="oldPassword"
+                    label="Password"
+                    type="password"
+                    id="oldPassword"
+                    autoComplete="oldPassword"
+                    value={values.oldPassword}
                     onChange={handleChange}
                     onBlur={handleBlur}
                   />
                   <MUIError
-                    touch={touched.email}
-                    error={errors.email}
+                    touch={touched.oldPassword}
+                    error={errors.oldPassword}
                     value={false}
                   />
                 </Grid>
@@ -118,7 +121,7 @@ export default function LoginForm() {
                     required
                     fullWidth
                     name="password"
-                    label="Password"
+                    label="New-Password"
                     type="password"
                     id="password"
                     autoComplete="new-password"
@@ -132,6 +135,26 @@ export default function LoginForm() {
                     value={false}
                   />
                 </Grid>
+                <Grid item xs={12}>
+                  <TextField
+                    error={touched.confirmPassword && errors.confirmPassword}
+                    required
+                    fullWidth
+                    name="confirmPassword"
+                    label="Confirm-Password"
+                    type="password"
+                    id="confirmPassword"
+                    autoComplete="ConfirmPassword"
+                    value={values.confirmPassword}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                  />
+                  <MUIError
+                    touch={touched.confirmPassword}
+                    error={errors.confirmPassword}
+                    value={false}
+                  />
+                </Grid>
               </Grid>
               <Button
                 type="submit"
@@ -139,15 +162,8 @@ export default function LoginForm() {
                 variant="contained"
                 sx={{ mt: 3, mb: 2 }}
               >
-                Login
+                Submit
               </Button>
-              <Grid container justifyContent="flex-end" spacing={1}>
-                <Grid item>
-                  <Link href="/forgot-password" variant="body2">
-                    Forgot Password?
-                  </Link>
-                </Grid>
-              </Grid>
             </Box>
           </Box>
         </Container>
