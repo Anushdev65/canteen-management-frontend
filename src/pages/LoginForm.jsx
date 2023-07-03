@@ -38,7 +38,6 @@ export default function LoginForm() {
     });
 
   React.useEffect(() => {
-    console.log(data?.message);
     setLevelInfo({
       token: data?.data.token,
     });
