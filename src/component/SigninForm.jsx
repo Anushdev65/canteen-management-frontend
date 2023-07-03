@@ -6,7 +6,6 @@ import Grid from "@mui/material/Grid";
 import Button from "@mui/material/Button";
 import DropZoneComp from "../component/DropZoneComp";
 import Box from "@mui/material/Box";
-import Link from "@mui/material/Link";
 
 const SigninForm = ({
   handleBlur,
@@ -15,6 +14,7 @@ const SigninForm = ({
   handleChange,
   handleSubmit,
   values,
+  updateProfile,
 }) => {
   const handleImageUpload = (image) => {
     handleChange({
@@ -41,9 +41,9 @@ const SigninForm = ({
             fullWidth
             id="firstName"
             label="First Name"
-            value={values.firstName}
             onChange={handleChange}
             onBlur={handleBlur}
+            value={values.firstName}
           />
           <MUIError
             touch={touched.firstName}
@@ -70,21 +70,27 @@ const SigninForm = ({
             value={false}
           />
         </Grid>
-        <Grid item xs={12}>
-          <TextField
-            error={touched.email && errors.email}
-            required
-            fullWidth
-            id="email"
-            label="Email Address"
-            name="email"
-            autoComplete="off"
-            value={values.email}
-            onChange={handleChange}
-            onBlur={handleBlur}
-          />
-          <MUIError touch={touched.email} error={errors.email} value={false} />
-        </Grid>
+        {!updateProfile && (
+          <Grid item xs={12}>
+            <TextField
+              error={touched.email && errors.email}
+              required
+              fullWidth
+              id="email"
+              label="Email Address"
+              name="email"
+              autoComplete="off"
+              value={values.email}
+              onChange={handleChange}
+              onBlur={handleBlur}
+            />
+            <MUIError
+              touch={touched.email}
+              error={errors.email}
+              value={false}
+            />
+          </Grid>
+        )}
         <Grid item xs={12}>
           <MUIMultiSelect
             error={touched.role && errors.role}
@@ -138,36 +144,38 @@ const SigninForm = ({
             value={false}
           />
         </Grid>
-        <Grid item xs={12}>
-          <DropZoneComp
-            error={touched.userImage && errors.userImage}
-            required
-            fullWidth
-            id="userImage"
-            name="userImage"
-            autoComplete="off"
-            value={values.userImage}
-            onChange={handleChange}
-            onBlur={handleBlur}
-            handleImageUpload={handleImageUpload}
-          />
-          <MUIError
-            touch={touched.userImage}
-            error={errors.userImage}
-            value={values.userImage}
-          />
-        </Grid>
+        {!updateProfile && (
+          <Grid item xs={12}>
+            <DropZoneComp
+              error={touched.userImage && errors.userImage}
+              required
+              fullWidth
+              id="userImage"
+              name="userImage"
+              autoComplete="off"
+              value={values.userImage}
+              onChange={handleChange}
+              onBlur={handleBlur}
+              handleImageUpload={handleImageUpload}
+            />
+            <MUIError
+              touch={touched.userImage}
+              error={errors.userImage}
+              value={values.userImage}
+            />
+          </Grid>
+        )}
       </Grid>
       <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
-        Sign Up
+        {updateProfile ? "Update" : "Register"}
       </Button>
-      <Grid container justifyContent="flex-end" spacing={1}>
+      {/* <Grid container justifyContent="flex-end" spacing={1}>
         <Grid item>
-          <Link href="/forgot-password" variant="body2">
+          <Link href="/login" variant="body2">
             Already have an aacount? Sign in?
           </Link>
         </Grid>
-      </Grid>
+      </Grid> */}
     </Box>
   );
 };

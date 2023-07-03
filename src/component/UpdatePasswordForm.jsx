@@ -13,7 +13,7 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import MUIError from "../component/MUIError";
-import { removeLevelInfo, setLevelInfo } from "../localStorage/localStorage";
+import { removeLevelInfo } from "../localStorage/localStorage";
 
 const initialValues = {
   oldPassword: "",
