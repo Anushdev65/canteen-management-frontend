@@ -4,7 +4,7 @@ import SignUp from "./pages/SignUp.jsx";
 import LoginForm from "./pages/LoginForm";
 import { Route, Routes } from "react-router-dom";
 import MUINavbar from "./component/MUINavbar";
-import ProtectedRoutes from "./utils/ProtectedRoutes";
+import AdminsRoute from "./utils/AdminsRoute";
 import MyProfile from "./component/MyProfile";
 import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
@@ -15,7 +15,7 @@ import CreateUser from "./component/CreateUser";
 function App() {
   return (
     <Routes>
-      <Route path="/" element={<ProtectedRoutes />}>
+      <Route path="/" element={<AdminsRoute />}>
         <Route path="/" element={<MUINavbar />}>
           <Route path="/myprofile" element={<MyProfile />} />
           <Route path="/allusers" element={<AllUsers />} />
