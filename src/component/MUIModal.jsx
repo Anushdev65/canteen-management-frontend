@@ -84,6 +84,7 @@ export default function MUIModal({ open, handleClose }) {
         role: userInfo?.data?.roles?.length ? userInfo?.data?.roles : [],
         phoneNumber: userInfo?.data?.phoneNumber || "",
         gender: userInfo?.data?.gender || "",
+        userImage: userInfo?.data?.profile || "",
       },
       validationSchema: userUpdateProfileSchema,
       onSubmit: (values, action) => {
@@ -93,6 +94,7 @@ export default function MUIModal({ open, handleClose }) {
           gender: values.gender,
           phoneNumber: values.phoneNumber,
           roles: values.role,
+          profile: values.userImage,
         };
         updateProfile(body);
         console.log(body);

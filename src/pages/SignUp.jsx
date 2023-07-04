@@ -33,7 +33,7 @@ export default function SignUp() {
           gender: values.gender,
           phoneNumber: values.phoneNumber,
           roles: values.role,
-          profile: "smile.png",
+          profile: values.userImage,
         };
         registerUser(body);
         action.resetForm();

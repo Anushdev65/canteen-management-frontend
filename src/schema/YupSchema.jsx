@@ -98,4 +98,5 @@ export const userUpdateProfileSchema = Yup.object({
     .required("Select user type"),
   phoneNumber: Yup.string().length(10).required("Phone number required."),
   gender: Yup.string().required("Gender required."),
+  userImage: Yup.string().required("Upload Picture"),
 });

@@ -68,13 +68,15 @@ function DropZoneComp({ handleImageUpload, value }) {
     [isFocused, isDragAccept, isDragReject]
   );
 
+  console.log(value, userImage);
+
   return (
     <div className="container">
       <div {...getRootProps({ style })}>
         <input {...getInputProps()} />
         <p>Drag 'n' drop your image here, or click to select image</p>
       </div>
-      {userImage && value && (
+      {value && (
         <div
           style={{
             marginTop: "20px",
@@ -84,7 +86,7 @@ function DropZoneComp({ handleImageUpload, value }) {
           }}
         >
           <img
-            src={userImage}
+            src={userImage ? userImage : `http://${value}`}
             alt="Dropped"
             style={{ maxWidth: "100%", height: "10rem" }}
           />
