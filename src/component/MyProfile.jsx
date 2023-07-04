@@ -59,7 +59,7 @@ const MyProfile = () => {
             }}
           >
             <img
-              src="smile.png"
+              src={`http://${data?.data.profile}`}
               alt="Profile Picture"
               style={{
                 height: "80px",

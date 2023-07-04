@@ -144,27 +144,26 @@ const SigninForm = ({
             value={false}
           />
         </Grid>
-        {!updateProfile && (
-          <Grid item xs={12}>
-            <DropZoneComp
-              error={touched.userImage && errors.userImage}
-              required
-              fullWidth
-              id="userImage"
-              name="userImage"
-              autoComplete="off"
-              value={values.userImage}
-              onChange={handleChange}
-              onBlur={handleBlur}
-              handleImageUpload={handleImageUpload}
-            />
-            <MUIError
-              touch={touched.userImage}
-              error={errors.userImage}
-              value={values.userImage}
-            />
-          </Grid>
-        )}
+
+        <Grid item xs={12}>
+          <DropZoneComp
+            error={touched.userImage && errors.userImage}
+            required
+            fullWidth
+            id="userImage"
+            name="userImage"
+            autoComplete="off"
+            value={values.userImage}
+            onChange={handleChange}
+            onBlur={handleBlur}
+            handleImageUpload={handleImageUpload}
+          />
+          <MUIError
+            touch={touched.userImage}
+            error={errors.userImage}
+            value={values.userImage}
+          />
+        </Grid>
       </Grid>
       <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
         {updateProfile ? "Update" : "Register"}
