@@ -72,7 +72,7 @@ BootstrapDialogTitle.propTypes = {
   onClose: PropTypes.func.isRequired,
 };
 
-export default function MUIModal({ open, handleClose }) {
+export default function MUIModal({ open, handleClose, updateProfileAdmin }) {
   const { data: userInfo } = useGetMyProfileQuery();
   const [updateProfile, { data, error }] = useUpdateProfileMutation();
 
@@ -97,7 +97,7 @@ export default function MUIModal({ open, handleClose }) {
           profile: values.userImage,
         };
         updateProfile(body);
-        console.log(body);
+        // console.log(body);
         action.resetForm();
         handleClose();
       },
@@ -132,57 +132,6 @@ export default function MUIModal({ open, handleClose }) {
                 alignItems: "center",
               }}
             >
-              {/* <Box component="form" noValidate onSubmit={handleSubmit}>
-                <Grid container spacing={2}>
-                  <Grid item xs={12} sm={6}>
-                    <TextField
-                      autoComplete="given-name"
-                      name="firstName"
-                      required
-                      fullWidth
-                      id="firstName"
-                      label="First Name"
-                      defaultValue="John"
-                    />
-                  </Grid>
-                  <Grid item xs={12} sm={6}>
-                    <TextField
-                      required
-                      fullWidth
-                      id="lastName"
-                      label="Last Name"
-                      name="lastName"
-                      autoComplete="family-name"
-                      defaultValue="Cena"
-                    />
-                  </Grid>
-                  <Grid item xs={12}>
-                    <TextField
-                      required
-                      fullWidth
-                      id="phoneNumber"
-                      label="Phone Number"
-                      name="phoneNumber"
-                      autoComplete="phoneNumber"
-                      defaultValue="1231231233"
-                    />
-                  </Grid>
-                  <Grid item xs={12}>
-                    <MUIMultiSelect error={""} defaultValue={["Admin"]} />
-                  </Grid>
-                  <Grid item xs={12}>
-                    <TextField
-                      required
-                      fullWidth
-                      name="gender"
-                      label="Gender"
-                      type="gender"
-                      id="gender"
-                      autoComplete="new-gender"
-                    />
-                  </Grid>
-                </Grid>
-              </Box> */}
               <SigninForm
                 handleBlur={handleBlur}
                 touched={touched}
@@ -195,11 +144,6 @@ export default function MUIModal({ open, handleClose }) {
             </Box>
           </Container>
         </DialogContent>
-        {/* <DialogActions>
-          <Button autoFocus onClick={handleClose}>
-            Save changes
-          </Button>
-        </DialogActions> */}
       </BootstrapDialog>
 
       {data ? (

@@ -25,7 +25,7 @@ export default function ConfirmPassword() {
       onSubmit: (values, action) => {
         verifyUser({ password: values.password });
         action.resetForm();
-        removeLevelInfo();
+        // removeLevelInfo();
       },
     });
 
@@ -33,7 +33,7 @@ export default function ConfirmPassword() {
     setLevelInfo({
       token: searchparams.get("token"),
     });
-  }, [searchparams]);
+  }, [searchparams, setLevelInfo]);
 
   React.useEffect(() => {
     if (data) {

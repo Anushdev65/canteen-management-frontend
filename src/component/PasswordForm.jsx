@@ -32,7 +32,9 @@ const PasswordForm = ({
           variant="h6"
           sx={{ fontWeight: "bold", fontSize: 12 }}
         >
-          Password must be minimum 6 character and maximum 15 character.
+          Password must be minimum of eight characters, with no space , at least
+          one uppercase letter, one lowercase letter, one number and one special
+          character.
         </Typography>
         <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
           <Grid container spacing={2}>

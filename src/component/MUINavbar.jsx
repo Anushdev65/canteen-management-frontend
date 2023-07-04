@@ -208,6 +208,7 @@ export default function MUINavbar() {
           </AppBar>
           <Drawer variant="permanent" open={open}>
             <DrawerHeader>
+              <img src="deerwalkLogo.jpeg" width="170px" />
               <IconButton onClick={handleDrawerClose}>
                 {theme.direction === "rtl" ? (
                   <ChevronRightIcon />

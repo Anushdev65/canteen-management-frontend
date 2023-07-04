@@ -84,9 +84,9 @@ export default function UpdatePasswordForm() {
               variant="h6"
               sx={{ fontWeight: "bold", fontSize: 12 }}
             >
-              Password must be minimum 6 character and maximum 15 character.{" "}
-              <br />
-              Old password cannot be used again.
+              Password must be minimum of eight characters, with no space , at
+              least one uppercase letter, one lowercase letter, one number and
+              one special character.
             </Typography>
             <Box
               component="form"
