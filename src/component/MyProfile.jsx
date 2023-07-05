@@ -39,7 +39,11 @@ const MyProfile = () => {
 
   return (
     <>
-      <MUIModal open={openModal} handleClose={handleCloseModal} />
+      <MUIModal
+        open={openModal}
+        handleClose={handleCloseModal}
+        updateProfileAdmin={true}
+      />
       <Container component="main">
         <CssBaseline />
         <Box
