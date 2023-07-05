@@ -68,8 +68,6 @@ function DropZoneComp({ handleImageUpload, value }) {
     [isFocused, isDragAccept, isDragReject]
   );
 
-  console.log(value, userImage);
-
   return (
     <div className="container">
       <div {...getRootProps({ style })}>
