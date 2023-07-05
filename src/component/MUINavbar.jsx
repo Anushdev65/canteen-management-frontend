@@ -190,7 +190,7 @@ export default function MUINavbar() {
                 noWrap
                 sx={{ flexGrow: 1 }}
               >
-                Deerwalk Food Sytem
+                Deerwalk Food System
               </Typography>
               {myData && (
                 <img
