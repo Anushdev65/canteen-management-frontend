@@ -186,7 +186,7 @@ export default function MUINavbar() {
                 noWrap
                 sx={{ flexGrow: 1 }}
               >
-                Deerwalk Food Sytem
+                Deerwalk Food System
               </Typography>
               <img
                 src="smile.png"
