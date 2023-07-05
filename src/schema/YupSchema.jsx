@@ -19,12 +19,32 @@ export const userRegistrationSchema = Yup.object({
   role: Yup.array()
     .min(1, "Select at least one user type")
     .required("Select user type"),
-  phoneNumber: Yup.string().length(10).required("Phone numbe rrequired."),
+  phoneNumber: Yup.string()
+    .length(10)
+    .required("Phone number required.")
+    .test(
+      "phoneNumber-validation",
+      "Phone number must be digits only.",
+      function (value) {
+        return /^\d+$/.test(value);
+      }
+    ),
   gender: Yup.string().required("Gender required."),
 });
 
 export const userPasswordSchema = Yup.object({
-  password: Yup.string().min(6).max(15).required("Password required."),
+  password: Yup.string()
+    .min(8)
+    .required("Password required.")
+    .test(
+      "password-validation",
+      "Password must be minimum of eight characters, with no space , at least one uppercase letter, one lowercase letter, one number and one special character.",
+      function (value) {
+        return /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[^\s]{8,}$/.test(
+          value
+        );
+      }
+    ),
   confirmPassword: Yup.string()
     .required("Confirm Password Required")
     .oneOf(
@@ -81,11 +101,42 @@ export const userResetPasswordSchema = Yup.object({
   oldPassword: Yup.string()
     .notOneOf([Yup.ref("password")], "Old and new password must be different.")
     .required("Password required."),
-  password: Yup.string().min(6).max(15).required("Password required."),
+  password: Yup.string()
+    .min(8)
+    .required("Password required.")
+    .test(
+      "password-validation",
+      "Password must be minimum of eight characters, with no space , at least one uppercase letter, one lowercase letter, one number and one special character.",
+      function (value) {
+        return /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[^\s]{8,}$/.test(
+          value
+        );
+      }
+    ),
   confirmPassword: Yup.string()
     .required("Confirm Password Required")
     .oneOf(
       [Yup.ref("password"), null],
       "Password and Confirm Password mis-match."
     ),
+});
+
+export const userUpdateProfileSchema = Yup.object({
+  firstName: Yup.string().required("First Name required."),
+  lastName: Yup.string().required("Last Name required."),
+  role: Yup.array()
+    .min(1, "Select at least one user type")
+    .required("Select user type"),
+  phoneNumber: Yup.string()
+    .length(10)
+    .required("Phone number required.")
+    .test(
+      "phoneNumber-validation",
+      "Phone number must be digits only.",
+      function (value) {
+        return /^\d+$/.test(value);
+      }
+    ),
+  gender: Yup.string().required("Gender required."),
+  userImage: Yup.string().required("Upload Picture"),
 });

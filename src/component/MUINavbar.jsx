@@ -23,7 +23,10 @@ import AccountBalanceIcon from "@mui/icons-material/AccountBalance";
 import ReceiptLongIcon from "@mui/icons-material/ReceiptLong";
 import AccountBoxIcon from "@mui/icons-material/AccountBox";
 import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined";
-import { useLogOutMutation } from "../services/api/admin/auth";
+import {
+  useGetMyProfileQuery,
+  useLogOutMutation,
+} from "../services/api/admin/auth";
 import { removeLevelInfo } from "../localStorage/localStorage";
 import MUIToast from "./MUIToast";
 import MUILoading from "./MUILoading";
@@ -138,6 +141,7 @@ const Drawer = styled(MuiDrawer, {
 export default function MUINavbar() {
   const theme = useTheme();
   const [open, setOpen] = React.useState(true);
+  const { data: myData } = useGetMyProfileQuery();
   const [logOut, { data, isSuccess }] = useLogOutMutation();
   const navigate = useNavigate();
 
@@ -186,22 +190,25 @@ export default function MUINavbar() {
                 noWrap
                 sx={{ flexGrow: 1 }}
               >
-                Deerwalk Food Sytem
+                Deerwalk Food System
               </Typography>
-              <img
-                src="smile.png"
-                alt="Your Picture"
-                style={{
-                  height: "40px",
-                  width: "40px",
-                  marginRight: "16px",
-                  borderRadius: "100%",
-                }}
-              />
+              {myData && (
+                <img
+                  src={`http://${myData.data.profile}`}
+                  alt="Your Picture"
+                  style={{
+                    height: "40px",
+                    width: "40px",
+                    marginRight: "16px",
+                    borderRadius: "100%",
+                  }}
+                />
+              )}
             </Toolbar>
           </AppBar>
           <Drawer variant="permanent" open={open}>
             <DrawerHeader>
+              <img src="deerwalkLogo.jpeg" width="170px" />
               <IconButton onClick={handleDrawerClose}>
                 {theme.direction === "rtl" ? (
                   <ChevronRightIcon />

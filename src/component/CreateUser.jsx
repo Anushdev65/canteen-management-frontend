@@ -1,3 +1,5 @@
+import React from "react";
+import SigninForm from "./SigninForm";
 import CssBaseline from "@mui/material/CssBaseline";
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
@@ -6,8 +8,6 @@ import { userRegistrationSchema } from "../schema/YupSchema";
 import { useRegisterUserMutation } from "../services/api/admin/auth";
 import MUILoading from "../component/MUILoading";
 import MUIToast from "../component/MUIToast";
-import SignInLogo from "../component/SignInLogo";
-import SigninForm from "../component/SigninForm";
 
 const initialValues = {
   firstName: "",
@@ -19,7 +19,7 @@ const initialValues = {
   gender: "",
 };
 
-export default function SignUp() {
+const CreateUser = () => {
   const [registerUser, { isLoading, data, error }] = useRegisterUserMutation();
   const { handleBlur, touched, errors, handleChange, handleSubmit, values } =
     useFormik({
@@ -35,6 +35,7 @@ export default function SignUp() {
           roles: values.role,
           profile: values.userImage,
         };
+        console.log(body);
         registerUser(body);
         action.resetForm();
       },
@@ -55,7 +56,6 @@ export default function SignUp() {
               marginBottom: 8,
             }}
           >
-            <SignInLogo />
             <SigninForm
               handleBlur={handleBlur}
               touched={touched}
@@ -84,4 +84,6 @@ export default function SignUp() {
       )}
     </>
   );
-}
+};
+
+export default CreateUser;

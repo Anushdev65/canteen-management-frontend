@@ -51,6 +51,7 @@ export const adminApi = createApi({
           method: "GET",
         };
       },
+      providesTags: ["getMyProfile"],
     }),
     logOut: builder.mutation({
       query: () => {
@@ -87,6 +88,7 @@ export const adminApi = createApi({
         };
       },
     }),
+
     updatePassword: builder.mutation({
       query: (body) => {
         return {
@@ -95,6 +97,17 @@ export const adminApi = createApi({
           body: body,
         };
       },
+    }),
+
+    updateProfile: builder.mutation({
+      query: (body) => {
+        return {
+          url: `/auths/update-profile`,
+          method: "PATCH",
+          body: body,
+        };
+      },
+      invalidatesTags: ["getMyProfile"],
     }),
   }),
 });
@@ -110,4 +123,5 @@ export const {
   useResetPasswordMutation,
   useGetAllUsersQuery,
   useUpdatePasswordMutation,
+  useUpdateProfileMutation,
 } = adminApi;

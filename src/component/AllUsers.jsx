@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import React, { useEffect, useState, useMemo } from "react";
 import "./table.css";
 import { COLUMNS } from "./columns";
@@ -87,5 +88,31 @@ const AllUsers = () => {
     </>
   );
 };
+=======
+import React, { useEffect, useState } from "react";
+import { useGetAllUsersQuery } from "../services/api/admin/auth";
+import { Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@mui/material";
+import Checkbox from '@mui/material/Checkbox';
+const AllUsers = () => {
+
+
+  const { data } = useGetAllUsersQuery();
+  useEffect(() => {
+
+    console.log(data?.data.results);
+  }, [data]);
+
+
+  return (
+    <>
+      <div className="table-container">
+
+      </div>
+    </>
+
+  )
+}
+
+>>>>>>> 3352ce298bf15e7b10c3a1693dbe86c394334d72
 
 export default AllUsers;

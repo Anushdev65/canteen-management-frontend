@@ -13,7 +13,7 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import MUIError from "../component/MUIError";
-import { removeLevelInfo, setLevelInfo } from "../localStorage/localStorage";
+import { removeLevelInfo } from "../localStorage/localStorage";
 
 const initialValues = {
   oldPassword: "",
@@ -84,9 +84,9 @@ export default function UpdatePasswordForm() {
               variant="h6"
               sx={{ fontWeight: "bold", fontSize: 12 }}
             >
-              Password must be minimum 6 character and maximum 15 character.{" "}
-              <br />
-              Old password cannot be used again.
+              Password must be minimum of eight characters, with no space , at
+              least one uppercase letter, one lowercase letter, one number and
+              one special character.
             </Typography>
             <Box
               component="form"
