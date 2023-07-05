@@ -78,10 +78,11 @@ export const adminApi = createApi({
         };
       },
     }),
+
     getAllUsers: builder.query({
-      query: () => {
+      query: (query) => {
         return {
-          url: `/auths`,
+          url: `/auths?_page=${query?._page}`,
           method: "GET",
         };
       },
@@ -102,6 +103,7 @@ export const {
   useRegisterUserMutation,
   useVerifyUserMutation,
   useLoginUserMutation,
+  useLazyGetAllUsersQuery,
   useGetMyProfileQuery,
   useLogOutMutation,
   useForgotPasswordMutation,
