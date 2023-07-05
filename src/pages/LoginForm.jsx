@@ -14,7 +14,7 @@ import { userLoginSchema } from "../schema/YupSchema";
 import MUIError from "../component/MUIError";
 import { useLoginUserMutation } from "../services/api/admin/auth";
 import MUIToast from "../component/MUIToast";
-import { setLevelInfo } from "../localStorage/localStorage";
+import { setLevelInfo, setUSerInfo } from "../localStorage/localStorage";
 import { useNavigate } from "react-router-dom";
 import MUILoading from "../component/MUILoading";
 
@@ -38,10 +38,10 @@ export default function LoginForm() {
     });
 
   React.useEffect(() => {
-    console.log(data?.message);
     setLevelInfo({
       token: data?.data.token,
     });
+    setUSerInfo({ user: data?.data.user });
     if (data?.data.token) {
       setTimeout(() => {
         navigate("/");

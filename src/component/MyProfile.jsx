@@ -1,134 +1,183 @@
-import React, { useEffect } from "react";
-import { Box, Button, Container, CssBaseline, Grid, Typography } from "@mui/material";
+import React, { useState } from "react";
+import {
+  Box,
+  Button,
+  Container,
+  CssBaseline,
+  Grid,
+  Typography,
+} from "@mui/material";
 import { useGetMyProfileQuery } from "../services/api/admin/auth";
-import { display, positions } from "@mui/system";
-import PersonIcon from '@mui/icons-material/Person';
-import EmailIcon from '@mui/icons-material/Email';
-import PhoneIcon from '@mui/icons-material/Phone';
-import MaleIcon from '@mui/icons-material/Male';
-import GroupsIcon from '@mui/icons-material/Groups';
-import FemaleIcon from '@mui/icons-material/Female';
-import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
+import PersonIcon from "@mui/icons-material/Person";
+import EmailIcon from "@mui/icons-material/Email";
+import PhoneIcon from "@mui/icons-material/Phone";
+import MaleIcon from "@mui/icons-material/Male";
+import GroupsIcon from "@mui/icons-material/Groups";
+import FemaleIcon from "@mui/icons-material/Female";
+import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
+import MUIModal from "./MUIModal";
+
 const MyProfile = () => {
   const { data } = useGetMyProfileQuery();
-  useEffect(() => {
-    console.log(data?.data.roles)
-  }, [data])
+  const [openModal, setOpenModal] = useState(false);
+
+  const handleEditProfile = () => {
+    setOpenModal(true);
+  };
+
+  const handleCloseModal = () => {
+    setOpenModal(false);
+  };
+
   const getGenderIcon = () => {
-    if (data && data.data.gender === 'female') {
-      return <FemaleIcon sx={{ position: 'relative', bottom: '2px' }} />
+    if (data && data.data.gender === "female") {
+      return <FemaleIcon sx={{ position: "relative", bottom: "2px" }} />;
     } else {
-      return <MaleIcon sx={{ position: 'relative', bottom: '2px' }} />;
+      return <MaleIcon sx={{ position: "relative", bottom: "2px" }} />;
     }
-  }
+  };
 
   return (
-    <Container component="main" >
-      <CssBaseline />
-      <Box
-        sx={{
-          marginTop: 1,
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          marginBottom: 8,
-        }}
-      >
-        <Container style={{
-          backgroundColor: 'rgb(231, 229, 229)',
-          borderTopLeftRadius: '50px',
-          width: '850px',
-          height: '180px',
-
-        }} ><img src='deerwalk.png' alt='' style={{
-          width: '350px',
-          height: '150px',
-          marginTop: '0',
-          position: 'relative',
-          left: '220px',
-          top: '-20px'
-
-        }}></img>
-          <img
-            src="smile.png"
-            alt="Profile Picture"
-            style={{
-              height: "80px",
-              width: "80px",
-              marginRight: "16px",
-              borderRadius: "100%",
-              marginTop: "110px",
-              position: 'relative',
-              top: '50px',
-              right: '350px'
-
-
-
-
-            }}
-          />
-        </Container>
-
-        <Typography component="h1" variant="h5" mt={1} style={{
-          // marginInlineEnd: '46%',
-          textAlign: 'left',
-          marginLeft: '135px'
-        }}>
-          Myprofile
-          <Button variant="contained" sx={{
-            marginLeft: '460px',
-
-
-          }}><EditOutlinedIcon />Edit Profile</Button>
-        </Typography>
-
+    <>
+      <MUIModal open={openModal} handleClose={handleCloseModal} />
+      <Container component="main">
+        <CssBaseline />
         <Box
           sx={{
-            mt: 3,
+            marginTop: 1,
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
             marginBottom: 8,
-            textAlign: "center",
           }}
         >
-          {data && (
-            <Grid container spacing={2} style={{
-              marginRight: '35px',
-              height: '140px',
+          <Container
+
+            style={{
+              backgroundColor: 'rgb(231, 229, 229)',
+              borderTopLeftRadius: '50px',
+              width: '850px',
+              height: '180px',
+            }}
+          ><img src='deerwalk.png' alt='' style={{
+            width: '350px',
+            height: '150px',
+            marginTop: '0',
+            position: 'relative',
+            left: '220px',
+            top: '-20px'
+
+          }}></img>
+            <img
+              src={`http://${data?.data.profile}`}
+              alt="Profile Picture"
+              style={{
+                height: "80px",
+                width: "80px",
+                marginRight: "16px",
+                borderRadius: "100%",
+                marginTop: "110px",
+                position: 'relative',
+                top: '50px',
+                right: '350px'
+              }}
+            />
+          </Container>
+
+          <Typography
+            component="h1"
+            variant="h5"
+            mt={1}
+            style={{
               textAlign: 'left',
-              marginTop: '5px',
+              marginLeft: '135px'
+            }}
+          >
+            Myprofile
+            <Button
+              variant="contained"
+              sx={{
+                marginLeft: '460px',
+              }}
+              onClick={handleEditProfile}
+            >
+              <EditOutlinedIcon />
+              Edit Profile
+            </Button>
+          </Typography>
+          <Box
+            sx={{
+              mt: 3,
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              marginBottom: 8,
+              textAlign: "center",
+            }}
+          >
+            {data && (
+              <Grid
+                container
+                spacing={2}
+                style={{
+                  marginRight: "50px",
+                  height: "160px",
+                  textAlign: "left",
+                }}
+              >
+                <Grid item xs={12}>
+                  <Typography
+                    sx={{ display: "flex", gap: "10px", flexDirection: "row" }}
+                  >
+                    <PersonIcon sx={{ position: "relative", bottom: "2px" }} />
+                    {data.data.firstName} {data.data.lastName}
+                  </Typography>
+                </Grid>
 
-            }}>
-
-              <Grid item xs={12}   >
-                <Typography sx={{ display: 'flex', gap: '10px', flexDirection: 'row' }}><PersonIcon sx={{ position: 'relative', bottom: '2px' }} />
-                  {data.data.firstName} {data.data.lastName}
-                </Typography>
+                <Grid item xs={12}>
+                  <Typography
+                    sx={{ display: "flex", gap: "10px", flexDirection: "row" }}
+                  >
+                    <EmailIcon sx={{ position: "relative", bottom: "2px" }} />
+                    {data.data.email}
+                  </Typography>
+                </Grid>
+                <Grid item xs={12}>
+                  <Typography
+                    sx={{ display: "flex", gap: "10px", flexDirection: "row" }}
+                  >
+                    <PhoneIcon sx={{ position: "relative", bottom: "2px" }} />
+                    {data.data.phoneNumber}
+                  </Typography>
+                </Grid>
+                <Grid item xs={12}>
+                  <Typography
+                    sx={{ display: "flex", gap: "10px", flexDirection: "row" }}
+                  >
+                    {" "}
+                    {getGenderIcon()}
+                    {data.data.gender.charAt(0).toUpperCase() +
+                      data.data.gender.slice(1)}
+                  </Typography>
+                </Grid>
+                <Grid item xs={12}>
+                  <Typography
+                    sx={{ display: "flex", gap: "10px", flexDirection: "row" }}
+                  >
+                    <GroupsIcon sx={{ position: "relative", bottom: "2px" }} />
+                    {data.data.roles.map((role) =>
+                      role.toLowerCase() === "admin"
+                        ? role.charAt(0).toUpperCase() + role.slice(1)
+                        : role
+                    )}
+                  </Typography>
+                </Grid>
               </Grid>
-
-              <Grid item xs={12} >
-                <Typography sx={{ display: 'flex', gap: '10px', flexDirection: 'row' }}>< EmailIcon sx={{ position: 'relative', bottom: '2px' }} />
-                  {data.data.email}</Typography>
-              </Grid>
-              <Grid item xs={12}>
-                <Typography sx={{ display: 'flex', gap: '10px', flexDirection: 'row' }}><PhoneIcon sx={{ position: 'relative', bottom: '2px' }} />
-                  {data.data.phoneNumber}</Typography>
-              </Grid>
-              <Grid item xs={12} >
-                <Typography sx={{ display: 'flex', gap: '10px', flexDirection: 'row' }}> {getGenderIcon()}
-                  {data.data.gender.charAt(0).toUpperCase() + data.data.gender.slice(1)}</Typography>
-              </Grid>
-              <Grid item xs={12}>
-                <Typography sx={{ display: 'flex', gap: '10px', flexDirection: 'row' }}><GroupsIcon sx={{ position: 'relative', bottom: '2px' }} />
-                  {data.data.roles.map((role) => role.charAt(0).toUpperCase() + role.slice(1))}</Typography>
-              </Grid>
-            </Grid>
-
-          )}
+            )}
+          </Box>
         </Box>
-      </Box>
-    </Container>
+      </Container>
+    </>
   );
 };
 

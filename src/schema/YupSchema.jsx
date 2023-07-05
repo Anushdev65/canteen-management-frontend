@@ -19,7 +19,7 @@ export const userRegistrationSchema = Yup.object({
   role: Yup.array()
     .min(1, "Select at least one user type")
     .required("Select user type"),
-  phoneNumber: Yup.string().length(10).required("Phone numbe rrequired."),
+  phoneNumber: Yup.string().length(10).required("Phone number required."),
   gender: Yup.string().required("Gender required."),
 });
 
@@ -88,4 +88,15 @@ export const userResetPasswordSchema = Yup.object({
       [Yup.ref("password"), null],
       "Password and Confirm Password mis-match."
     ),
+});
+
+export const userUpdateProfileSchema = Yup.object({
+  firstName: Yup.string().required("First Name required."),
+  lastName: Yup.string().required("Last Name required."),
+  role: Yup.array()
+    .min(1, "Select at least one user type")
+    .required("Select user type"),
+  phoneNumber: Yup.string().length(10).required("Phone number required."),
+  gender: Yup.string().required("Gender required."),
+  userImage: Yup.string().required("Upload Picture"),
 });
