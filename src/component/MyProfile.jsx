@@ -56,22 +56,25 @@ const MyProfile = () => {
           }}
         >
           <Container
-
             style={{
-              backgroundColor: 'rgb(231, 229, 229)',
-              borderTopLeftRadius: '50px',
-              width: '850px',
-              height: '180px',
+              backgroundColor: "rgb(231, 229, 229)",
+              borderTopLeftRadius: "50px",
+              width: "850px",
+              height: "180px",
             }}
-          ><img src='deerwalk.png' alt='' style={{
-            width: '350px',
-            height: '150px',
-            marginTop: '0',
-            position: 'relative',
-            left: '220px',
-            top: '-20px'
-
-          }}></img>
+          >
+            <img
+              src="deerwalk.png"
+              alt=""
+              style={{
+                width: "350px",
+                height: "150px",
+                marginTop: "0",
+                position: "relative",
+                left: "220px",
+                top: "-20px",
+              }}
+            ></img>
             <img
               src={`http://${data?.data.profile}`}
               alt="Profile Picture"
@@ -81,9 +84,9 @@ const MyProfile = () => {
                 marginRight: "16px",
                 borderRadius: "100%",
                 marginTop: "110px",
-                position: 'relative',
-                top: '50px',
-                right: '350px'
+                position: "relative",
+                top: "50px",
+                right: "350px",
               }}
             />
           </Container>
@@ -93,15 +96,15 @@ const MyProfile = () => {
             variant="h5"
             mt={1}
             style={{
-              textAlign: 'left',
-              marginLeft: '135px'
+              textAlign: "left",
+              marginLeft: "135px",
             }}
           >
             Myprofile
             <Button
               variant="contained"
               sx={{
-                marginLeft: '460px',
+                marginLeft: "460px",
               }}
               onClick={handleEditProfile}
             >

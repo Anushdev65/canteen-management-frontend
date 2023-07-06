@@ -2,6 +2,7 @@ import React, { useEffect, useState, useMemo } from "react";
 import "./table.css";
 import { COLUMNS } from "./columns";
 import { useTable, useSortBy, usePagination } from "react-table";
+
 import {
   useGetAllUsersQuery,
   useLazyGetAllUsersQuery,
@@ -15,7 +16,7 @@ const AllUsers = () => {
   const tableData = useMemo(() => data?.data?.results || [], [data]);
 
   useEffect(() => {
-    trigger({ _page: 1 });
+    trigger({ _page: 1, _brake: 13 });
   }, []);
 
   useEffect(() => {
@@ -26,6 +27,7 @@ const AllUsers = () => {
     getTableProps,
     getTableBodyProps,
     headerGroups,
+    rows,
     page,
     nextPage,
     previousPage,
@@ -34,6 +36,9 @@ const AllUsers = () => {
     {
       columns,
       data: tableData,
+      initialState: {
+        pageSize: 15,
+      },
     },
     useSortBy,
     usePagination
@@ -56,8 +61,8 @@ const AllUsers = () => {
                   <span>
                     {column.isSorted
                       ? column.isSortedDesc
-                        ? "down"
-                        : "up"
+                        ? " 🔽 "
+                        : " 🔼 "
                       : ""}
                   </span>
                 </th>
