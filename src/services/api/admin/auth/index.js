@@ -83,7 +83,7 @@ export const adminApi = createApi({
     getAllUsers: builder.query({
       query: (query) => {
         return {
-          url: `/auths?_page=${query?._page}`,
+          url: `/auths?_page=${query?._page}&_brake=${query?._brake}`,
           method: "GET",
         };
       },
