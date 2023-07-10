@@ -83,10 +83,11 @@ export const adminApi = createApi({
     getAllUsers: builder.query({
       query: (query) => {
         return {
-          url: `/auths?_page=${query?._page}&_brake=${query?._brake}`,
+          url: `/auths?_page=${query?._page}&_brake=${query?._brake}&_sort=${query?._sort}`,
           method: "GET",
         };
       },
+      providesTags: ["getAllUsers"],
     }),
 
     updatePassword: builder.mutation({
@@ -109,6 +110,37 @@ export const adminApi = createApi({
       },
       invalidatesTags: ["getMyProfile"],
     }),
+
+    updateUserByAdmin: builder.mutation({
+      query: ({ body, id }) => {
+        return {
+          url: `/auths/${id}`,
+          method: "PATCH",
+          body: body,
+        };
+      },
+      invalidatesTags: ["getUserProfile", "getAllUsers"],
+    }),
+
+    deleteUserByAdmin: builder.mutation({
+      query: (id) => {
+        return {
+          url: `/auths/${id}`,
+          method: "DELETE",
+        };
+      },
+      invalidatesTags: ["getAllUsers"],
+    }),
+
+    getUserById: builder.query({
+      query: (id) => {
+        return {
+          url: `/auths/${id}`,
+          method: "Get",
+        };
+      },
+      providesTags: ["getUserProfile"],
+    }),
   }),
 });
 
@@ -124,4 +156,7 @@ export const {
   useGetAllUsersQuery,
   useUpdatePasswordMutation,
   useUpdateProfileMutation,
+  useGetUserByIdQuery,
+  useUpdateUserByAdminMutation,
+  useDeleteUserByAdminMutation,
 } = adminApi;

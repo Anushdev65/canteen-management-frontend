@@ -1,5 +1,5 @@
 import * as React from "react";
-import { NavLink, Outlet, useNavigate } from "react-router-dom";
+import { NavLink, Outlet, useNavigate, useParams } from "react-router-dom";
 import { styled, useTheme } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import MuiDrawer from "@mui/material/Drawer";
@@ -25,6 +25,7 @@ import AccountBoxIcon from "@mui/icons-material/AccountBox";
 import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined";
 import {
   useGetMyProfileQuery,
+  useGetUserByIdQuery,
   useLogOutMutation,
 } from "../services/api/admin/auth";
 import { removeLevelInfo } from "../localStorage/localStorage";
@@ -139,9 +140,11 @@ const Drawer = styled(MuiDrawer, {
 }));
 
 export default function MUINavbar() {
+  const { id } = useParams();
   const theme = useTheme();
   const [open, setOpen] = React.useState(true);
   const { data: myData } = useGetMyProfileQuery();
+  const { data: userData } = useGetUserByIdQuery(id);
   const [logOut, { data, isSuccess }] = useLogOutMutation();
   const navigate = useNavigate();
 
@@ -194,7 +197,11 @@ export default function MUINavbar() {
               </Typography>
               {myData && (
                 <img
-                  src={`http://${myData.data.profile}`}
+                  src={
+                    id
+                      ? `http://${userData?.data.profile}`
+                      : `http://${myData.data.profile}`
+                  }
                   alt="Your Picture"
                   style={{
                     height: "40px",
@@ -208,7 +215,10 @@ export default function MUINavbar() {
           </AppBar>
           <Drawer variant="permanent" open={open}>
             <DrawerHeader>
-              <img src="deerwalkLogo.jpeg" width="170px" />
+              <img
+                src={`http://localhost:8000/deerwalklogo.jpeg`}
+                width="170px"
+              />
               <IconButton onClick={handleDrawerClose}>
                 {theme.direction === "rtl" ? (
                   <ChevronRightIcon />

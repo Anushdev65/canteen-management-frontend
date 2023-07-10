@@ -1,4 +1,10 @@
-import React, { useState } from "react";
+import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
+import EmailIcon from "@mui/icons-material/Email";
+import FemaleIcon from "@mui/icons-material/Female";
+import GroupsIcon from "@mui/icons-material/Groups";
+import MaleIcon from "@mui/icons-material/Male";
+import PersonIcon from "@mui/icons-material/Person";
+import PhoneIcon from "@mui/icons-material/Phone";
 import {
   Box,
   Button,
@@ -7,18 +13,21 @@ import {
   Grid,
   Typography,
 } from "@mui/material";
-import { useGetMyProfileQuery } from "../services/api/admin/auth";
-import PersonIcon from "@mui/icons-material/Person";
-import EmailIcon from "@mui/icons-material/Email";
-import PhoneIcon from "@mui/icons-material/Phone";
-import MaleIcon from "@mui/icons-material/Male";
-import GroupsIcon from "@mui/icons-material/Groups";
-import FemaleIcon from "@mui/icons-material/Female";
-import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
+import React, { useState } from "react";
+import { useParams } from "react-router-dom";
+import {
+  useGetMyProfileQuery,
+  useGetUserByIdQuery,
+} from "../services/api/admin/auth";
 import MUIModal from "./MUIModal";
 
 const MyProfile = () => {
-  const { data } = useGetMyProfileQuery();
+  const { id } = useParams();
+  const { data: myProfileData } = useGetMyProfileQuery();
+  const { data: userData } = useGetUserByIdQuery(id);
+
+  const data = id ? userData : myProfileData;
+
   const [openModal, setOpenModal] = useState(false);
 
   const handleEditProfile = () => {
@@ -39,11 +48,7 @@ const MyProfile = () => {
 
   return (
     <>
-      <MUIModal
-        open={openModal}
-        handleClose={handleCloseModal}
-        updateProfileAdmin={true}
-      />
+      <MUIModal open={openModal} handleClose={handleCloseModal} />
       <Container component="main">
         <CssBaseline />
         <Box
@@ -64,7 +69,7 @@ const MyProfile = () => {
             }}
           >
             <img
-              src="deerwalk.png"
+              src={`http://localhost:8000/deerwalkCompware.png`}
               alt=""
               style={{
                 width: "350px",
@@ -75,7 +80,7 @@ const MyProfile = () => {
             ></img>
             <img
               src={`http://${data?.data.profile}`}
-              alt="Profile Picture"
+              alt=""
               style={{
                 height: "80px",
                 width: "80px",
