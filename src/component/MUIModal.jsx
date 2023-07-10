@@ -90,42 +90,52 @@ export default function MUIModal({ open, handleClose, userId }) {
   const data = adminUpdate || userUpdate;
   const error = adminError || userUpdateError;
 
-  const { handleBlur, touched, errors, handleChange, handleSubmit, values } =
-    useFormik({
-      initialValues: {
-        firstName: userInfo?.data?.firstName || "",
-        lastName: userInfo?.data?.lastName || "",
-        role: userInfo?.data?.roles?.length ? userInfo?.data?.roles : [],
-        phoneNumber: userInfo?.data?.phoneNumber || "",
-        gender: userInfo?.data?.gender || "",
-        userImage: userInfo?.data?.profile || "",
-      },
-      validationSchema: userUpdateProfileSchema,
-      onSubmit: (values, action) => {
-        const body = {
-          firstName: values.firstName,
-          lastName: values.lastName,
-          gender: values.gender,
-          phoneNumber: values.phoneNumber,
-          roles: values.role,
-          profile: values.userImage,
-        };
+  const {
+    handleBlur,
+    touched,
+    errors,
+    handleChange,
+    handleSubmit,
+    values,
+    handleReset,
+  } = useFormik({
+    enableReinitialize: true,
+    initialValues: {
+      firstName: userInfo?.data?.firstName || "",
+      lastName: userInfo?.data?.lastName || "",
+      role: userInfo?.data?.roles?.length ? userInfo?.data?.roles : [],
+      phoneNumber: userInfo?.data?.phoneNumber || "",
+      gender: userInfo?.data?.gender || "",
+      userImage: userInfo?.data?.profile || "",
+    },
+    validationSchema: userUpdateProfileSchema,
+    onSubmit: (values, action) => {
+      const body = {
+        firstName: values.firstName,
+        lastName: values.lastName,
+        gender: values.gender,
+        phoneNumber: values.phoneNumber,
+        roles: values.role,
+        profile: values.userImage,
+      };
 
-        id
-          ? updateUserByAdmin({ body, id })
-          : userId
-          ? updateUserByAdmin({ body, id: userId })
-          : updateProfile(body);
-        action.resetForm();
-        handleClose();
-      },
-      enableReinitialize: true,
-    });
+      id
+        ? updateUserByAdmin({ body, id })
+        : userId
+        ? updateUserByAdmin({ body, id: userId })
+        : updateProfile(body);
+      action.resetForm();
+      handleClose();
+    },
+  });
 
   return (
     <div>
       <BootstrapDialog
-        onClose={handleClose}
+        onClose={() => {
+          handleReset();
+          handleClose();
+        }}
         aria-labelledby="customized-dialog-title"
         open={open}
         TransitionComponent={Transition}
@@ -136,7 +146,10 @@ export default function MUIModal({ open, handleClose, userId }) {
       >
         <BootstrapDialogTitle
           id="customized-dialog-title"
-          onClose={handleClose}
+          onClose={() => {
+            handleReset();
+            handleClose();
+          }}
         >
           Update Profile
         </BootstrapDialogTitle>
