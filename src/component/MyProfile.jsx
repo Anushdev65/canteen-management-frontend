@@ -69,10 +69,8 @@ const MyProfile = () => {
               style={{
                 width: "350px",
                 height: "150px",
-                marginTop: "0",
-                position: "relative",
-                left: "220px",
-                top: "-20px",
+                marginLeft: "190px",
+                marginTop: "20px",
               }}
             ></img>
             <img
@@ -83,10 +81,8 @@ const MyProfile = () => {
                 width: "80px",
                 marginRight: "16px",
                 borderRadius: "100%",
-                marginTop: "110px",
-                position: "relative",
-                top: "50px",
-                right: "350px",
+                marginTop: "-22px",
+                marginRight: "400px",
               }}
             />
           </Container>
@@ -130,6 +126,7 @@ const MyProfile = () => {
                   marginRight: "50px",
                   height: "160px",
                   textAlign: "left",
+                  marginTop: "0.5px",
                 }}
               >
                 <Grid item xs={12}>

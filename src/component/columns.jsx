@@ -2,10 +2,6 @@ import { ColumnFilter } from "./ColumnFilter";
 
 export const COLUMNS = [
   {
-    Header: "Select",
-    accessor: "id",
-  },
-  {
     Header: "First Name",
     accessor: "firstName",
   },
@@ -29,4 +25,19 @@ export const COLUMNS = [
     Header: "Role",
     accessor: "roles",
   },
+  // {
+  //   Header: "Action",
+  //   Cell: (row) => (
+  //     <div>
+  //       <button
+  //         onClick={() => {
+  //           console.log(row);
+  //         }}
+  //       >
+  //         Add
+  //       </button>
+  //       <button>Delete</button>
+  //     </div>
+  //   ),
+  // },
 ];

@@ -1,7 +1,8 @@
 import React, { useEffect, useState, useMemo } from "react";
 import "./table.css";
 import { COLUMNS } from "./columns";
-import { useTable, useSortBy, usePagination } from "react-table";
+import { useTable, useSortBy, usePagination, useRowSelect } from "react-table";
+import { Checkbox } from "./Checkbox";
 
 import {
   useGetAllUsersQuery,
@@ -14,6 +15,8 @@ const AllUsers = () => {
   const [trigger, { data }] = useLazyGetAllUsersQuery();
   // const { data } = useGetAllUsersQuery();
   const tableData = useMemo(() => data?.data?.results || [], [data]);
+
+  const [selectedRows, setSelectedRows] = useState([]);
 
   useEffect(() => {
     trigger({ _page: 1, _brake: 13 });
@@ -32,6 +35,7 @@ const AllUsers = () => {
     nextPage,
     previousPage,
     prepareRow,
+    selectedFlatRows,
   } = useTable(
     {
       columns,
@@ -41,9 +45,27 @@ const AllUsers = () => {
       },
     },
     useSortBy,
-    usePagination
+    usePagination,
+    useRowSelect,
+    (hooks) => {
+      hooks.visibleColumns.push((columns) => [
+        {
+          id: "selection",
+          Header: ({ getToggleAllRowsSelectedProps }) => (
+            <Checkbox {...getToggleAllRowsSelectedProps()} />
+          ),
+          Cell: ({ row }) => <Checkbox {...row.getToggleRowSelectedProps()} />,
+        },
+        ...columns,
+      ]);
+    }
   );
 
+  useEffect(() => {
+    console.log(selectedFlatRows);
+  }, [selectedFlatRows]);
+
+  const firstPageRows = rows.slice(0, 10);
   // useEffect(() => {
   //   console.log("data test");
   //   console.log(data);
@@ -54,7 +76,7 @@ const AllUsers = () => {
       <table {...getTableProps()}>
         <thead>
           {headerGroups.map((headerGroup) => (
-            <tr {...headerGroup.getFooterGroupProps()}>
+            <tr {...headerGroup.getHeaderGroupProps()}>
               {headerGroup.headers.map((column) => (
                 <th {...column.getHeaderProps(column.getSortByToggleProps())}>
                   {column.render("Header")}
@@ -71,7 +93,7 @@ const AllUsers = () => {
           ))}
         </thead>
         <tbody {...getTableBodyProps()}>
-          {page.map((row) => {
+          {firstPageRows.map((row) => {
             prepareRow(row);
             return (
               <tr {...row.getRowProps()}>
@@ -89,6 +111,17 @@ const AllUsers = () => {
         <button onClick={() => trigger({ _page: 1 })}>Previous</button>
         <button onClick={() => trigger({ _page: 2 })}> Next</button>
       </div>
+      <pre>
+        <code>
+          {JSON.stringify(
+            {
+              selectedFlatRows: selectedFlatRows.map((row) => row.original),
+            },
+            null,
+            2
+          )}
+        </code>
+      </pre>
     </>
   );
 };

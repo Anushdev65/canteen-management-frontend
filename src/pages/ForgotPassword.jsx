@@ -13,7 +13,7 @@ import { useForgotPasswordMutation } from "../services/api/admin/auth";
 import { useNavigate } from "react-router-dom";
 import MUILoading from "../component/MUILoading";
 import MUIToast from "../component/MUIToast";
-
+import "./login.css";
 const initialValues = {
   email: "",
   confirmEmail: "",
@@ -44,102 +44,117 @@ export default function ForgotPassword() {
 
   return (
     <>
-      {data ? (
-        <MUIToast
-          initialValue={true}
-          message={data.message}
-          severity="success"
-        />
-      ) : error ? (
-        <MUIToast
-          initialValue={true}
-          message={error.data.message}
-          severity="error"
-        />
-      ) : (
-        <></>
-      )}
-      {isLoading ? (
-        <MUILoading />
-      ) : (
-        <Container component="main" maxWidth="xs" sx={{ mt: "5rem" }}>
-          <CssBaseline />
-          <Box
+      <div className="forgetpassword-container">
+        {data ? (
+          <MUIToast
+            initialValue={true}
+            message={data.message}
+            severity="success"
+          />
+        ) : error ? (
+          <MUIToast
+            initialValue={true}
+            message={error.data.message}
+            severity="error"
+          />
+        ) : (
+          <></>
+        )}
+        {isLoading ? (
+          <MUILoading />
+        ) : (
+          <Container
+            component="main"
+            maxWidth="xs"
             sx={{
-              marginTop: 4,
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              marginBottom: 8,
+              marginTop: "6rem",
+              height: "325px",
+              paddingTop: "10px",
+              borderRadius: "20px",
+              boxShadow: "7px 7px 6px 0 rgba(0, 0, 0, 0.4)",
+              transition: "box-shadow 0.3",
+              "&:hover": { boxShadow: "12px 12px 6px 0 rgba(0, 0, 0, 0.4)" },
+              opacity: 1.21,
             }}
           >
-            <Typography
-              component="h6"
-              variant="h6"
-              sx={{ fontWeight: "bold", fontSize: 14 }}
-            >
-              Fill up your email.
-            </Typography>
+            <CssBaseline />
             <Box
-              component="form"
-              noValidate
-              onSubmit={handleSubmit}
-              sx={{ mt: 3 }}
+              sx={{
+                marginTop: 4,
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                marginBottom: 8,
+              }}
             >
-              <Grid container spacing={2}>
-                <Grid item xs={12}>
-                  <TextField
-                    error={touched.email && errors.email}
-                    required
-                    fullWidth
-                    name="email"
-                    label="Email"
-                    type="email"
-                    id="email"
-                    autoComplete="new-email"
-                    value={values.email}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                  />
-                  <MUIError
-                    touch={touched.email}
-                    error={errors.email}
-                    value={false}
-                  />
-                </Grid>
-                <Grid item xs={12}>
-                  <TextField
-                    error={touched.confirmEmail && errors.confirmEmail}
-                    required
-                    fullWidth
-                    name="confirmEmail"
-                    label="Confirm Email"
-                    type="email"
-                    id="confirmEmail"
-                    autoComplete="ConfirmEmail"
-                    value={values.confirmEmail}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                  />
-                  <MUIError
-                    touch={touched.confirmEmail}
-                    error={errors.confirmEmail}
-                    value={false}
-                  />
-                </Grid>
-              </Grid>
-              <Button
-                type="submit"
-                fullWidth
-                variant="contained"
-                sx={{ mt: 3, mb: 2 }}
+              <Typography
+                component="h6"
+                variant="h6"
+                sx={{ fontWeight: "bold", fontSize: 14 }}
               >
-                Submit
-              </Button>
+                Fill up your email.
+              </Typography>
+              <Box
+                component="form"
+                noValidate
+                onSubmit={handleSubmit}
+                sx={{ mt: 3 }}
+              >
+                <Grid container spacing={2}>
+                  <Grid item xs={12}>
+                    <TextField
+                      error={touched.email && errors.email}
+                      required
+                      fullWidth
+                      name="email"
+                      label="Email"
+                      type="email"
+                      id="email"
+                      autoComplete="new-email"
+                      value={values.email}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                    />
+                    <MUIError
+                      touch={touched.email}
+                      error={errors.email}
+                      value={false}
+                    />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <TextField
+                      error={touched.confirmEmail && errors.confirmEmail}
+                      required
+                      fullWidth
+                      name="confirmEmail"
+                      label="Confirm Email"
+                      type="email"
+                      id="confirmEmail"
+                      autoComplete="ConfirmEmail"
+                      value={values.confirmEmail}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                    />
+                    <MUIError
+                      touch={touched.confirmEmail}
+                      error={errors.confirmEmail}
+                      value={false}
+                    />
+                  </Grid>
+                </Grid>
+                <Button
+                  type="submit"
+                  fullWidth
+                  variant="contained"
+                  sx={{ mt: 3, mb: 2 }}
+                >
+                  Submit
+                </Button>
+              </Box>
             </Box>
-          </Box>
-        </Container>
-      )}
+          </Container>
+        )}
+      </div>
     </>
   );
 }
