@@ -24,6 +24,7 @@ function App() {
             element={<UpdatePasswordForm />}
           />
           <Route path="/create-user" element={<CreateUser />} />
+          <Route path="/view-user/:id" element={<MyProfile />} />
         </Route>
       </Route>
       <Route path="/register" element={<SignUp />} />

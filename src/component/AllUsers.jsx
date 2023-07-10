@@ -1,6 +1,15 @@
+import AddIcon from "@mui/icons-material/Add";
+import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined";
+import EditIcon from "@mui/icons-material/Edit";
+import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
+import { Box, Fab, Grid, Tooltip, Zoom } from "@mui/material";
 import React, { useEffect, useMemo, useState } from "react";
-import { usePagination, useSortBy, useTable } from "react-table";
+import { useNavigate } from "react-router-dom";
+import { usePagination, useRowSelect, useSortBy, useTable } from "react-table";
 import { useLazyGetAllUsersQuery } from "../services/api/admin/auth";
+import { IndeterminateCheckbox } from "./IndeterminateCheckbox";
+import MUIDeleteModal from "./MUIDeleteModal";
+import MUIModal from "./MUIModal";
 import { COLUMNS } from "./columns";
 import "./table.css";
 
@@ -9,6 +18,10 @@ const AllUsers = () => {
   const [trigger, { data }] = useLazyGetAllUsersQuery();
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
+  const [sortBy, setSortBy] = useState("");
+  const [openModal, setOpenModal] = useState(false);
+  const [openDeleteModal, setOpenDeleteModal] = useState(false);
+  const navigate = useNavigate();
 
   const tableData = useMemo(
     () => data?.data?.results || [],
@@ -16,23 +29,66 @@ const AllUsers = () => {
   );
 
   useEffect(() => {
-    trigger({ _page: currentPage, _brake: rowsPerPage });
-  }, [currentPage, rowsPerPage]);
+    trigger({ _page: currentPage, _brake: rowsPerPage, _sort: sortBy });
+  }, [currentPage, rowsPerPage, sortBy, trigger]);
 
-  useEffect(() => {
-    console.log(data);
-  }, [data]);
+  // useEffect(() => {
+  //   console.log(data);
+  // }, [data]);
 
-  const { getTableProps, getTableBodyProps, headerGroups, page, prepareRow } =
-    useTable(
-      {
-        columns,
-        data: tableData,
-        initialState: { pageSize: rowsPerPage },
+  const {
+    getTableProps,
+    getTableBodyProps,
+    headerGroups,
+    page,
+    prepareRow,
+    selectedFlatRows,
+  } = useTable(
+    {
+      columns,
+      data: tableData,
+      initialState: { pageSize: 20 },
+      stateReducer: (state, action) => {
+        if (
+          action.type === "toggleRowSelected" &&
+          Object.keys(state.selectedRowIds).length
+        ) {
+          const newState = { ...state };
+
+          newState.selectedRowIds = {
+            [action.id]: true,
+          };
+
+          return newState;
+        }
+
+        return state;
       },
-      useSortBy,
-      usePagination
-    );
+    },
+    useSortBy,
+    usePagination,
+    useRowSelect,
+    (hooks) => {
+      hooks.visibleColumns.push((columns) => {
+        return [
+          {
+            id: "selection",
+            // Header: ({ getToggleAllRowsSelectedProps }) => {
+            //   return (
+            //     <IndeterminateCheckbox {...getToggleAllRowsSelectedProps()} />
+            //   );
+            // },
+            Cell: ({ row }) => {
+              return (
+                <IndeterminateCheckbox {...row.getToggleRowSelectedProps()} />
+              );
+            },
+          },
+          ...columns,
+        ];
+      });
+    }
+  );
 
   const handleRowSelect = (e) => {
     const selectedRowsPerPage = e.target.value;
@@ -46,20 +102,131 @@ const AllUsers = () => {
     trigger({ _page: pageNumber, _brake: rowsPerPage });
   };
 
+  const handleSort = (column) => {
+    setSortBy(
+      sortBy === column.id
+        ? `-${column.id}`
+        : sortBy === `-${column.id}`
+        ? ""
+        : column.id
+    );
+  };
+
+  // useEffect(() => {
+  //   console.log(selectedFlatRows[0]?.original);
+  // }, [selectedFlatRows]);
+  const handleViewProfile = () => {
+    // console.log(selectedFlatRows[0]?.original._id);
+    navigate(`/view-user/${selectedFlatRows[0]?.original._id}`);
+  };
+
+  const handleCloseModal = () => {
+    setOpenModal(false);
+  };
+
+  const handleCloseDeleteModal = () => {
+    setOpenDeleteModal(false);
+  };
+
+  const handleEditProfile = () => {
+    setOpenModal(true);
+  };
+
+  const handleDeleteProfile = () => {
+    setOpenDeleteModal(true);
+  };
+
   return (
     <>
+      <MUIModal
+        open={openModal}
+        handleClose={handleCloseModal}
+        userId={selectedFlatRows[0]?.original._id}
+      />
+      <MUIDeleteModal
+        open={openDeleteModal}
+        handleClose={handleCloseDeleteModal}
+        userId={selectedFlatRows[0]?.original._id}
+      />
+      <Grid container justifyContent="space-between" sx={{ mb: 2 }}>
+        <Grid item>
+          <Tooltip
+            title="Add User"
+            placement="right-start"
+            TransitionComponent={Zoom}
+          >
+            <Fab
+              color="primary"
+              aria-label="add"
+              size="small"
+              onClick={() => {
+                navigate("/create-user");
+              }}
+            >
+              <AddIcon />
+            </Fab>
+          </Tooltip>
+        </Grid>
+        {selectedFlatRows.length > 0 && (
+          <Grid item>
+            <Box sx={{ display: "flex", gap: "10px" }}>
+              <Tooltip
+                title="View User"
+                placement="top"
+                TransitionComponent={Zoom}
+              >
+                <Fab
+                  color="primary"
+                  aria-label="view"
+                  size="small"
+                  onClick={handleViewProfile}
+                >
+                  <VisibilityOutlinedIcon />
+                </Fab>
+              </Tooltip>
+              <Tooltip
+                title="Edit User"
+                placement="top"
+                TransitionComponent={Zoom}
+                onClick={handleEditProfile}
+              >
+                <Fab color="primary" aria-label="view" size="small">
+                  <EditIcon />
+                </Fab>
+              </Tooltip>
+              <Tooltip
+                title="Delete User"
+                placement="top"
+                TransitionComponent={Zoom}
+                onClick={handleDeleteProfile}
+              >
+                <Fab color="primary" aria-label="view" size="small">
+                  <DeleteOutlinedIcon />
+                </Fab>
+              </Tooltip>
+            </Box>
+          </Grid>
+        )}
+      </Grid>
       <table {...getTableProps()}>
         <thead>
           {headerGroups.map((headerGroup) => (
             <tr {...headerGroup.getFooterGroupProps()}>
               {headerGroup.headers.map((column) => (
-                <th {...column.getHeaderProps(column.getSortByToggleProps())}>
+                <th
+                  {...column.getHeaderProps(column.getSortByToggleProps())}
+                  onClick={() => {
+                    if (column.id !== "selection") {
+                      handleSort(column);
+                    }
+                  }}
+                >
                   {column.render("Header")}
                   <span>
-                    {column.isSorted
-                      ? column.isSortedDesc
-                        ? "down"
-                        : "up"
+                    {sortBy === column.id
+                      ? " ↑"
+                      : sortBy === `-${column.id}`
+                      ? " ↓"
                       : ""}
                   </span>
                 </th>
