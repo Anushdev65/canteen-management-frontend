@@ -1,5 +1,6 @@
 import CloseIcon from "@mui/icons-material/Close";
-import ManageAccountsOutlinedIcon from "@mui/icons-material/ManageAccountsOutlined";
+import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined";
+import { Button, DialogActions, Typography } from "@mui/material";
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -9,19 +10,10 @@ import DialogTitle from "@mui/material/DialogTitle";
 import IconButton from "@mui/material/IconButton";
 import Slide from "@mui/material/Slide";
 import { styled } from "@mui/material/styles";
-import { useFormik } from "formik";
 import PropTypes from "prop-types";
 import React from "react";
-import { useParams } from "react-router-dom";
-import { userUpdateProfileSchema } from "../schema/YupSchema";
-import {
-  useGetMyProfileQuery,
-  useGetUserByIdQuery,
-  useUpdateProfileMutation,
-  useUpdateUserByAdminMutation,
-} from "../services/api/admin/auth";
+import { useDeleteUserByAdminMutation } from "../services/api/admin/auth";
 import MUIToast from "./MUIToast";
-import SigninForm from "./SigninForm";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -50,7 +42,7 @@ function BootstrapDialogTitle(props) {
       }}
       {...other}
     >
-      <ManageAccountsOutlinedIcon sx={{ mr: 2 }} />
+      <DeleteOutlinedIcon sx={{ mr: 2 }} />
       {children}
       {onClose ? (
         <IconButton
@@ -75,52 +67,17 @@ BootstrapDialogTitle.propTypes = {
   onClose: PropTypes.func.isRequired,
 };
 
-export default function MUIModal({ open, handleClose, userId }) {
-  const { id } = useParams();
-  const { data: adminInfo } = useGetMyProfileQuery();
-  const { data: userData } = useGetUserByIdQuery(id);
-  const { data: userDataTable } = useGetUserByIdQuery(userId);
+export default function MUIDeleteModal({ open, handleClose, userId }) {
+  const [deleteUserByAdmin, { data, error }] = useDeleteUserByAdminMutation();
 
-  const userInfo = id ? userData : userId ? userDataTable : adminInfo;
-  const [updateProfile, { data: adminUpdate, error: adminError }] =
-    useUpdateProfileMutation();
-  const [updateUserByAdmin, { data: userUpdate, error: userUpdateError }] =
-    useUpdateUserByAdminMutation();
+  const handleAgree = () => {
+    deleteUserByAdmin(userId);
+    handleClose();
+  };
 
-  const data = adminUpdate || userUpdate;
-  const error = adminError || userUpdateError;
-
-  const { handleBlur, touched, errors, handleChange, handleSubmit, values } =
-    useFormik({
-      initialValues: {
-        firstName: userInfo?.data?.firstName || "",
-        lastName: userInfo?.data?.lastName || "",
-        role: userInfo?.data?.roles?.length ? userInfo?.data?.roles : [],
-        phoneNumber: userInfo?.data?.phoneNumber || "",
-        gender: userInfo?.data?.gender || "",
-        userImage: userInfo?.data?.profile || "",
-      },
-      validationSchema: userUpdateProfileSchema,
-      onSubmit: (values, action) => {
-        const body = {
-          firstName: values.firstName,
-          lastName: values.lastName,
-          gender: values.gender,
-          phoneNumber: values.phoneNumber,
-          roles: values.role,
-          profile: values.userImage,
-        };
-
-        id
-          ? updateUserByAdmin({ body, id })
-          : userId
-          ? updateUserByAdmin({ body, id: userId })
-          : updateProfile(body);
-        action.resetForm();
-        handleClose();
-      },
-      enableReinitialize: true,
-    });
+  const handleDisagree = () => {
+    handleClose();
+  };
 
   return (
     <div>
@@ -138,7 +95,7 @@ export default function MUIModal({ open, handleClose, userId }) {
           id="customized-dialog-title"
           onClose={handleClose}
         >
-          Update Profile
+          Delete Profile
         </BootstrapDialogTitle>
         <DialogContent dividers>
           <Container component="main" maxWidth="sm" sx={{ mb: 2 }}>
@@ -150,18 +107,16 @@ export default function MUIModal({ open, handleClose, userId }) {
                 alignItems: "center",
               }}
             >
-              <SigninForm
-                handleBlur={handleBlur}
-                touched={touched}
-                errors={errors}
-                handleChange={handleChange}
-                handleSubmit={handleSubmit}
-                values={values}
-                updateProfile={true}
-              />
+              <Typography>
+                Are You sure you want to delete this user?
+              </Typography>
             </Box>
           </Container>
         </DialogContent>
+        <DialogActions>
+          <Button onClick={handleDisagree}>Disagree</Button>
+          <Button onClick={handleAgree}>Agree</Button>
+        </DialogActions>
       </BootstrapDialog>
 
       {data ? (
