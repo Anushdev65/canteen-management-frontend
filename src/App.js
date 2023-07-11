@@ -13,6 +13,7 @@ import UpdatePasswordForm from "./component/UpdatePasswordForm";
 import CreateUser from "./component/CreateUser";
 import ProtectedRoute from "./utils/ProtectedRoute";
 import CanteenRoute from "./utils/CanteenRoute";
+import FoodCategory from "./component/canteen/FoodCategory";
 
 function App() {
   return (
@@ -29,7 +30,9 @@ function App() {
             <Route path="/create-user" element={<CreateUser />} />
             <Route path="/view-user/:id" element={<MyProfile />} />
           </Route>
-          <Route element={<CanteenRoute />}></Route>
+          <Route element={<CanteenRoute />}>
+            <Route path="/food-category" element={<FoodCategory />} />
+          </Route>
         </Route>
       </Route>
 
