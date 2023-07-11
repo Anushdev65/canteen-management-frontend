@@ -1,13 +1,13 @@
 import { Navigate, Outlet } from "react-router-dom";
 import { getUserInfo } from "../localStorage/localStorage";
 
-const AdminsRoute = () => {
+const CanteenRoute = () => {
   const user = getUserInfo();
-  return user && user?.user?.roles.includes("admin") ? (
+  return user && user?.user?.roles.includes("canteen") ? (
     <Outlet />
   ) : (
     <Navigate to="/" />
   );
 };
 
-export default AdminsRoute;
+export default CanteenRoute;

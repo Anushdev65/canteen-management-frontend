@@ -159,4 +159,5 @@ export const {
   useGetUserByIdQuery,
   useUpdateUserByAdminMutation,
   useDeleteUserByAdminMutation,
+  useLazyGetUserByIdQuery,
 } = adminApi;

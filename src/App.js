@@ -11,22 +11,28 @@ import ResetPassword from "./pages/ResetPassword";
 import AllUsers from "./component/AllUsers";
 import UpdatePasswordForm from "./component/UpdatePasswordForm";
 import CreateUser from "./component/CreateUser";
+import ProtectedRoute from "./utils/ProtectedRoute";
+import CanteenRoute from "./utils/CanteenRoute";
 
 function App() {
   return (
     <Routes>
-      <Route path="/" element={<AdminsRoute />}>
+      <Route element={<ProtectedRoute />}>
         <Route path="/" element={<MUINavbar />}>
-          <Route path="/myprofile" element={<MyProfile />} />
-          <Route path="/allusers" element={<AllUsers />} />
-          <Route
-            path="/auth/update-password"
-            element={<UpdatePasswordForm />}
-          />
-          <Route path="/create-user" element={<CreateUser />} />
-          <Route path="/view-user/:id" element={<MyProfile />} />
+          <Route element={<AdminsRoute />}>
+            <Route path="/myprofile" element={<MyProfile />} />
+            <Route path="/allusers" element={<AllUsers />} />
+            <Route
+              path="/auth/update-password"
+              element={<UpdatePasswordForm />}
+            />
+            <Route path="/create-user" element={<CreateUser />} />
+            <Route path="/view-user/:id" element={<MyProfile />} />
+          </Route>
+          <Route element={<CanteenRoute />}></Route>
         </Route>
       </Route>
+
       <Route path="/register" element={<SignUp />} />
       <Route path="/login" element={<LoginForm />} />
       <Route path="/confirm-email" element={<ConfirmPassword />} />
