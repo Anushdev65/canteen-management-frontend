@@ -19,7 +19,7 @@ const MenuProps = {
   },
 };
 
-const names = ["admin", "staff", "canteen"];
+const names = ["admin", "staff", "canteen", "student"];
 
 function getStyles(name, role, theme) {
   return {

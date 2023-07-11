@@ -26,9 +26,10 @@ import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined";
 import {
   useGetMyProfileQuery,
   useGetUserByIdQuery,
+  useLazyGetUserByIdQuery,
   useLogOutMutation,
 } from "../services/api/admin/auth";
-import { removeLevelInfo } from "../localStorage/localStorage";
+import { getUserInfo, removeLevelInfo } from "../localStorage/localStorage";
 import MUIToast from "./MUIToast";
 import MUILoading from "./MUILoading";
 import PeopleAltOutlinedIcon from "@mui/icons-material/PeopleAltOutlined";
@@ -36,7 +37,45 @@ import EnhancedEncryptionOutlinedIcon from "@mui/icons-material/EnhancedEncrypti
 
 const drawerWidth = 240;
 
-const navData = [
+const navDataAdmin = [
+  {
+    name: "DeerwalkFoods",
+    icon: <FoodBankOutlinedIcon />,
+    link: "https://deerwalkfoods.com/",
+  },
+  {
+    name: "FeedBack",
+    icon: <FeedbackIcon />,
+    link: "https://deerwalkfoods.com/",
+  },
+  {
+    name: "Student Deposit",
+    icon: <AccountBalanceIcon />,
+    link: "https://deerwalkfoods.com/",
+  },
+  {
+    name: "Reports",
+    icon: <ReceiptLongIcon />,
+    link: "https://deerwalkfoods.com/",
+  },
+  {
+    name: "All Users",
+    icon: <PeopleAltOutlinedIcon />,
+    link: "/allusers",
+  },
+  {
+    name: "My Profile",
+    icon: <AccountBoxIcon />,
+    link: "/myprofile",
+  },
+  {
+    name: "Update Password",
+    icon: <EnhancedEncryptionOutlinedIcon />,
+    link: "/auth/update-password",
+  },
+];
+
+const navDataCanteen = [
   {
     name: "DeerwalkFoods",
     icon: <FoodBankOutlinedIcon />,
@@ -143,10 +182,17 @@ export default function MUINavbar() {
   const { id } = useParams();
   const theme = useTheme();
   const [open, setOpen] = React.useState(true);
-  const { data: myData } = useGetMyProfileQuery();
-  const { data: userData } = useGetUserByIdQuery(id);
+  // const { data: myData } = useGetMyProfileQuery();
+  const myData = getUserInfo();
+  const [trigger, { data: userData }] = useLazyGetUserByIdQuery();
   const [logOut, { data, isSuccess }] = useLogOutMutation();
   const navigate = useNavigate();
+
+  React.useEffect(() => {
+    if (id) {
+      trigger(id);
+    }
+  }, [id, trigger]);
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -200,7 +246,7 @@ export default function MUINavbar() {
                   src={
                     id
                       ? `http://${userData?.data.profile}`
-                      : `http://${myData.data.profile}`
+                      : `http://${myData.user.profile}`
                   }
                   alt="Your Picture"
                   style={{
@@ -229,7 +275,7 @@ export default function MUINavbar() {
             </DrawerHeader>
             <Divider />
             <List>
-              {navData.map((item) => (
+              {navDataAdmin.map((item) => (
                 <ListItem
                   key={item.name}
                   disablePadding

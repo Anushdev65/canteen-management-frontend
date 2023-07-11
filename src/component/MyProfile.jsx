@@ -13,18 +13,24 @@ import {
   Grid,
   Typography,
 } from "@mui/material";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import {
   useGetMyProfileQuery,
-  useGetUserByIdQuery,
+  useLazyGetUserByIdQuery,
 } from "../services/api/admin/auth";
 import MUIModal from "./MUIModal";
 
 const MyProfile = () => {
   const { id } = useParams();
   const { data: myProfileData } = useGetMyProfileQuery();
-  const { data: userData } = useGetUserByIdQuery(id);
+  const [trigger, { data: userData }] = useLazyGetUserByIdQuery();
+
+  useEffect(() => {
+    if (id) {
+      trigger(id);
+    }
+  }, [id, trigger]);
 
   const data = id ? userData : myProfileData;
 
