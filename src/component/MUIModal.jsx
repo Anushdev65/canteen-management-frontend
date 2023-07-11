@@ -11,12 +11,13 @@ import Slide from "@mui/material/Slide";
 import { styled } from "@mui/material/styles";
 import { useFormik } from "formik";
 import PropTypes from "prop-types";
-import React from "react";
+import React, { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { userUpdateProfileSchema } from "../schema/YupSchema";
 import {
   useGetMyProfileQuery,
   useGetUserByIdQuery,
+  useLazyGetUserByIdQuery,
   useUpdateProfileMutation,
   useUpdateUserByAdminMutation,
 } from "../services/api/admin/auth";
@@ -78,10 +79,19 @@ BootstrapDialogTitle.propTypes = {
 export default function MUIModal({ open, handleClose, userId }) {
   const { id } = useParams();
   const { data: adminInfo } = useGetMyProfileQuery();
-  const { data: userData } = useGetUserByIdQuery(id);
-  const { data: userDataTable } = useGetUserByIdQuery(userId);
+  // const { data: userData } = useGetUserByIdQuery(id);
+  // const { data: userDataTable } = useGetUserByIdQuery(userId);
+  const [trigger, { data: userData }] = useLazyGetUserByIdQuery();
 
-  const userInfo = id ? userData : userId ? userDataTable : adminInfo;
+  useEffect(() => {
+    if (id) {
+      trigger(id);
+    } else if (userId) {
+      trigger(userId);
+    }
+  }, [trigger, id, userId]);
+
+  const userInfo = id || userId ? userData : adminInfo;
   const [updateProfile, { data: adminUpdate, error: adminError }] =
     useUpdateProfileMutation();
   const [updateUserByAdmin, { data: userUpdate, error: userUpdateError }] =

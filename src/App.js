@@ -16,7 +16,7 @@ import CanteenTable from "./component/canteen/CanteenTable";
 function App() {
   return (
     <Routes>
-      <Route path="/" element={<AdminsRoute />}>
+      <Route element={<ProtectedRoute />}>
         <Route path="/" element={<MUINavbar />}>
           <Route path="/myprofile" element={<MyProfile />} />
           <Route path="/allusers" element={<AllUsers />} />
@@ -26,10 +26,22 @@ function App() {
             path="/auth/update-password"
             element={<UpdatePasswordForm />}
           />
-          <Route path="/create-user" element={<CreateUser />} />
-          <Route path="/view-user/:id" element={<MyProfile />} />
+          {/* <Route path="/create-user" element={<CreateUser />} />
+          <Route path="/view-user/:id" element={<MyProfile />} /> */}
+          <Route element={<AdminsRoute />}>
+            <Route path="/myprofile" element={<MyProfile />} />
+            <Route path="/allusers" element={<AllUsers />} />
+            <Route
+              path="/auth/update-password"
+              element={<UpdatePasswordForm />}
+            />
+            <Route path="/create-user" element={<CreateUser />} />
+            <Route path="/view-user/:id" element={<MyProfile />} />
+          </Route>
+          <Route element={<CanteenRoute />}></Route>
         </Route>
       </Route>
+
       <Route path="/register" element={<SignUp />} />
       <Route path="/login" element={<LoginForm />} />
       <Route path="/confirm-email" element={<ConfirmPassword />} />
