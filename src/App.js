@@ -11,14 +11,23 @@ import ResetPassword from "./pages/ResetPassword";
 import AllUsers from "./component/AllUsers";
 import UpdatePasswordForm from "./component/UpdatePasswordForm";
 import CreateUser from "./component/CreateUser";
-import ProtectedRoute from "./utils/ProtectedRoute";
-import CanteenRoute from "./utils/CanteenRoute";
+import CanteenTable from "./component/canteen/CanteenTable";
 
 function App() {
   return (
     <Routes>
       <Route element={<ProtectedRoute />}>
         <Route path="/" element={<MUINavbar />}>
+          <Route path="/myprofile" element={<MyProfile />} />
+          <Route path="/allusers" element={<AllUsers />} />
+          <Route path="/canteentable" element={<CanteenTable />} />
+
+          <Route
+            path="/auth/update-password"
+            element={<UpdatePasswordForm />}
+          />
+          {/* <Route path="/create-user" element={<CreateUser />} />
+          <Route path="/view-user/:id" element={<MyProfile />} /> */}
           <Route element={<AdminsRoute />}>
             <Route path="/myprofile" element={<MyProfile />} />
             <Route path="/allusers" element={<AllUsers />} />
