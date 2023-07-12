@@ -34,6 +34,8 @@ import MUIToast from "./MUIToast";
 import MUILoading from "./MUILoading";
 import PeopleAltOutlinedIcon from "@mui/icons-material/PeopleAltOutlined";
 import EnhancedEncryptionOutlinedIcon from "@mui/icons-material/EnhancedEncryptionOutlined";
+import FastfoodOutlinedIcon from "@mui/icons-material/FastfoodOutlined";
+import RestaurantMenuOutlinedIcon from "@mui/icons-material/RestaurantMenuOutlined";
 
 const drawerWidth = 240;
 
@@ -87,29 +89,19 @@ const navDataCanteen = [
     link: "https://deerwalkfoods.com/",
   },
   {
-    name: "Student Deposit",
-    icon: <AccountBalanceIcon />,
-    link: "https://deerwalkfoods.com/",
-  },
-  {
     name: "Reports",
     icon: <ReceiptLongIcon />,
     link: "https://deerwalkfoods.com/",
   },
   {
-    name: "All Users",
-    icon: <PeopleAltOutlinedIcon />,
-    link: "/allusers",
+    name: "Food Category",
+    icon: <FastfoodOutlinedIcon />,
+    link: "/food-category",
   },
   {
-    name: "My Profile",
-    icon: <AccountBoxIcon />,
-    link: "/myprofile",
-  },
-  {
-    name: "Update Password",
-    icon: <EnhancedEncryptionOutlinedIcon />,
-    link: "/auth/update-password",
+    name: "Generate Menu",
+    icon: <RestaurantMenuOutlinedIcon />,
+    link: "/generate-menu",
   },
 ];
 
@@ -210,6 +202,36 @@ export default function MUINavbar() {
     }, 3000);
   };
 
+  const renderList = (data) => {
+    return data.map((item) => (
+      <ListItem key={item.name} disablePadding sx={{ display: "block" }}>
+        <NavLink
+          to={item.link}
+          style={{ textDecoration: "none", color: "black" }}
+        >
+          <ListItemButton
+            sx={{
+              minHeight: 48,
+              justifyContent: open ? "initial" : "center",
+              px: 2.5,
+            }}
+          >
+            <ListItemIcon
+              sx={{
+                minWidth: 0,
+                mr: open ? 3 : "auto",
+                justifyContent: "center",
+              }}
+            >
+              {item.icon}
+            </ListItemIcon>
+            <ListItemText primary={item.name} sx={{ opacity: open ? 1 : 0 }} />
+          </ListItemButton>
+        </NavLink>
+      </ListItem>
+    ));
+  };
+
   return (
     <>
       {data ? <MUIToast initialValue={true} message={data.message} /> : <></>}
@@ -261,10 +283,7 @@ export default function MUINavbar() {
           </AppBar>
           <Drawer variant="permanent" open={open}>
             <DrawerHeader>
-              <img
-                src={`http://localhost:8000/deerwalklogo.jpeg`}
-                width="170px"
-              />
+              <img src="/deerwalklogo.jpeg" width="170px" />
               <IconButton onClick={handleDrawerClose}>
                 {theme.direction === "rtl" ? (
                   <ChevronRightIcon />
@@ -275,40 +294,9 @@ export default function MUINavbar() {
             </DrawerHeader>
             <Divider />
             <List>
-              {navDataAdmin.map((item) => (
-                <ListItem
-                  key={item.name}
-                  disablePadding
-                  sx={{ display: "block" }}
-                >
-                  <NavLink
-                    to={item.link}
-                    style={{ textDecoration: "none", color: "black" }}
-                  >
-                    <ListItemButton
-                      sx={{
-                        minHeight: 48,
-                        justifyContent: open ? "initial" : "center",
-                        px: 2.5,
-                      }}
-                    >
-                      <ListItemIcon
-                        sx={{
-                          minWidth: 0,
-                          mr: open ? 3 : "auto",
-                          justifyContent: "center",
-                        }}
-                      >
-                        {item.icon}
-                      </ListItemIcon>
-                      <ListItemText
-                        primary={item.name}
-                        sx={{ opacity: open ? 1 : 0 }}
-                      />
-                    </ListItemButton>
-                  </NavLink>
-                </ListItem>
-              ))}
+              {myData?.user.roles.includes("admin")
+                ? renderList(navDataAdmin)
+                : renderList(navDataCanteen)}
             </List>
             <Divider />
             <List>

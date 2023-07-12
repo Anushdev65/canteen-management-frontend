@@ -75,7 +75,7 @@ const MyProfile = () => {
             }}
           >
             <img
-              src={`http://localhost:8000/deerwalk.png`}
+              src="/deerwalkCompware.png"
               alt=""
               style={{
                 width: "350px",

@@ -299,17 +299,6 @@ const AllUsers = () => {
           {">>"}
         </button>
       </div>
-      {/* <pre>
-        <code>
-          {JSON.stringify(
-            {
-              selectedFlatRows: selectedFlatRows.map((row) => row.original),
-            },
-            null,
-            2
-          )}
-        </code>
-      </pre> */}
     </>
   );
 };

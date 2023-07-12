@@ -1,13 +1,11 @@
-import { ColumnFilter } from "../ColumnFilter";
-
 export const COLUMNS = [
   {
     Header: "SN",
-    accessor: "id",
+    accessor: (row, index) => index + 1,
     disableFilters: true,
   },
   {
     Header: "Category",
-    accessor: "first_name",
+    accessor: "name",
   },
 ];

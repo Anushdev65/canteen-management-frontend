@@ -1,45 +1,44 @@
 import AddIcon from "@mui/icons-material/Add";
 import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined";
 import EditIcon from "@mui/icons-material/Edit";
-import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
 import { Box, Fab, Grid, Tooltip, Zoom } from "@mui/material";
 import React, { useEffect, useMemo, useState } from "react";
-import MOCK_DATA from "./MOCK_DATA.json";
-// import { useNavigate } from "react-router-dom";
 import { usePagination, useRowSelect, useSortBy, useTable } from "react-table";
-// import MUIDeleteModal from "./MUIDeleteModal";
-// import MUIModal from "./MUIModal";
-import { IndeterminateCheckbox } from "../IndeterminateCheckbox";
+import { useLazyGetAllFoodCategoryQuery } from "../../../services/api/canteen/foodcategory";
+import { IndeterminateCheckbox } from "../../IndeterminateCheckbox";
+import MUIDeleteModal from "../../MUIDeleteModal";
+import "../../table.css";
+import AddCategoryModel from "../popmodel/AddCategoryModel";
 import { COLUMNS } from "./Column";
-import "./tables.css";
 
-const CanteenTable = () => {
+const FoodCategory = () => {
+  const [trigger, { data }] = useLazyGetAllFoodCategoryQuery();
   const columns = useMemo(() => COLUMNS, []);
-  const data = useMemo(() => MOCK_DATA, []);
-  //   const [trigger, { data }] = useLazyGetAllUsersQuery();
+  const tableData = useMemo(
+    () => data?.data?.results || [],
+    [data?.data?.results]
+  );
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
   const [sortBy, setSortBy] = useState("");
   const [openModal, setOpenModal] = useState(false);
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
-  //   const navigate = useNavigate();
 
-  //   useEffect(() => {
-  //     trigger({ _page: currentPage, _brake: rowsPerPage, _sort: sortBy });
-  //   }, [currentPage, rowsPerPage, sortBy, trigger]);
+  useEffect(() => {
+    trigger({ _page: currentPage, _brake: rowsPerPage, _sort: sortBy });
+  }, [currentPage, rowsPerPage, sortBy, trigger]);
 
   const {
     getTableProps,
     getTableBodyProps,
     headerGroups,
-    rows,
     page,
     prepareRow,
     selectedFlatRows,
   } = useTable(
     {
       columns,
-      data,
+      data: tableData,
       initialState: { pageSize: 15 },
       stateReducer: (state, action) => {
         if (
@@ -82,12 +81,12 @@ const CanteenTable = () => {
     const selectedRowsPerPage = e.target.value;
     setRowsPerPage(selectedRowsPerPage);
     setCurrentPage(1);
-    // trigger({ _page: 1, _brake: selectedRowsPerPage });
+    trigger({ _page: 1, _brake: selectedRowsPerPage });
   };
 
   const handlePage = (pageNumber) => {
     setCurrentPage(pageNumber);
-    // trigger({ _page: pageNumber, _brake: rowsPerPage });
+    trigger({ _page: pageNumber, _brake: rowsPerPage });
   };
 
   const handleSort = (column) => {
@@ -100,39 +99,38 @@ const CanteenTable = () => {
     );
   };
 
-  //   const handleViewProfile = () => {
-  //     // console.log(selectedFlatRows[0]?.original._id);
-  //     navigate(`/view-user/${selectedFlatRows[0]?.original._id}`);
-  //   };
+  const handleCloseModal = () => {
+    setOpenModal(false);
+  };
 
-  //   const handleCloseModal = () => {
-  //     setOpenModal(false);
-  //   };
+  const handleCloseDeleteModal = () => {
+    setOpenDeleteModal(false);
+  };
 
-  //   const handleCloseDeleteModal = () => {
-  //     setOpenDeleteModal(false);
-  //   };
-
-  const handleEditProfile = () => {
+  const handleEditCategory = () => {
     setOpenModal(true);
   };
 
-  const handleDeleteProfile = () => {
+  const handleDeleteCategory = () => {
     setOpenDeleteModal(true);
+  };
+
+  const handleAddCategory = () => {
+    setOpenModal(true);
   };
 
   return (
     <>
-      {/* <MUIModal
+      <AddCategoryModel
         open={openModal}
         handleClose={handleCloseModal}
-        userId={selectedFlatRows[0]?.original._id}
+        category={selectedFlatRows[0]?.original}
       />
       <MUIDeleteModal
         open={openDeleteModal}
         handleClose={handleCloseDeleteModal}
-        userId={selectedFlatRows[0]?.original._id}
-      /> */}
+        category={selectedFlatRows[0]?.original}
+      />
       <Grid container justifyContent="space-between" sx={{ mb: 2 }}>
         <Grid item>
           <Tooltip
@@ -144,7 +142,7 @@ const CanteenTable = () => {
               color="primary"
               aria-label="add"
               size="small"
-              // onClick={() => {}}
+              onClick={handleAddCategory}
             >
               <AddIcon />
             </Fab>
@@ -157,7 +155,7 @@ const CanteenTable = () => {
                 title="Update Category"
                 placement="top"
                 TransitionComponent={Zoom}
-                onClick={handleEditProfile}
+                onClick={handleEditCategory}
               >
                 <Fab color="primary" aria-label="view" size="small">
                   <EditIcon />
@@ -167,7 +165,7 @@ const CanteenTable = () => {
                 title="Delete Category"
                 placement="top"
                 TransitionComponent={Zoom}
-                onClick={handleDeleteProfile}
+                onClick={handleDeleteCategory}
               >
                 <Fab color="primary" aria-label="view" size="small">
                   <DeleteOutlinedIcon />
@@ -185,7 +183,7 @@ const CanteenTable = () => {
                 <th
                   {...column.getHeaderProps(column.getSortByToggleProps())}
                   onClick={() => {
-                    if (column.id !== "selection") {
+                    if (column.id !== "SN") {
                       handleSort(column);
                     }
                   }}
@@ -238,28 +236,31 @@ const CanteenTable = () => {
         <span>
           Page{" "}
           <strong>
-            {data.currentPage} of {data.totalPage}
+            {data?.data.currentPage} of {data?.data?.totalPage}
           </strong>
         </span>
-        <button disabled={!data.hasPreviousPage} onClick={() => handlePage(1)}>
+        <button
+          disabled={!data?.data?.hasPreviousPage}
+          onClick={() => handlePage(1)}
+        >
           {"<<"}
         </button>
         <button
-          onClick={() => handlePage(data.currentPage - 1)}
-          disabled={!data.hasPreviousPage}
+          onClick={() => handlePage(data?.data?.currentPage - 1)}
+          disabled={!data?.data?.hasPreviousPage}
         >
           Previous
         </button>
         <button
-          onClick={() => handlePage(data.currentPage + 1)}
-          disabled={!data.hasNextPage}
+          onClick={() => handlePage(data?.data?.currentPage + 1)}
+          disabled={!data?.data?.hasNextPage}
         >
           {" "}
           Next
         </button>
         <button
-          disabled={!data.hasNextPage}
-          onClick={() => handlePage(data.totalPage)}
+          disabled={!data?.data?.hasNextPage}
+          onClick={() => handlePage(data?.data?.totalPage)}
         >
           {">>"}
         </button>
@@ -267,4 +268,4 @@ const CanteenTable = () => {
     </>
   );
 };
-export default CanteenTable;
+export default FoodCategory;
