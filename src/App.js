@@ -11,9 +11,10 @@ import ResetPassword from "./pages/ResetPassword";
 import AllUsers from "./component/AllUsers";
 import UpdatePasswordForm from "./component/UpdatePasswordForm";
 import CreateUser from "./component/CreateUser";
-import ProtectedRoute from "./utils/ProtectedRoute";
 import CanteenRoute from "./utils/CanteenRoute";
-import FoodCategory from "./component/canteen/FoodCategory";
+import FoodCategory from "./component/canteen/table/FoodCategory";
+import ProtectedRoute from "./utils/ProtectedRoute";
+import AddCategory from "./component/canteen/form/AddCategory";
 
 function App() {
   return (

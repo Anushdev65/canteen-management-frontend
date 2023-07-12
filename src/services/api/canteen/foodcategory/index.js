@@ -17,7 +17,7 @@ export const foodCategoryApi = createApi({
   }),
 
   endpoints: (builder) => ({
-    createCategory: builder.mutation({
+    createFoodCategory: builder.mutation({
       query: (body) => {
         return {
           url: `/category`,
@@ -28,20 +28,20 @@ export const foodCategoryApi = createApi({
       invalidatesTags: ["getAllCategory"],
     }),
 
-    getAllCategory: builder.query({
-      query: () => {
+    getAllFoodCategory: builder.query({
+      query: (query) => {
         return {
-          url: `/category`,
+          url: `/category?_page=${query?._page}&_brake=${query?._brake}&_sort=${query?._sort}`,
           method: "GET",
         };
       },
       providesTags: ["getAllCategory"],
     }),
 
-    updateCategory: builder.mutation({
-      query: (body) => {
+    updateFoodCategory: builder.mutation({
+      query: ({ body, id }) => {
         return {
-          url: `/category`,
+          url: `/category/${id}`,
           method: "PATCH",
           body: body,
         };
@@ -49,7 +49,7 @@ export const foodCategoryApi = createApi({
       invalidatesTags: ["getAllCategory"],
     }),
 
-    deleteCategory: builder.mutation({
+    deleteFoodCategory: builder.mutation({
       query: (id) => {
         return {
           url: `/category/${id}`,
@@ -62,8 +62,9 @@ export const foodCategoryApi = createApi({
 });
 
 export const {
-  useCreateCategoryMutation,
-  useGetAllCategoryQuery,
-  useDeleteCategoryMutation,
-  useUpdateCategoryMutation,
+  useLazyGetAllFoodCategoryQuery,
+  useCreateFoodCategoryMutation,
+  useGetAllFoodCategoryQuery,
+  useDeleteFoodCategoryMutation,
+  useUpdateFoodCategoryMutation,
 } = foodCategoryApi;

@@ -14,6 +14,7 @@ import PropTypes from "prop-types";
 import React from "react";
 import { useDeleteUserByAdminMutation } from "../services/api/admin/auth";
 import MUIToast from "./MUIToast";
+import { useDeleteFoodCategoryMutation } from "../services/api/canteen/foodcategory";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -67,11 +68,27 @@ BootstrapDialogTitle.propTypes = {
   onClose: PropTypes.func.isRequired,
 };
 
-export default function MUIDeleteModal({ open, handleClose, userId }) {
-  const [deleteUserByAdmin, { data, error }] = useDeleteUserByAdminMutation();
+export default function MUIDeleteModal({
+  open,
+  handleClose,
+  userId,
+  category,
+}) {
+  const [deleteUserByAdmin, { data: userData, error: userError }] =
+    useDeleteUserByAdminMutation();
+  const [deleteFoodCategory, { data: categoryData, error: categoryError }] =
+    useDeleteFoodCategoryMutation();
+
+  const data = userData || categoryData;
+  const error = userError || categoryError;
 
   const handleAgree = () => {
-    deleteUserByAdmin(userId);
+    if (userId) {
+      deleteUserByAdmin(userId);
+    } else if (category?._id) {
+      deleteFoodCategory(category._id);
+    }
+
     handleClose();
   };
 
@@ -95,7 +112,7 @@ export default function MUIDeleteModal({ open, handleClose, userId }) {
           id="customized-dialog-title"
           onClose={handleClose}
         >
-          Delete Profile
+          {userId ? "Delete Profile" : "Delete Food Category"}
         </BootstrapDialogTitle>
         <DialogContent dividers>
           <Container component="main" maxWidth="sm" sx={{ mb: 2 }}>
@@ -108,7 +125,9 @@ export default function MUIDeleteModal({ open, handleClose, userId }) {
               }}
             >
               <Typography>
-                Are You sure you want to delete this user?
+                {userId
+                  ? "Are You sure you want to delete this user?"
+                  : `Are You sure you want to delete ${category?.name} category?`}
               </Typography>
             </Box>
           </Container>

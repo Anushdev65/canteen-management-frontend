@@ -1,46 +1,37 @@
 import AddIcon from "@mui/icons-material/Add";
 import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined";
 import EditIcon from "@mui/icons-material/Edit";
-import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
 import { Box, Fab, Grid, Tooltip, Zoom } from "@mui/material";
 import React, { useEffect, useMemo, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { usePagination, useRowSelect, useSortBy, useTable } from "react-table";
-import { useLazyGetAllUsersQuery } from "../services/api/admin/auth";
-import { IndeterminateCheckbox } from "./IndeterminateCheckbox";
-import MUIDeleteModal from "./MUIDeleteModal";
-import MUIModal from "./MUIModal";
-import { COLUMNS } from "./columns";
-import "./table.css";
+import { useLazyGetAllFoodCategoryQuery } from "../../../services/api/canteen/foodcategory";
+import { IndeterminateCheckbox } from "../../IndeterminateCheckbox";
+import MUIDeleteModal from "../../MUIDeleteModal";
+import "../../table.css";
+import AddCategoryModel from "../popmodel/AddCategoryModel";
+import { COLUMNS } from "./Column";
 
-const AllUsers = () => {
+const FoodCategory = () => {
+  const [trigger, { data }] = useLazyGetAllFoodCategoryQuery();
   const columns = useMemo(() => COLUMNS, []);
-  const [trigger, { data }] = useLazyGetAllUsersQuery();
+  const tableData = useMemo(
+    () => data?.data?.results || [],
+    [data?.data?.results]
+  );
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
   const [sortBy, setSortBy] = useState("");
   const [openModal, setOpenModal] = useState(false);
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
-  const navigate = useNavigate();
-
-  const tableData = useMemo(
-    () => data?.data?.results || [],
-    [data?.data?.results]
-  );
 
   useEffect(() => {
     trigger({ _page: currentPage, _brake: rowsPerPage, _sort: sortBy });
   }, [currentPage, rowsPerPage, sortBy, trigger]);
 
-  // useEffect(() => {
-  //   console.log(data);
-  // }, [data]);
-
   const {
     getTableProps,
     getTableBodyProps,
     headerGroups,
-    rows,
     page,
     prepareRow,
     selectedFlatRows,
@@ -48,7 +39,7 @@ const AllUsers = () => {
     {
       columns,
       data: tableData,
-      initialState: { pageSize: 20 },
+      initialState: { pageSize: 15 },
       stateReducer: (state, action) => {
         if (
           action.type === "toggleRowSelected" &&
@@ -74,11 +65,6 @@ const AllUsers = () => {
         return [
           {
             id: "selection",
-            // Header: ({ getToggleAllRowsSelectedProps }) => {
-            //   return (
-            //     <IndeterminateCheckbox {...getToggleAllRowsSelectedProps()} />
-            //   );
-            // },
             Cell: ({ row }) => {
               return (
                 <IndeterminateCheckbox {...row.getToggleRowSelectedProps()} />
@@ -113,14 +99,6 @@ const AllUsers = () => {
     );
   };
 
-  // useEffect(() => {
-  //   console.log(selectedFlatRows[0]?.original);
-  // }, [selectedFlatRows]);
-  const handleViewProfile = () => {
-    // console.log(selectedFlatRows[0]?.original._id);
-    navigate(`/view-user/${selectedFlatRows[0]?.original._id}`);
-  };
-
   const handleCloseModal = () => {
     setOpenModal(false);
   };
@@ -129,30 +107,34 @@ const AllUsers = () => {
     setOpenDeleteModal(false);
   };
 
-  const handleEditProfile = () => {
+  const handleEditCategory = () => {
     setOpenModal(true);
   };
 
-  const handleDeleteProfile = () => {
+  const handleDeleteCategory = () => {
     setOpenDeleteModal(true);
+  };
+
+  const handleAddCategory = () => {
+    setOpenModal(true);
   };
 
   return (
     <>
-      <MUIModal
+      <AddCategoryModel
         open={openModal}
         handleClose={handleCloseModal}
-        userId={selectedFlatRows[0]?.original._id}
+        category={selectedFlatRows[0]?.original}
       />
       <MUIDeleteModal
         open={openDeleteModal}
         handleClose={handleCloseDeleteModal}
-        userId={selectedFlatRows[0]?.original._id}
+        category={selectedFlatRows[0]?.original}
       />
       <Grid container justifyContent="space-between" sx={{ mb: 2 }}>
         <Grid item>
           <Tooltip
-            title="Add User"
+            title="Add Category"
             placement="right-start"
             TransitionComponent={Zoom}
           >
@@ -160,9 +142,7 @@ const AllUsers = () => {
               color="primary"
               aria-label="add"
               size="small"
-              onClick={() => {
-                navigate("/create-user");
-              }}
+              onClick={handleAddCategory}
             >
               <AddIcon />
             </Fab>
@@ -172,34 +152,20 @@ const AllUsers = () => {
           <Grid item>
             <Box sx={{ display: "flex", gap: "10px" }}>
               <Tooltip
-                title="View User"
+                title="Update Category"
                 placement="top"
                 TransitionComponent={Zoom}
-              >
-                <Fab
-                  color="primary"
-                  aria-label="view"
-                  size="small"
-                  onClick={handleViewProfile}
-                >
-                  <VisibilityOutlinedIcon />
-                </Fab>
-              </Tooltip>
-              <Tooltip
-                title="Edit User"
-                placement="top"
-                TransitionComponent={Zoom}
-                onClick={handleEditProfile}
+                onClick={handleEditCategory}
               >
                 <Fab color="primary" aria-label="view" size="small">
                   <EditIcon />
                 </Fab>
               </Tooltip>
               <Tooltip
-                title="Delete User"
+                title="Delete Category"
                 placement="top"
                 TransitionComponent={Zoom}
-                onClick={handleDeleteProfile}
+                onClick={handleDeleteCategory}
               >
                 <Fab color="primary" aria-label="view" size="small">
                   <DeleteOutlinedIcon />
@@ -217,7 +183,7 @@ const AllUsers = () => {
                 <th
                   {...column.getHeaderProps(column.getSortByToggleProps())}
                   onClick={() => {
-                    if (column.id !== "selection") {
+                    if (column.id !== "SN") {
                       handleSort(column);
                     }
                   }}
@@ -302,5 +268,4 @@ const AllUsers = () => {
     </>
   );
 };
-
-export default AllUsers;
+export default FoodCategory;
