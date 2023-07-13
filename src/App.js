@@ -12,18 +12,18 @@ import AllUsers from "./component/AllUsers";
 import UpdatePasswordForm from "./component/UpdatePasswordForm";
 import CreateUser from "./component/CreateUser";
 import CanteenRoute from "./utils/CanteenRoute";
-import FoodCategory from "./component/canteen/table/FoodCategory";
 import ProtectedRoute from "./utils/ProtectedRoute";
-import AddCategory from "./component/canteen/form/AddCategory";
-import AddFoodItem from "./component/canteen/form/AddFoodItem";
+import FoodCategory from "./component/canteen/foodCategory/table/FoodCategory";
+import FoodItem from "./component/canteen/foodItem/table/FoodItem";
+import AddFoodItem from "./component/canteen/foodItem/form/AddFoodItem";
 
 function App() {
   return (
     <Routes>
       <Route element={<ProtectedRoute />}>
         <Route path="/" element={<MUINavbar />}>
+          <Route path="/myprofile" element={<MyProfile />} />
           <Route element={<AdminsRoute />}>
-            <Route path="/myprofile" element={<MyProfile />} />
             <Route path="/allusers" element={<AllUsers />} />
             <Route
               path="/auth/update-password"
@@ -35,6 +35,7 @@ function App() {
           </Route>
           <Route element={<CanteenRoute />}>
             <Route path="/food-category" element={<FoodCategory />} />
+            <Route path="/food-item" element={<FoodItem />} />
           </Route>
         </Route>
       </Route>

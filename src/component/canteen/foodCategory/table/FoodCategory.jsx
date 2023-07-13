@@ -4,12 +4,12 @@ import EditIcon from "@mui/icons-material/Edit";
 import { Box, Fab, Grid, Tooltip, Zoom } from "@mui/material";
 import React, { useEffect, useMemo, useState } from "react";
 import { usePagination, useRowSelect, useSortBy, useTable } from "react-table";
-import { useLazyGetAllFoodCategoryQuery } from "../../../services/api/canteen/foodcategory";
-import { IndeterminateCheckbox } from "../../IndeterminateCheckbox";
-import MUIDeleteModal from "../../MUIDeleteModal";
-import "../../table.css";
-import AddCategoryModel from "../popmodel/AddCategoryModel";
+import { useLazyGetAllFoodCategoryQuery } from "../../../../services/api/canteen/foodcategory";
 import { COLUMNS } from "./Column";
+import { IndeterminateCheckbox } from "../../../IndeterminateCheckbox";
+import MUIDeleteModal from "../../../MUIDeleteModal";
+import "../../../table.css";
+import AddCategoryModel from "../popmodel/AddCategoryModel";
 
 const FoodCategory = () => {
   const [trigger, { data }] = useLazyGetAllFoodCategoryQuery();
