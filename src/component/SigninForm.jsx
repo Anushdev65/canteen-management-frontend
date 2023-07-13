@@ -16,6 +16,7 @@ const SigninForm = ({
   handleSubmit,
   values,
   updateProfile,
+  user,
 }) => {
   const handleImageUpload = useCallback((image) => {
     handleChange({
@@ -30,6 +31,7 @@ const SigninForm = ({
       },
     });
   }, []);
+
   return (
     <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
       <Grid container spacing={2}>
@@ -92,21 +94,23 @@ const SigninForm = ({
             />
           </Grid>
         )}
-        <Grid item xs={12}>
-          <MUIMultiSelect
-            error={touched.role && errors.role}
-            required
-            fullWidth
-            id="role"
-            label="User Type"
-            name="role"
-            autoComplete="off"
-            value={values.role}
-            onChange={handleChange}
-            onBlur={handleBlur}
-          />
-          <MUIError touch={touched.role} error={errors.role} value={false} />
-        </Grid>
+        {user?.roles?.includes("admin") && (
+          <Grid item xs={12}>
+            <MUIMultiSelect
+              error={touched.role && errors.role}
+              required
+              fullWidth
+              id="role"
+              label="User Type"
+              name="role"
+              autoComplete="off"
+              value={values.role}
+              onChange={handleChange}
+              onBlur={handleBlur}
+            />
+            <MUIError touch={touched.role} error={errors.role} value={false} />
+          </Grid>
+        )}
         <Grid item xs={12}>
           <TextField
             error={touched.phoneNumber && errors.phoneNumber}
