@@ -15,6 +15,7 @@ import CanteenRoute from "./utils/CanteenRoute";
 import FoodCategory from "./component/canteen/table/FoodCategory";
 import ProtectedRoute from "./utils/ProtectedRoute";
 import AddCategory from "./component/canteen/form/AddCategory";
+import AddFoodItem from "./component/canteen/form/AddFoodItem";
 
 function App() {
   return (
@@ -29,6 +30,7 @@ function App() {
               element={<UpdatePasswordForm />}
             />
             <Route path="/create-user" element={<CreateUser />} />
+            <Route path="/add-food-item" element={<AddFoodItem />} />
             <Route path="/view-user/:id" element={<MyProfile />} />
           </Route>
           <Route element={<CanteenRoute />}>

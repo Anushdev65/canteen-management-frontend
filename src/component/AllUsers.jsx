@@ -168,6 +168,24 @@ const AllUsers = () => {
             </Fab>
           </Tooltip>
         </Grid>
+        <Grid item>
+          <Tooltip
+            title="Add User"
+            placement="right-start"
+            TransitionComponent={Zoom}
+          >
+            <Fab
+              color="primary"
+              aria-label="add"
+              size="small"
+              onClick={() => {
+                navigate("/add-food-item");
+              }}
+            >
+              <AddIcon />
+            </Fab>
+          </Tooltip>
+        </Grid>
         {selectedFlatRows.length > 0 && (
           <Grid item>
             <Box sx={{ display: "flex", gap: "10px" }}>
