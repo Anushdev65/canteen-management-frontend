@@ -8,7 +8,7 @@ import { userRegistrationSchema } from "../schema/YupSchema";
 import { useRegisterUserMutation } from "../services/api/admin/auth";
 import MUILoading from "../component/MUILoading";
 import MUIToast from "../component/MUIToast";
-
+import "../styles/create.css";
 const initialValues = {
   firstName: "",
   lastName: "",
@@ -42,46 +42,47 @@ const CreateUser = () => {
     });
   return (
     <>
-      {isLoading ? (
-        <MUILoading />
-      ) : (
-        <Container component="main" maxWidth="xs">
-          <CssBaseline />
-          <Box
-            sx={{
-              marginTop: 4,
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              marginBottom: 8,
-            }}
-          >
-            <SigninForm
-              handleBlur={handleBlur}
-              touched={touched}
-              errors={errors}
-              handleChange={handleChange}
-              handleSubmit={handleSubmit}
-              values={values}
-            />
-          </Box>
-        </Container>
-      )}
-      {data ? (
-        <MUIToast
-          initialValue={true}
-          message={data.message}
-          severity="success"
-        />
-      ) : error ? (
-        <MUIToast
-          initialValue={true}
-          message={error.data.message}
-          severity="error"
-        />
-      ) : (
-        <></>
-      )}
+      <div className="main-container">
+        {isLoading ? (
+          <MUILoading />
+        ) : (
+          <Container component="main" maxWidth="xs" className="container">
+            <CssBaseline />
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                // marginBottom: 8,
+              }}
+            >
+              <SigninForm
+                handleBlur={handleBlur}
+                touched={touched}
+                errors={errors}
+                handleChange={handleChange}
+                handleSubmit={handleSubmit}
+                values={values}
+              />
+            </Box>
+          </Container>
+        )}
+        {data ? (
+          <MUIToast
+            initialValue={true}
+            message={data.message}
+            severity="success"
+          />
+        ) : error ? (
+          <MUIToast
+            initialValue={true}
+            message={error.data.message}
+            severity="error"
+          />
+        ) : (
+          <></>
+        )}
+      </div>
     </>
   );
 };

@@ -17,7 +17,7 @@ import MUIToast from "../component/MUIToast";
 import { setLevelInfo, setUSerInfo } from "../localStorage/localStorage";
 import { useNavigate } from "react-router-dom";
 import MUILoading from "../component/MUILoading";
-import "./login.css";
+import "../styles/login.css";
 
 const initialValues = {
   password: "",

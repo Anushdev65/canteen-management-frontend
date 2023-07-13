@@ -11,7 +11,7 @@ import { IndeterminateCheckbox } from "./IndeterminateCheckbox";
 import MUIDeleteModal from "./MUIDeleteModal";
 import MUIModal from "./MUIModal";
 import { COLUMNS } from "./columns";
-import "./table.css";
+import "../styles/table.css";
 
 const AllUsers = () => {
   const columns = useMemo(() => COLUMNS, []);
@@ -156,7 +156,7 @@ const AllUsers = () => {
             TransitionComponent={Zoom}
           >
             <Fab
-              color="primary"
+              id="addIcon"
               aria-label="add"
               size="small"
               onClick={() => {
@@ -168,7 +168,7 @@ const AllUsers = () => {
           </Tooltip>
         </Grid>
         {selectedFlatRows.length > 0 && (
-          <Grid item>
+          <Grid item className="Icon">
             <Box sx={{ display: "flex", gap: "10px" }}>
               <Tooltip
                 title="View User"
@@ -176,9 +176,9 @@ const AllUsers = () => {
                 TransitionComponent={Zoom}
               >
                 <Fab
-                  color="primary"
                   aria-label="view"
                   size="small"
+                  id="visibityIcon"
                   onClick={handleViewProfile}
                 >
                   <VisibilityOutlinedIcon />
@@ -190,7 +190,7 @@ const AllUsers = () => {
                 TransitionComponent={Zoom}
                 onClick={handleEditProfile}
               >
-                <Fab color="primary" aria-label="view" size="small">
+                <Fab id="editIcon" aria-label="view" size="small">
                   <EditIcon />
                 </Fab>
               </Tooltip>
@@ -200,7 +200,7 @@ const AllUsers = () => {
                 TransitionComponent={Zoom}
                 onClick={handleDeleteProfile}
               >
-                <Fab color="primary" aria-label="view" size="small">
+                <Fab id="delete" aria-label="view" size="small">
                   <DeleteOutlinedIcon />
                 </Fab>
               </Tooltip>
@@ -208,48 +208,52 @@ const AllUsers = () => {
           </Grid>
         )}
       </Grid>
-      <table {...getTableProps()}>
-        <thead>
-          {headerGroups.map((headerGroup) => (
-            <tr {...headerGroup.getFooterGroupProps()}>
-              {headerGroup.headers.map((column) => (
-                <th
-                  {...column.getHeaderProps(column.getSortByToggleProps())}
-                  onClick={() => {
-                    if (column.id !== "selection") {
-                      handleSort(column);
-                    }
-                  }}
-                >
-                  {column.render("Header")}
-                  <span>
-                    {sortBy === column.id
-                      ? " ↑"
-                      : sortBy === `-${column.id}`
-                      ? " ↓"
-                      : ""}
-                  </span>
-                </th>
-              ))}
-            </tr>
-          ))}
-        </thead>
-        <tbody {...getTableBodyProps()}>
-          {page.map((row) => {
-            prepareRow(row);
-            return (
-              <tr {...row.getRowProps()}>
-                {row.cells.map((cell) => {
-                  return (
-                    <td {...cell.getCellProps()}>{cell.render("Cell")}</td>
-                  );
-                })}
+
+      <div className="table-container">
+        <table {...getTableProps()} className="table-data">
+          <thead className="header">
+            {headerGroups.map((headerGroup) => (
+              <tr {...headerGroup.getFooterGroupProps()}>
+                {headerGroup.headers.map((column) => (
+                  <th
+                    {...column.getHeaderProps(column.getSortByToggleProps())}
+                    onClick={() => {
+                      if (column.id !== "selection") {
+                        handleSort(column);
+                      }
+                    }}
+                  >
+                    {column.render("Header")}
+                    <span>
+                      {sortBy === column.id
+                        ? " ↑"
+                        : sortBy === `-${column.id}`
+                        ? " ↓"
+                        : ""}
+                    </span>
+                  </th>
+                ))}
               </tr>
-            );
-          })}
-        </tbody>
-      </table>
+            ))}
+          </thead>
+          <tbody {...getTableBodyProps()} id="table-body">
+            {page.map((row) => {
+              prepareRow(row);
+              return (
+                <tr {...row.getRowProps()}>
+                  {row.cells.map((cell) => {
+                    return (
+                      <td {...cell.getCellProps()}>{cell.render("Cell")}</td>
+                    );
+                  })}
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
       <div
+        className="pegnation"
         style={{
           display: "flex",
           justifyContent: "center",

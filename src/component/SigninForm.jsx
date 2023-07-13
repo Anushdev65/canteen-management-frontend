@@ -6,7 +6,7 @@ import Grid from "@mui/material/Grid";
 import Button from "@mui/material/Button";
 import DropZoneComp from "../component/DropZoneComp";
 import Box from "@mui/material/Box";
-
+import "../styles/create.css";
 const SigninForm = ({
   handleBlur,
   touched,
@@ -165,7 +165,13 @@ const SigninForm = ({
           />
         </Grid>
       </Grid>
-      <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
+      <Button
+        id="button"
+        type="submit"
+        fullWidth
+        variant="contained"
+        sx={{ mt: 3, mb: 2 }}
+      >
         {updateProfile ? "Update" : "Register"}
       </Button>
       {/* <Grid container justifyContent="flex-end" spacing={1}>

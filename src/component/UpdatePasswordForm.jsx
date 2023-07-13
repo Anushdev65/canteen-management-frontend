@@ -14,7 +14,7 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import MUIError from "../component/MUIError";
 import { removeLevelInfo } from "../localStorage/localStorage";
-
+import "../styles/update.css";
 const initialValues = {
   oldPassword: "",
   password: "",
@@ -68,7 +68,12 @@ export default function UpdatePasswordForm() {
       {isLoading || data ? (
         <MUILoading />
       ) : (
-        <Container component="main" maxWidth="xs" sx={{ mt: "5rem" }}>
+        <Container
+          component="main"
+          maxWidth="xs"
+          sx={{ mt: "2rem" }}
+          className="update-container"
+        >
           <CssBaseline />
           <Box
             sx={{

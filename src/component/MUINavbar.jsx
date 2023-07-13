@@ -1,4 +1,5 @@
 import * as React from "react";
+
 import { NavLink, Outlet, useNavigate, useParams } from "react-router-dom";
 import { styled, useTheme } from "@mui/material/styles";
 import Box from "@mui/material/Box";
@@ -33,7 +34,7 @@ import MUIToast from "./MUIToast";
 import MUILoading from "./MUILoading";
 import PeopleAltOutlinedIcon from "@mui/icons-material/PeopleAltOutlined";
 import EnhancedEncryptionOutlinedIcon from "@mui/icons-material/EnhancedEncryptionOutlined";
-
+import "../styles/navbar.css";
 const drawerWidth = 240;
 
 const navData = [
@@ -140,6 +141,7 @@ const Drawer = styled(MuiDrawer, {
 }));
 
 export default function MUINavbar() {
+  const [isScrolled, setIsScrolled] = React.useState(false);
   const { id } = useParams();
   const theme = useTheme();
   const [open, setOpen] = React.useState(true);
@@ -147,6 +149,16 @@ export default function MUINavbar() {
   const { data: userData } = useGetUserByIdQuery(id);
   const [logOut, { data, isSuccess }] = useLogOutMutation();
   const navigate = useNavigate();
+
+  React.useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 0);
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -173,45 +185,48 @@ export default function MUINavbar() {
         <Box sx={{ display: "flex" }}>
           <CssBaseline />
           <AppBar position="fixed" open={open}>
-            <Toolbar>
-              <IconButton
-                color="inherit"
-                aria-label="open drawer"
-                onClick={handleDrawerOpen}
-                edge="start"
-                sx={{
-                  marginRight: 5,
-                  ...(open && { display: "none" }),
-                }}
-              >
-                <MenuIcon />
-              </IconButton>
-              <Typography
-                component="h1"
-                variant="h6"
-                color="inherit"
-                noWrap
-                sx={{ flexGrow: 1 }}
-              >
-                Deerwalk Food System
-              </Typography>
-              {myData && (
-                <img
-                  src={
-                    id
-                      ? `http://${userData?.data.profile}`
-                      : `http://${myData.data.profile}`
-                  }
-                  alt="Your Picture"
-                  style={{
-                    height: "40px",
-                    width: "40px",
-                    marginRight: "16px",
-                    borderRadius: "100%",
+            <div className={`nav-container ${isScrolled ? "scrolled" : ""}`}>
+              <Toolbar>
+                <IconButton
+                  color="inherit"
+                  aria-label="open drawer"
+                  onClick={handleDrawerOpen}
+                  edge="start"
+                  sx={{
+                    marginRight: 5,
+                    ...(open && { display: "none" }),
                   }}
-                />
-              )}
-            </Toolbar>
+                >
+                  <MenuIcon />
+                </IconButton>
+
+                <Typography
+                  component="h1"
+                  variant="h6"
+                  color="inherit"
+                  noWrap
+                  sx={{ flexGrow: 1 }}
+                >
+                  Deerwalk Food System
+                </Typography>
+                {myData && (
+                  <img
+                    src={
+                      id
+                        ? `http://${userData?.data.profile}`
+                        : `http://${myData.data.profile}`
+                    }
+                    alt="Your Picture"
+                    style={{
+                      height: "40px",
+                      width: "40px",
+                      marginRight: "16px",
+                      borderRadius: "100%",
+                    }}
+                  />
+                )}
+              </Toolbar>
+            </div>
           </AppBar>
           <Drawer variant="permanent" open={open}>
             <DrawerHeader>
