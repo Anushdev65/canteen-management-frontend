@@ -33,9 +33,8 @@ const CreateUser = () => {
           gender: values.gender,
           phoneNumber: values.phoneNumber,
           roles: values.role,
-          profile: values.userImage,
+          profile: values.userImage || "localhost:8000/defaultProfile.png",
         };
-        console.log(body);
         registerUser(body);
         action.resetForm();
       },

@@ -13,18 +13,24 @@ import {
   Grid,
   Typography,
 } from "@mui/material";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import {
   useGetMyProfileQuery,
-  useGetUserByIdQuery,
+  useLazyGetUserByIdQuery,
 } from "../services/api/admin/auth";
 import MUIModal from "./MUIModal";
 import "../styles/profile.css";
 const MyProfile = () => {
   const { id } = useParams();
   const { data: myProfileData } = useGetMyProfileQuery();
-  const { data: userData } = useGetUserByIdQuery(id);
+  const [trigger, { data: userData }] = useLazyGetUserByIdQuery();
+
+  useEffect(() => {
+    if (id) {
+      trigger(id);
+    }
+  }, [id, trigger]);
 
   const data = id ? userData : myProfileData;
 
@@ -70,7 +76,7 @@ const MyProfile = () => {
             }}
           >
             <img
-              src={`http://localhost:8000/deerwalk.png`}
+              src="/deerwalkCompware.png"
               alt=""
               style={{
                 width: "350px",
@@ -85,7 +91,6 @@ const MyProfile = () => {
               style={{
                 height: "80px",
                 width: "80px",
-                marginRight: "16px",
                 borderRadius: "100%",
                 marginTop: "-22px",
                 marginRight: "400px",

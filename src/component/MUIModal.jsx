@@ -16,7 +16,7 @@ import { useParams } from "react-router-dom";
 import { userUpdateProfileSchema } from "../schema/YupSchema";
 import {
   useGetMyProfileQuery,
-  useGetUserByIdQuery,
+  useLazyGetUserByIdQuery,
   useUpdateProfileMutation,
   useUpdateUserByAdminMutation,
 } from "../services/api/admin/auth";
@@ -98,10 +98,19 @@ BootstrapDialogTitle.propTypes = {
 export default function MUIModal({ open, handleClose, userId }) {
   const { id } = useParams();
   const { data: adminInfo } = useGetMyProfileQuery();
-  const { data: userData } = useGetUserByIdQuery(id);
-  const { data: userDataTable } = useGetUserByIdQuery(userId);
+  // const { data: userData } = useGetUserByIdQuery(id);
+  // const { data: userDataTable } = useGetUserByIdQuery(userId);
+  const [trigger, { data: userData }] = useLazyGetUserByIdQuery();
 
-  const userInfo = id ? userData : userId ? userDataTable : adminInfo;
+  useEffect(() => {
+    if (id) {
+      trigger(id);
+    } else if (userId) {
+      trigger(userId);
+    }
+  }, [trigger, id, userId]);
+
+  const userInfo = id || userId ? userData : adminInfo;
   const [updateProfile, { data: adminUpdate, error: adminError }] =
     useUpdateProfileMutation();
   const [updateUserByAdmin, { data: userUpdate, error: userUpdateError }] =
@@ -110,41 +119,53 @@ export default function MUIModal({ open, handleClose, userId }) {
   const data = adminUpdate || userUpdate;
   const error = adminError || userUpdateError;
 
-  const { handleBlur, touched, errors, handleChange, handleSubmit, values } =
-    useFormik({
-      initialValues: {
-        firstName: userInfo?.data?.firstName || "",
-        lastName: userInfo?.data?.lastName || "",
-        role: userInfo?.data?.roles?.length ? userInfo?.data?.roles : [],
-        phoneNumber: userInfo?.data?.phoneNumber || "",
-        gender: userInfo?.data?.gender || "",
-        userImage: userInfo?.data?.profile || "",
-      },
-      validationSchema: userUpdateProfileSchema,
-      onSubmit: (values, action) => {
-        const body = {
-          firstName: values.firstName,
-          lastName: values.lastName,
-          gender: values.gender,
-          phoneNumber: values.phoneNumber,
-          roles: values.role,
-          profile: values.userImage,
-        };
-        id
-          ? updateUserByAdmin({ body, id })
-          : userId
-          ? updateUserByAdmin({ body, id: userId })
-          : updateProfile(body);
-        action.resetForm();
-        handleClose();
-      },
-      enableReinitialize: true,
-    });
+  const {
+    handleBlur,
+    touched,
+    errors,
+    handleChange,
+    handleSubmit,
+    values,
+    handleReset,
+  } = useFormik({
+    enableReinitialize: true,
+    initialValues: {
+      firstName: userInfo?.data?.firstName || "",
+      lastName: userInfo?.data?.lastName || "",
+      role: userInfo?.data?.roles?.length ? userInfo?.data?.roles : [],
+      phoneNumber: userInfo?.data?.phoneNumber || "",
+      gender: userInfo?.data?.gender || "",
+      userImage: userInfo?.data?.profile || "",
+    },
+    validationSchema: userUpdateProfileSchema,
+    onSubmit: (values, action) => {
+      const body = {
+        firstName: values.firstName,
+        lastName: values.lastName,
+        gender: values.gender,
+        phoneNumber: `${values.phoneNumber}`,
+        roles: values.role,
+        profile: values.userImage,
+      };
+
+      id
+        ? updateUserByAdmin({ body, id })
+        : userId
+        ? updateUserByAdmin({ body, id: userId })
+        : updateProfile(body);
+      action.resetForm();
+      handleClose();
+    },
+  });
 
   return (
     <div>
       <BootstrapDialog
-        onClose={handleClose}
+        onClose={() => {
+          values.userImage = "";
+          handleReset();
+          handleClose();
+        }}
         aria-labelledby="customized-dialog-title"
         open={open}
         TransitionComponent={Transition}
@@ -155,8 +176,10 @@ export default function MUIModal({ open, handleClose, userId }) {
       >
         <BootstrapDialogTitle
           id="customized-dialog-title"
-          onClose={handleClose}
-          // isScrolled={isScrolled}
+          onClose={() => {
+            handleReset();
+            handleClose();
+          }}
         >
           Update Profile
         </BootstrapDialogTitle>
