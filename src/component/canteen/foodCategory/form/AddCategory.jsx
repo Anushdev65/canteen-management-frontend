@@ -1,6 +1,6 @@
 import { TextField } from "@mui/material";
 import React from "react";
-import MUIError from "../../MUIError";
+import MUIError from "../../../MUIError";
 
 const AddCategory = ({ handleBlur, touched, errors, handleChange, values }) => {
   return (

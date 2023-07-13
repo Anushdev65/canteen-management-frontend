@@ -5,12 +5,12 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import { useFormik } from "formik";
-import { foodCategoryNameSchema } from "../../../schema/YupCanteenSchema";
+import { foodCategoryNameSchema } from "../../../../schema/YupCanteenSchema";
 import {
   useCreateFoodCategoryMutation,
   useUpdateFoodCategoryMutation,
-} from "../../../services/api/canteen/foodcategory";
-import MUIToast from "../../MUIToast";
+} from "../../../../services/api/canteen/foodcategory";
+import MUIToast from "../../../MUIToast";
 import AddCategory from "../form/AddCategory";
 
 export default function AddCategoryModel({ open, handleClose, category }) {

@@ -16,7 +16,6 @@ import { useParams } from "react-router-dom";
 import { userUpdateProfileSchema } from "../schema/YupSchema";
 import {
   useGetMyProfileQuery,
-  useGetUserByIdQuery,
   useLazyGetUserByIdQuery,
   useUpdateProfileMutation,
   useUpdateUserByAdminMutation,
@@ -124,7 +123,7 @@ export default function MUIModal({ open, handleClose, userId }) {
         firstName: values.firstName,
         lastName: values.lastName,
         gender: values.gender,
-        phoneNumber: values.phoneNumber,
+        phoneNumber: `${values.phoneNumber}`,
         roles: values.role,
         profile: values.userImage,
       };
@@ -143,6 +142,7 @@ export default function MUIModal({ open, handleClose, userId }) {
     <div>
       <BootstrapDialog
         onClose={() => {
+          values.userImage = "";
           handleReset();
           handleClose();
         }}

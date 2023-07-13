@@ -168,13 +168,6 @@ const SigninForm = ({
       <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
         {updateProfile ? "Update" : "Register"}
       </Button>
-      {/* <Grid container justifyContent="flex-end" spacing={1}>
-        <Grid item>
-          <Link href="/login" variant="body2">
-            Already have an aacount? Sign in?
-          </Link>
-        </Grid>
-      </Grid> */}
     </Box>
   );
 };

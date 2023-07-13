@@ -36,7 +36,9 @@ function DropZoneComp({ handleImageUpload, value }) {
 
   const { getRootProps, getInputProps, isFocused, isDragAccept, isDragReject } =
     useDropzone({
-      accept: "image/*",
+      accept: {
+        "image/*": [".jpeg", ".jpg", ".png"],
+      },
       onDrop: (acceptedFiles) => {
         const file = acceptedFiles[0];
         const reader = new FileReader();
@@ -56,7 +58,7 @@ function DropZoneComp({ handleImageUpload, value }) {
     if (data) {
       handleImageUpload(data.data.path);
     }
-  }, [data]);
+  }, [data, userImage, handleImageUpload]);
 
   const style = useMemo(
     () => ({
@@ -84,7 +86,7 @@ function DropZoneComp({ handleImageUpload, value }) {
           }}
         >
           <img
-            src={userImage ? userImage : `http://${value}`}
+            src={`http://${value}`}
             alt="Dropped"
             style={{ maxWidth: "100%", height: "10rem" }}
           />

@@ -32,15 +32,10 @@ const AllUsers = () => {
     trigger({ _page: currentPage, _brake: rowsPerPage, _sort: sortBy });
   }, [currentPage, rowsPerPage, sortBy, trigger]);
 
-  // useEffect(() => {
-  //   console.log(data);
-  // }, [data]);
-
   const {
     getTableProps,
     getTableBodyProps,
     headerGroups,
-    rows,
     page,
     prepareRow,
     selectedFlatRows,
