@@ -34,6 +34,7 @@ function App() {
           </Route>
           <Route element={<CanteenRoute />}>
             <Route path="/food-category" element={<FoodCategory />} />
+            <Route path="/food-item" element={<FoodItem />} />
           </Route>
         </Route>
       </Route>
