@@ -157,5 +157,5 @@ export const userUpdateProfileSchema = Yup.object({
       }
     ),
   gender: Yup.string().required("Gender required."),
-  userImage: Yup.string().required("Upload Picture"),
+  userImage: Yup.string(),
 });

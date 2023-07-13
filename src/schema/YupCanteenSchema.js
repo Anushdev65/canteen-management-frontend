@@ -36,12 +36,12 @@ export const foodItemSchema = Yup.object({
     .test("discountedRate-validation", "Rate is digit only.", function (value) {
       return numberRegex.test(value);
     }),
-  category: Yup.string.required("Category required"),
-  description: Yup.string
+  category: Yup.string().required("Category required"),
+  description: Yup.string()
     .required("Description required")
     .test("description-validation", "Alphabets only.", function (value) {
       return descriptionRegex.test(value);
     }),
-  tags: Yup.string.required("Category required"),
-  foodImage: Yup.string.required("Category required"),
+  tags: Yup.string().required("Category required"),
+  foodImage: Yup.string().required("Category required"),
 });
