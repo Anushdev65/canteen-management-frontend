@@ -185,6 +185,7 @@ export default function MUIModal({ open, handleClose, userId }) {
                 handleSubmit={handleSubmit}
                 values={values}
                 updateProfile={true}
+                user={userInfo?.data}
               />
             </Box>
           </Container>
