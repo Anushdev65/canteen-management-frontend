@@ -1,5 +1,7 @@
 import * as Yup from "yup";
 
+const categoryNameRegex = /^[a-z]{3,30}$/;
+
 export const foodCategoryNameSchema = Yup.object({
   name: Yup.string()
     .required("Food Name Required")
@@ -7,7 +9,7 @@ export const foodCategoryNameSchema = Yup.object({
       "categoryName-validation",
       "Category names must begin with a small letter and have a minimum of three characters.",
       function (value) {
-        return /^[a-z]{3,30}$/.test(value);
+        return categoryNameRegex.test(value);
       }
     ),
 });

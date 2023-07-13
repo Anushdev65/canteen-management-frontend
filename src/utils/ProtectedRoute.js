@@ -1,4 +1,3 @@
-import React, { useEffect } from "react";
 import { getLevelInfo } from "../localStorage/localStorage";
 import { Navigate, Outlet } from "react-router-dom";
 

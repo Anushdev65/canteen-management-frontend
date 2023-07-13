@@ -1,12 +1,12 @@
-import * as React from "react";
 import { useFormik } from "formik";
-import { userPasswordSchema } from "../schema/YupSchema";
-import { useVerifyUserMutation } from "../services/api/admin/auth";
+import * as React from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { removeLevelInfo, setLevelInfo } from "../localStorage/localStorage";
 import MUILoading from "../component/MUILoading";
 import MUIToast from "../component/MUIToast";
 import PasswordForm from "../component/PasswordForm";
+import { setLevelInfo } from "../localStorage/localStorage";
+import { userPasswordSchema } from "../schema/YupSchema";
+import { useVerifyUserMutation } from "../services/api/admin/auth";
 
 const initialValues = {
   password: "",
@@ -33,7 +33,7 @@ export default function ConfirmPassword() {
     setLevelInfo({
       token: searchparams.get("token"),
     });
-  }, [searchparams, setLevelInfo]);
+  }, [searchparams]);
 
   React.useEffect(() => {
     if (data) {

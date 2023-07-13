@@ -1,41 +1,40 @@
-import * as React from "react";
-import { NavLink, Outlet, useNavigate, useParams } from "react-router-dom";
-import { styled, useTheme } from "@mui/material/styles";
-import Box from "@mui/material/Box";
-import MuiDrawer from "@mui/material/Drawer";
-import MuiAppBar from "@mui/material/AppBar";
-import Toolbar from "@mui/material/Toolbar";
-import List from "@mui/material/List";
-import CssBaseline from "@mui/material/CssBaseline";
-import Typography from "@mui/material/Typography";
-import Divider from "@mui/material/Divider";
-import IconButton from "@mui/material/IconButton";
-import MenuIcon from "@mui/icons-material/Menu";
+import AccountBalanceIcon from "@mui/icons-material/AccountBalance";
+import AccountBoxIcon from "@mui/icons-material/AccountBox";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
+import EnhancedEncryptionOutlinedIcon from "@mui/icons-material/EnhancedEncryptionOutlined";
+import FastfoodOutlinedIcon from "@mui/icons-material/FastfoodOutlined";
+import FeedbackIcon from "@mui/icons-material/Feedback";
+import FoodBankOutlinedIcon from "@mui/icons-material/FoodBank";
+import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined";
+import MenuIcon from "@mui/icons-material/Menu";
+import MenuBookOutlinedIcon from "@mui/icons-material/MenuBookOutlined";
+import PeopleAltOutlinedIcon from "@mui/icons-material/PeopleAltOutlined";
+import ReceiptLongIcon from "@mui/icons-material/ReceiptLong";
+import RestaurantMenuOutlinedIcon from "@mui/icons-material/RestaurantMenuOutlined";
+import MuiAppBar from "@mui/material/AppBar";
+import Box from "@mui/material/Box";
+import CssBaseline from "@mui/material/CssBaseline";
+import Divider from "@mui/material/Divider";
+import MuiDrawer from "@mui/material/Drawer";
+import IconButton from "@mui/material/IconButton";
+import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
-import FoodBankOutlinedIcon from "@mui/icons-material/FoodBank";
-import FeedbackIcon from "@mui/icons-material/Feedback";
-import AccountBalanceIcon from "@mui/icons-material/AccountBalance";
-import ReceiptLongIcon from "@mui/icons-material/ReceiptLong";
-import AccountBoxIcon from "@mui/icons-material/AccountBox";
-import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined";
+import Toolbar from "@mui/material/Toolbar";
+import Typography from "@mui/material/Typography";
+import { styled, useTheme } from "@mui/material/styles";
+import * as React from "react";
+import { NavLink, Outlet, useNavigate, useParams } from "react-router-dom";
+import { getUserInfo, removeLevelInfo } from "../localStorage/localStorage";
 import {
-  useGetMyProfileQuery,
-  useGetUserByIdQuery,
   useLazyGetUserByIdQuery,
   useLogOutMutation,
 } from "../services/api/admin/auth";
-import { getUserInfo, removeLevelInfo } from "../localStorage/localStorage";
-import MUIToast from "./MUIToast";
 import MUILoading from "./MUILoading";
-import PeopleAltOutlinedIcon from "@mui/icons-material/PeopleAltOutlined";
-import EnhancedEncryptionOutlinedIcon from "@mui/icons-material/EnhancedEncryptionOutlined";
-import FastfoodOutlinedIcon from "@mui/icons-material/FastfoodOutlined";
-import RestaurantMenuOutlinedIcon from "@mui/icons-material/RestaurantMenuOutlined";
+import MUIToast from "./MUIToast";
 
 const drawerWidth = 240;
 
@@ -99,9 +98,19 @@ const navDataCanteen = [
     link: "/food-category",
   },
   {
-    name: "Generate Menu",
+    name: "Add Food Item",
     icon: <RestaurantMenuOutlinedIcon />,
+    link: "/food-item",
+  },
+  {
+    name: "Generate Menu",
+    icon: <MenuBookOutlinedIcon />,
     link: "/generate-menu",
+  },
+  {
+    name: "My Profile",
+    icon: <AccountBoxIcon />,
+    link: "/myprofile",
   },
 ];
 
@@ -270,7 +279,7 @@ export default function MUINavbar() {
                       ? `http://${userData?.data.profile}`
                       : `http://${myData.user.profile}`
                   }
-                  alt="Your Picture"
+                  alt=""
                   style={{
                     height: "40px",
                     width: "40px",
@@ -283,7 +292,7 @@ export default function MUINavbar() {
           </AppBar>
           <Drawer variant="permanent" open={open}>
             <DrawerHeader>
-              <img src="/deerwalklogo.jpeg" width="170px" />
+              <img src="/deerwalklogo.jpeg" alt="" width="170px" />
               <IconButton onClick={handleDrawerClose}>
                 {theme.direction === "rtl" ? (
                   <ChevronRightIcon />

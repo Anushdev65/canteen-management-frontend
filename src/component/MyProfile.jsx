@@ -90,7 +90,6 @@ const MyProfile = () => {
               style={{
                 height: "80px",
                 width: "80px",
-                marginRight: "16px",
                 borderRadius: "100%",
                 marginTop: "-22px",
                 marginRight: "400px",

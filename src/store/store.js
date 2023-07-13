@@ -1,12 +1,10 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { adminApi } from "../services/api/admin/auth";
 import { imageUpload } from "../services/api/imageUpload";
-import authReducer from "../features/auth/authSlice";
 import { foodCategoryApi } from "../services/api/canteen/foodcategory";
 
 const store = configureStore({
   reducer: {
-    auth: authReducer,
     // Add the generated reducer as a specific top-level slice
     [adminApi.reducerPath]: adminApi.reducer,
     [imageUpload.reducerPath]: imageUpload.reducer,
