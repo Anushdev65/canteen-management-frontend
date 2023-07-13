@@ -28,8 +28,9 @@ import Typography from "@mui/material/Typography";
 import { styled, useTheme } from "@mui/material/styles";
 import * as React from "react";
 import { NavLink, Outlet, useNavigate, useParams } from "react-router-dom";
-import { getUserInfo, removeLevelInfo } from "../localStorage/localStorage";
+import { removeLevelInfo } from "../localStorage/localStorage";
 import {
+  useGetMyProfileQuery,
   useLazyGetUserByIdQuery,
   useLogOutMutation,
 } from "../services/api/admin/auth";
@@ -183,8 +184,8 @@ export default function MUINavbar() {
   const { id } = useParams();
   const theme = useTheme();
   const [open, setOpen] = React.useState(true);
-  // const { data: myData } = useGetMyProfileQuery();
-  const myData = getUserInfo();
+  const { data: myData } = useGetMyProfileQuery();
+  // const myData = getUserInfo();
   const [trigger, { data: userData }] = useLazyGetUserByIdQuery();
   const [logOut, { data, isSuccess }] = useLogOutMutation();
   const navigate = useNavigate();
@@ -277,7 +278,7 @@ export default function MUINavbar() {
                   src={
                     id
                       ? `http://${userData?.data.profile}`
-                      : `http://${myData.user.profile}`
+                      : `http://${myData?.data?.profile}`
                   }
                   alt=""
                   style={{
@@ -303,7 +304,7 @@ export default function MUINavbar() {
             </DrawerHeader>
             <Divider />
             <List>
-              {myData?.user.roles.includes("admin")
+              {myData?.data?.roles?.includes("admin")
                 ? renderList(navDataAdmin)
                 : renderList(navDataCanteen)}
             </List>

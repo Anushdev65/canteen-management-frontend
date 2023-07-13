@@ -6,6 +6,7 @@ import Grid from "@mui/material/Grid";
 import Button from "@mui/material/Button";
 import DropZoneComp from "../component/DropZoneComp";
 import Box from "@mui/material/Box";
+import { useCallback } from "react";
 
 const SigninForm = ({
   handleBlur,
@@ -16,7 +17,7 @@ const SigninForm = ({
   values,
   updateProfile,
 }) => {
-  const handleImageUpload = (image) => {
+  const handleImageUpload = useCallback((image) => {
     handleChange({
       target: {
         name: "userImage",
@@ -28,7 +29,7 @@ const SigninForm = ({
         name: "userImage",
       },
     });
-  };
+  }, []);
   return (
     <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
       <Grid container spacing={2}>
@@ -148,7 +149,6 @@ const SigninForm = ({
         <Grid item xs={12}>
           <DropZoneComp
             error={touched.userImage && errors.userImage}
-            required
             fullWidth
             id="userImage"
             name="userImage"

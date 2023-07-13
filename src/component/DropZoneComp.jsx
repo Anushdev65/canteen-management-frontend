@@ -31,14 +31,14 @@ const rejectStyle = {
 };
 
 function DropZoneComp({ handleImageUpload, value }) {
-  const [userImage, setUserImage] = useState(null);
-  const [uploadImage, { data }] = useUploadImageMutation();
+  const [uploadImage, { data, isSuccess }] = useUploadImageMutation();
 
   const { getRootProps, getInputProps, isFocused, isDragAccept, isDragReject } =
     useDropzone({
       accept: {
         "image/*": [".jpeg", ".jpg", ".png"],
       },
+
       onDrop: (acceptedFiles) => {
         const file = acceptedFiles[0];
         const reader = new FileReader();
@@ -47,18 +47,14 @@ function DropZoneComp({ handleImageUpload, value }) {
         const formData = new FormData();
         formData.append("file", file);
         uploadImage(formData);
-
-        reader.onload = (e) => {
-          setUserImage(e.target.result);
-        };
       },
     });
 
   useEffect(() => {
-    if (data) {
+    if (isSuccess) {
       handleImageUpload(data.data.path);
     }
-  }, [data, userImage, handleImageUpload]);
+  }, [data, isSuccess, handleImageUpload]);
 
   const style = useMemo(
     () => ({
