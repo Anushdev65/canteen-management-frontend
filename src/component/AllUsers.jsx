@@ -163,6 +163,7 @@ const AllUsers = () => {
             </Fab>
           </Tooltip>
         </Grid>
+
         {selectedFlatRows.length > 0 && (
           <Grid item>
             <Box sx={{ display: "flex", gap: "10px" }}>

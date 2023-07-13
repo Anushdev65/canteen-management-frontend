@@ -29,11 +29,11 @@ function App() {
               element={<UpdatePasswordForm />}
             />
             <Route path="/create-user" element={<CreateUser />} />
+
             <Route path="/view-user/:id" element={<MyProfile />} />
           </Route>
           <Route element={<CanteenRoute />}>
             <Route path="/food-category" element={<FoodCategory />} />
-            <Route path="/food-item" element={<FoodItem />} />
           </Route>
         </Route>
       </Route>
