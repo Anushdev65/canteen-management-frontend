@@ -14,7 +14,7 @@ import MUIToast from "../component/MUIToast";
 import { removeLevelInfo } from "../localStorage/localStorage";
 import { userResetPasswordSchema } from "../schema/YupSchema";
 import { useUpdatePasswordMutation } from "../services/api/admin/auth";
-
+import "../styles/update.css";
 const initialValues = {
   oldPassword: "",
   password: "",
@@ -68,7 +68,12 @@ export default function UpdatePasswordForm() {
       {isLoading || data ? (
         <MUILoading />
       ) : (
-        <Container component="main" maxWidth="xs" sx={{ mt: "5rem" }}>
+        <Container
+          component="main"
+          maxWidth="xs"
+          sx={{ mt: "2rem" }}
+          className="update-container"
+        >
           <CssBaseline />
           <Box
             sx={{

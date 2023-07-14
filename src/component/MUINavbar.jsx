@@ -28,15 +28,14 @@ import Typography from "@mui/material/Typography";
 import { styled, useTheme } from "@mui/material/styles";
 import * as React from "react";
 import { NavLink, Outlet, useNavigate, useParams } from "react-router-dom";
-import { removeLevelInfo } from "../localStorage/localStorage";
+import { getUserInfo, removeLevelInfo } from "../localStorage/localStorage";
 import {
-  useGetMyProfileQuery,
   useLazyGetUserByIdQuery,
   useLogOutMutation,
 } from "../services/api/admin/auth";
 import MUILoading from "./MUILoading";
 import MUIToast from "./MUIToast";
-
+import "../styles/navbar.css";
 const drawerWidth = 240;
 
 const navDataAdmin = [
@@ -99,7 +98,7 @@ const navDataCanteen = [
     link: "/food-category",
   },
   {
-    name: "Food Item",
+    name: "Add Food Item",
     icon: <RestaurantMenuOutlinedIcon />,
     link: "/food-item",
   },
@@ -181,19 +180,34 @@ const Drawer = styled(MuiDrawer, {
 }));
 
 export default function MUINavbar() {
+  const [isScrolled, setIsScrolled] = React.useState(false);
   const { id } = useParams();
   const theme = useTheme();
   const [open, setOpen] = React.useState(true);
-  const { data: myData } = useGetMyProfileQuery();
-  // const myData = getUserInfo();
+  // const { data: myData } = useGetMyProfileQuery();
+  const myData = getUserInfo();
   const [trigger, { data: userData }] = useLazyGetUserByIdQuery();
   const [logOut, { data, isSuccess }] = useLogOutMutation();
   const navigate = useNavigate();
 
+  // React.useEffect(() => {
+  //   if (id) {
+  //     trigger(id);
+  //   }
+  // }, [id, trigger]);
+
   React.useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 0);
+    };
+    window.addEventListener("scroll", handleScroll);
+
     if (id) {
       trigger(id);
     }
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
   }, [id, trigger]);
 
   const handleDrawerOpen = () => {
@@ -251,45 +265,47 @@ export default function MUINavbar() {
         <Box sx={{ display: "flex" }}>
           <CssBaseline />
           <AppBar position="fixed" open={open}>
-            <Toolbar>
-              <IconButton
-                color="inherit"
-                aria-label="open drawer"
-                onClick={handleDrawerOpen}
-                edge="start"
-                sx={{
-                  marginRight: 5,
-                  ...(open && { display: "none" }),
-                }}
-              >
-                <MenuIcon />
-              </IconButton>
-              <Typography
-                component="h1"
-                variant="h6"
-                color="inherit"
-                noWrap
-                sx={{ flexGrow: 1 }}
-              >
-                Deerwalk Food System
-              </Typography>
-              {myData && (
-                <img
-                  src={
-                    id
-                      ? `http://${userData?.data.profile}`
-                      : `http://${myData?.data?.profile}`
-                  }
-                  alt=""
-                  style={{
-                    height: "40px",
-                    width: "40px",
-                    marginRight: "16px",
-                    borderRadius: "100%",
+            <div className={`nav-container ${isScrolled ? "scrolled" : ""}`}>
+              <Toolbar>
+                <IconButton
+                  color="inherit"
+                  aria-label="open drawer"
+                  onClick={handleDrawerOpen}
+                  edge="start"
+                  sx={{
+                    marginRight: 5,
+                    ...(open && { display: "none" }),
                   }}
-                />
-              )}
-            </Toolbar>
+                >
+                  <MenuIcon />
+                </IconButton>
+                <Typography
+                  component="h1"
+                  variant="h6"
+                  color="inherit"
+                  noWrap
+                  sx={{ flexGrow: 1 }}
+                >
+                  Deerwalk Food System
+                </Typography>
+                {myData && (
+                  <img
+                    src={
+                      id
+                        ? `http://${userData?.data.profile}`
+                        : `http://${myData.user.profile}`
+                    }
+                    alt=""
+                    style={{
+                      height: "40px",
+                      width: "40px",
+                      marginRight: "16px",
+                      borderRadius: "100%",
+                    }}
+                  />
+                )}
+              </Toolbar>
+            </div>
           </AppBar>
           <Drawer variant="permanent" open={open}>
             <DrawerHeader>
@@ -304,7 +320,7 @@ export default function MUINavbar() {
             </DrawerHeader>
             <Divider />
             <List>
-              {myData?.data?.roles?.includes("admin")
+              {myData?.user.roles.includes("admin")
                 ? renderList(navDataAdmin)
                 : renderList(navDataCanteen)}
             </List>

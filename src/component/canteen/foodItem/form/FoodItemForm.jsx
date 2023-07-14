@@ -7,7 +7,7 @@ import { useGetAllFoodCategoryQuery } from "../../../../services/api/canteen/foo
 import DropZoneComp from "../../../DropZoneComp";
 import MUIError from "../../../MUIError";
 import FoodItemAutoComplete from "./FoodItemAutoComplete";
-
+import "./fooditem.css";
 export const tags = [
   { label: "breakfast" },
   { label: "lunch" },
@@ -202,8 +202,8 @@ export default function FoodItemForm({
           </Box>
         </Grid>
       </Grid>
-      <Grid container>
-        <Grid item mt={"1.5rem"}>
+      <Grid container className="dropzone-container">
+        <Grid item>
           <DropZoneComp
             error={touched.foodImage && errors.foodImage}
             fullWidth

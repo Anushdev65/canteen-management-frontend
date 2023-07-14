@@ -11,7 +11,7 @@ import Slide from "@mui/material/Slide";
 import { styled } from "@mui/material/styles";
 import { useFormik } from "formik";
 import PropTypes from "prop-types";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { userUpdateProfileSchema } from "../schema/YupSchema";
 import {
@@ -22,7 +22,7 @@ import {
 } from "../services/api/admin/auth";
 import MUIToast from "./MUIToast";
 import SigninForm from "./SigninForm";
-
+import "../styles/muimodal.css";
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
@@ -38,9 +38,29 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
 
 function BootstrapDialogTitle(props) {
   const { children, onClose, ...other } = props;
+  const [isScrolled, setIsScrolled] = useState(false);
 
+  useEffect(() => {
+    const handleScroll = () => {
+      const diologContentElement = document.querySelector(".custom-dialog");
+      if (diologContentElement) {
+        setIsScrolled(diologContentElement.scrollTop > 0);
+      }
+    };
+    const diologContentElement = document.querySelector(".custom-dialog");
+    if (diologContentElement) {
+      diologContentElement.addEventListener("scroll", handleScroll);
+    }
+
+    return () => {
+      if (diologContentElement) {
+        diologContentElement.removeEventListener("scroll", handleScroll);
+      }
+    };
+  }, []);
   return (
     <DialogTitle
+      className={`dialogTitle ${isScrolled ? "scrolled" : ""}`}
       sx={{
         m: 0,
         p: 2,
@@ -166,7 +186,7 @@ export default function MUIModal({ open, handleClose, userId }) {
         >
           Update Profile
         </BootstrapDialogTitle>
-        <DialogContent dividers>
+        <DialogContent dividers className="custom-dialog">
           <Container component="main" maxWidth="sm" sx={{ mb: 2 }}>
             <CssBaseline />
             <Box
@@ -191,7 +211,6 @@ export default function MUIModal({ open, handleClose, userId }) {
           </Container>
         </DialogContent>
       </BootstrapDialog>
-
       {data ? (
         <MUIToast
           initialValue={true}
