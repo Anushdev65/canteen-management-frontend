@@ -128,7 +128,6 @@ export default function MUIModal({ open, handleClose, userId }) {
       };
 
       id ? updateUserByAdmin({ body, id }) : updateProfile(body);
-      console.log(body.profile);
       action.resetForm();
       handleClose();
     },
@@ -186,6 +185,7 @@ export default function MUIModal({ open, handleClose, userId }) {
                 values={values}
                 updateProfile={true}
                 user={userInfo?.data}
+                id={id}
               />
             </Box>
           </Container>
