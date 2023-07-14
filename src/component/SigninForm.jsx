@@ -18,6 +18,8 @@ const SigninForm = ({
   values,
   updateProfile,
   user,
+  createUser,
+  id,
 }) => {
   const handleImageUpload = useCallback((image) => {
     handleChange({
@@ -95,7 +97,7 @@ const SigninForm = ({
             />
           </Grid>
         )}
-        {user?.roles?.includes("admin") && (
+        {(id || createUser || user?.roles?.includes("admin")) && (
           <Grid item xs={12}>
             <MUIMultiSelect
               error={touched.role && errors.role}

@@ -222,7 +222,7 @@ export default function MUINavbar() {
     logOut();
     removeLevelInfo();
     setTimeout(() => {
-      navigate("/login");
+      window.location.href = "/login";
     }, 3000);
   };
 

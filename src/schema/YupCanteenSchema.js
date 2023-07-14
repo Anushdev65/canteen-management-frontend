@@ -31,18 +31,19 @@ export const foodItemSchema = Yup.object({
     .test("rate-validation", "Rate is digit only.", function (value) {
       return numberRegex.test(value);
     }),
-  discountedRate: Yup.string()
-    .required("Rate required")
-    .test(
-      "discountedRate-validation",
-      "Rate must be a digit and less than or equal to the rate.",
-      function (value) {
-        const { rate } = this.parent;
+  discountedRate: Yup.string().test(
+    "discountedRate-validation",
+    "Rate must be a digit and less than or equal to the rate.",
+    function (value) {
+      const { rate } = this.parent;
+      if (value && value.trim() !== "") {
         return numberRegex.test(value) && parseFloat(value) < parseFloat(rate);
       }
-    ),
+      return true;
+    }
+  ),
   category: Yup.string().required("Category required"),
-  description: Yup.string().required("Description required"),
+  description: Yup.string(),
   tags: Yup.string().required("Tags required"),
   foodImage: Yup.string().required("Image required"),
 });
