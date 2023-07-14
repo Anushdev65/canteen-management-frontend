@@ -49,6 +49,10 @@ export default function LoginForm() {
     }
   }, [data, navigate]);
 
+  React.useEffect(() => {
+    console.log(data);
+  }, [data]);
+
   return (
     <>
       <div className="login-container">
