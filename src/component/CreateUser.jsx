@@ -62,6 +62,7 @@ const CreateUser = () => {
               handleChange={handleChange}
               handleSubmit={handleSubmit}
               values={values}
+              createUser={true}
             />
           </Box>
         </Container>
