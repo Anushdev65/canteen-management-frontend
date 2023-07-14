@@ -1,29 +1,24 @@
-import * as React from "react";
-import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
+import TextField from "@mui/material/TextField";
+import * as React from "react";
 
-export default function FoodItemAutoComplete() {
+export default function FoodItemAutoComplete({
+  label,
+  value,
+  onChange,
+  options,
+  error,
+}) {
   return (
     <Autocomplete
-      disablePortal
-      id="combo-box-demo"
-      options={top100Films}
-      renderInput={(params) => <TextField {...params} label="Movie" />}
+      value={value === "" ? null : value}
+      options={options}
+      onChange={onChange}
+      ListboxProps={{ style: { maxHeight: 200, overflow: "auto" } }}
+      renderInput={(params) => (
+        <TextField id="index" {...params} label={label} error={error} />
+      )}
+      isOptionEqualToValue={(option, value) => option.label === value}
     />
   );
 }
-
-// Top 100 films as rated by IMDb users. http://www.imdb.com/chart/top
-const top100Films = [
-  { label: "The Shawshank Redemption", year: 1994 },
-  { label: "The Godfather", year: 1972 },
-  { label: "The Godfather: Part II", year: 1974 },
-  { label: "The Dark Knight", year: 2008 },
-  { label: "12 Angry Men", year: 1957 },
-  { label: "Schindler's List", year: 1993 },
-  { label: "Pulp Fiction", year: 1994 },
-  {
-    label: "The Lord of the Rings: The Return of the King",
-    year: 2003,
-  },
-];
