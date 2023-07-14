@@ -1,20 +1,20 @@
-import "./App.css";
-import ConfirmPassword from "./pages/ConfirmPAssword";
-import SignUp from "./pages/SignUp.jsx";
-import LoginForm from "./pages/LoginForm";
 import { Route, Routes } from "react-router-dom";
-import MUINavbar from "./component/MUINavbar";
-import AdminsRoute from "./utils/AdminsRoute";
-import MyProfile from "./component/MyProfile";
-import ForgotPassword from "./pages/ForgotPassword";
-import ResetPassword from "./pages/ResetPassword";
+import "./App.css";
 import AllUsers from "./component/AllUsers";
-import UpdatePasswordForm from "./component/UpdatePasswordForm";
 import CreateUser from "./component/CreateUser";
+import MUINavbar from "./component/MUINavbar";
+import MyProfile from "./component/MyProfile";
+import UpdatePasswordForm from "./component/UpdatePasswordForm";
+import FoodCategory from "./component/canteen/foodCategory/table/FoodCategory";
+import ConfirmPassword from "./pages/ConfirmPAssword";
+import ForgotPassword from "./pages/ForgotPassword";
+import LoginForm from "./pages/LoginForm";
+import ResetPassword from "./pages/ResetPassword";
+import SignUp from "./pages/SignUp.jsx";
+import AdminsRoute from "./utils/AdminsRoute";
 import CanteenRoute from "./utils/CanteenRoute";
 import ProtectedRoute from "./utils/ProtectedRoute";
-import FoodCategory from "./component/canteen/foodCategory/table/FoodCategory";
-import FoodItem from "./component/canteen/foodItem/table/FoodItem";
+import CreateFoodItem from "./component/canteen/foodItem/foodItem/CreateFoodItem";
 
 function App() {
   return (
@@ -34,6 +34,7 @@ function App() {
           </Route>
           <Route element={<CanteenRoute />}>
             <Route path="/food-category" element={<FoodCategory />} />
+            <Route path="/food-item" element={<CreateFoodItem />} />
           </Route>
         </Route>
       </Route>

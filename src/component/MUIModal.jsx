@@ -96,21 +96,20 @@ BootstrapDialogTitle.propTypes = {
 };
 
 export default function MUIModal({ open, handleClose, userId }) {
-  const { id } = useParams();
+  const { id: idParam } = useParams();
   const { data: adminInfo } = useGetMyProfileQuery();
   // const { data: userData } = useGetUserByIdQuery(id);
   // const { data: userDataTable } = useGetUserByIdQuery(userId);
   const [trigger, { data: userData }] = useLazyGetUserByIdQuery();
+  const id = idParam || userId;
 
   useEffect(() => {
     if (id) {
       trigger(id);
-    } else if (userId) {
-      trigger(userId);
     }
-  }, [trigger, id, userId]);
+  }, [trigger, id]);
 
-  const userInfo = id || userId ? userData : adminInfo;
+  const userInfo = id ? userData : adminInfo;
   const [updateProfile, { data: adminUpdate, error: adminError }] =
     useUpdateProfileMutation();
   const [updateUserByAdmin, { data: userUpdate, error: userUpdateError }] =
@@ -148,15 +147,20 @@ export default function MUIModal({ open, handleClose, userId }) {
         profile: values.userImage,
       };
 
-      id
-        ? updateUserByAdmin({ body, id })
-        : userId
-        ? updateUserByAdmin({ body, id: userId })
-        : updateProfile(body);
+      id ? updateUserByAdmin({ body, id }) : updateProfile(body);
+      console.log(body.profile);
       action.resetForm();
       handleClose();
     },
   });
+
+  useEffect(() => {
+    if (data) {
+      console.log(data);
+    } else if (error) {
+      console.log(error);
+    }
+  }, [data, error]);
 
   return (
     <div>
@@ -201,6 +205,7 @@ export default function MUIModal({ open, handleClose, userId }) {
                 handleSubmit={handleSubmit}
                 values={values}
                 updateProfile={true}
+                user={userInfo?.data}
               />
             </Box>
           </Container>

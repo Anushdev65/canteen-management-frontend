@@ -7,6 +7,8 @@ import Button from "@mui/material/Button";
 import DropZoneComp from "../component/DropZoneComp";
 import Box from "@mui/material/Box";
 import "../styles/create.css";
+import { useCallback } from "react";
+
 const SigninForm = ({
   handleBlur,
   touched,
@@ -15,8 +17,9 @@ const SigninForm = ({
   handleSubmit,
   values,
   updateProfile,
+  user,
 }) => {
-  const handleImageUpload = (image) => {
+  const handleImageUpload = useCallback((image) => {
     handleChange({
       target: {
         name: "userImage",
@@ -28,7 +31,8 @@ const SigninForm = ({
         name: "userImage",
       },
     });
-  };
+  }, []);
+
   return (
     <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
       <Grid container spacing={2}>
@@ -91,21 +95,23 @@ const SigninForm = ({
             />
           </Grid>
         )}
-        <Grid item xs={12}>
-          <MUIMultiSelect
-            error={touched.role && errors.role}
-            required
-            fullWidth
-            id="role"
-            label="User Type"
-            name="role"
-            autoComplete="off"
-            value={values.role}
-            onChange={handleChange}
-            onBlur={handleBlur}
-          />
-          <MUIError touch={touched.role} error={errors.role} value={false} />
-        </Grid>
+        {user?.roles?.includes("admin") && (
+          <Grid item xs={12}>
+            <MUIMultiSelect
+              error={touched.role && errors.role}
+              required
+              fullWidth
+              id="role"
+              label="User Type"
+              name="role"
+              autoComplete="off"
+              value={values.role}
+              onChange={handleChange}
+              onBlur={handleBlur}
+            />
+            <MUIError touch={touched.role} error={errors.role} value={false} />
+          </Grid>
+        )}
         <Grid item xs={12}>
           <TextField
             error={touched.phoneNumber && errors.phoneNumber}
@@ -148,7 +154,6 @@ const SigninForm = ({
         <Grid item xs={12}>
           <DropZoneComp
             error={touched.userImage && errors.userImage}
-            required
             fullWidth
             id="userImage"
             name="userImage"

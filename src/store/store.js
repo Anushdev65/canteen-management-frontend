@@ -2,6 +2,7 @@ import { configureStore } from "@reduxjs/toolkit";
 import { adminApi } from "../services/api/admin/auth";
 import { imageUpload } from "../services/api/imageUpload";
 import { foodCategoryApi } from "../services/api/canteen/foodcategory";
+import { foodItemApi } from "../services/api/canteen/foodItem";
 
 const store = configureStore({
   reducer: {
@@ -9,6 +10,7 @@ const store = configureStore({
     [adminApi.reducerPath]: adminApi.reducer,
     [imageUpload.reducerPath]: imageUpload.reducer,
     [foodCategoryApi.reducerPath]: foodCategoryApi.reducer,
+    [foodItemApi.reducerPath]: foodItemApi.reducer,
   },
   // Adding the api middleware enables caching, invalidation, polling,
   // and other useful features of `rtk-query`.
@@ -16,6 +18,7 @@ const store = configureStore({
     getDefaultMiddleware().concat([
       adminApi.middleware,
       foodCategoryApi.middleware,
+      foodItemApi.middleware,
       imageUpload.middleware,
     ]),
 });

@@ -34,7 +34,6 @@ export default function LoginForm() {
       onSubmit: (values, action) => {
         loginUser(values);
         action.resetForm();
-        return false;
       },
     });
 
