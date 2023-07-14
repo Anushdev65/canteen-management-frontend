@@ -97,7 +97,6 @@ export default function FoodItemForm({
                   error={touched.description && errors.description}
                   autoComplete="off"
                   name="description"
-                  required
                   fullWidth
                   id="description"
                   label="Description"
@@ -178,7 +177,6 @@ export default function FoodItemForm({
                   error={touched.discountedRate && errors.discountedRate}
                   autoComplete="off"
                   name="discountedRate"
-                  required
                   fullWidth
                   id="discountedRate"
                   label="Discounted Rate"
