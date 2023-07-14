@@ -99,7 +99,7 @@ const navDataCanteen = [
     link: "/food-category",
   },
   {
-    name: "Add Food Item",
+    name: "Food Item",
     icon: <RestaurantMenuOutlinedIcon />,
     link: "/food-item",
   },

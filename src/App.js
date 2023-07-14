@@ -6,7 +6,6 @@ import MUINavbar from "./component/MUINavbar";
 import MyProfile from "./component/MyProfile";
 import UpdatePasswordForm from "./component/UpdatePasswordForm";
 import FoodCategory from "./component/canteen/foodCategory/table/FoodCategory";
-import AddFoodItem from "./component/canteen/foodItem/addFoodItem/AddFoodItem";
 import ConfirmPassword from "./pages/ConfirmPAssword";
 import ForgotPassword from "./pages/ForgotPassword";
 import LoginForm from "./pages/LoginForm";
@@ -15,6 +14,7 @@ import SignUp from "./pages/SignUp.jsx";
 import AdminsRoute from "./utils/AdminsRoute";
 import CanteenRoute from "./utils/CanteenRoute";
 import ProtectedRoute from "./utils/ProtectedRoute";
+import CreateFoodItem from "./component/canteen/foodItem/foodItem/CreateFoodItem";
 
 function App() {
   return (
@@ -34,7 +34,7 @@ function App() {
           </Route>
           <Route element={<CanteenRoute />}>
             <Route path="/food-category" element={<FoodCategory />} />
-            <Route path="/food-item" element={<AddFoodItem />} />
+            <Route path="/food-item" element={<CreateFoodItem />} />
           </Route>
         </Route>
       </Route>

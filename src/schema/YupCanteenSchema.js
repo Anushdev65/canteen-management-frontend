@@ -33,15 +33,16 @@ export const foodItemSchema = Yup.object({
     }),
   discountedRate: Yup.string()
     .required("Rate required")
-    .test("discountedRate-validation", "Rate is digit only.", function (value) {
-      return numberRegex.test(value);
-    }),
+    .test(
+      "discountedRate-validation",
+      "Rate must be a digit and less than or equal to the rate.",
+      function (value) {
+        const { rate } = this.parent;
+        return numberRegex.test(value) && parseFloat(value) < parseFloat(rate);
+      }
+    ),
   category: Yup.string().required("Category required"),
-  description: Yup.string()
-    .required("Description required")
-    .test("description-validation", "Alphabets only.", function (value) {
-      return descriptionRegex.test(value);
-    }),
-  tags: Yup.string().required("Category required"),
-  foodImage: Yup.string().required("Category required"),
+  description: Yup.string().required("Description required"),
+  tags: Yup.string().required("Tags required"),
+  foodImage: Yup.string().required("Image required"),
 });
