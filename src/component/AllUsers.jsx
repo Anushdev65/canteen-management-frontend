@@ -11,6 +11,11 @@ import { IndeterminateCheckbox } from "./IndeterminateCheckbox";
 import MUIDeleteModal from "./MUIDeleteModal";
 import MUIModal from "./MUIModal";
 import { COLUMNS } from "./columns";
+import MailOutlineIcon from "@mui/icons-material/MailOutline";
+import WcIcon from "@mui/icons-material/Wc";
+import LocalPhoneIcon from "@mui/icons-material/LocalPhone";
+import TaskAltIcon from "@mui/icons-material/TaskAlt";
+import SupervisorAccountIcon from "@mui/icons-material/SupervisorAccount";
 import "../styles/usertable.css";
 
 const AllUsers = () => {
@@ -27,6 +32,12 @@ const AllUsers = () => {
     () => data?.data?.results || [],
     [data?.data?.results]
   );
+
+  // const columnIcons = {
+  //   email: <MailOutlineIcon />,
+  //   phoneNumber: <LocalPhoneIcon />,
+  //   gender: <TransgenderIcon />,
+  // };
 
   useEffect(() => {
     trigger({ _page: currentPage, _brake: rowsPerPage, _sort: sortBy });
@@ -220,7 +231,57 @@ const AllUsers = () => {
                       }
                     }}
                   >
-                    {column.render("Header")}
+                    {column.id === "selection" ? (
+                      <span>
+                        <TaskAltIcon
+                          className="Icon"
+                          {...column.getHeaderProps()}
+                        />
+                        {column.render("Header")}
+                      </span>
+                    ) : (
+                      <>
+                        {column.id === "email" && (
+                          <span>
+                            {column.id === "email" && (
+                              <MailOutlineIcon className="Icon" />
+                            )}
+                            {column.render("Header")}
+                          </span>
+                        )}
+                        {column.id === "gender" && (
+                          <span>
+                            {column.id === "gender" && (
+                              <WcIcon className="Icon" />
+                            )}
+                            {column.render("Header")}
+                          </span>
+                        )}
+                        {column.id === "phoneNumber" && (
+                          <span>
+                            {column.id === "phoneNumber" && (
+                              <LocalPhoneIcon className="Icon" />
+                            )}
+                            {column.render("Header")}
+                          </span>
+                        )}
+                        {column.id === "roles" && (
+                          <span>
+                            {column.id === "roles" && (
+                              <SupervisorAccountIcon className="Icon" />
+                            )}
+                            {column.render("Header")}
+                          </span>
+                        )}
+
+                        {column.id !== "email" &&
+                          column.id !== "phoneNumber" &&
+                          column.id !== "gender" &&
+                          column.id !== "roles" && (
+                            <span>{column.render("Header")}</span>
+                          )}
+                      </>
+                    )}
                     <span>
                       {sortBy === column.id
                         ? " ↑"

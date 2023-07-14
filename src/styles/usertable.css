@@ -91,11 +91,22 @@
     font-weight: bold;
    text-align: end;
     font-size: 17px;
+  /* display: inline-block; */
+  /* vertical-align: middle; */
    
-  }
+ padding-left:20px;
+  };
+
   .table-container #table-body{
     font-family: 'Didact Gothic', sans-serif;
-   
   }
+  /*Icon*/
+  .Icon{
+   position: relative;
+   top:5px;
+   right:6px;
+   color: rgb(114, 113, 113);
+  }
+  
 
     
