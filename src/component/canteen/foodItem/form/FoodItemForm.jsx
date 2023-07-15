@@ -23,6 +23,7 @@ export default function FoodItemForm({
   handleChange,
   handleSubmit,
   values,
+  updateItem,
 }) {
   const { data } = useGetAllFoodCategoryQuery();
   const handleCategoryChange = (event, newValue) => {
@@ -43,19 +44,22 @@ export default function FoodItemForm({
     });
   };
 
-  const handleImageUpload = React.useCallback((image) => {
-    handleChange({
-      target: {
-        name: "foodImage",
-        value: image,
-      },
-    });
-    handleBlur({
-      target: {
-        name: "foodImage",
-      },
-    });
-  }, []);
+  const handleImageUpload = React.useCallback(
+    (image) => {
+      handleChange({
+        target: {
+          name: "foodImage",
+          value: image,
+        },
+      });
+      handleBlur({
+        target: {
+          name: "foodImage",
+        },
+      });
+    },
+    [handleBlur, handleChange]
+  );
 
   const category = data?.data.results?.map((category) => ({
     label: category.name,
@@ -113,9 +117,11 @@ export default function FoodItemForm({
               {category && (
                 <Grid item xs={12}>
                   <FoodItemAutoComplete
-                    error={touched.category && errors.category}
-                    autoComplete="off"
                     name="category"
+                    errors={errors}
+                    touched={touched}
+                    autoComplete="off"
+                    componentName={"category"}
                     required
                     fullWidth
                     id="category"
@@ -136,8 +142,9 @@ export default function FoodItemForm({
               )}
               <Grid item xs={12}>
                 <FoodItemAutoComplete
+                  errors={errors}
                   autoComplete="off"
-                  name="tags"
+                  componentName={"tags"}
                   required
                   fullWidth
                   id="tags"
@@ -197,7 +204,7 @@ export default function FoodItemForm({
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
             >
-              Create Food Item
+              {updateItem ? "Update Food Item" : "Create Food Item"}
             </Button>
           </Box>
         </Grid>

@@ -15,6 +15,7 @@ import React from "react";
 import { useDeleteUserByAdminMutation } from "../services/api/admin/auth";
 import MUIToast from "./MUIToast";
 import { useDeleteFoodCategoryMutation } from "../services/api/canteen/foodcategory";
+import { useDeleteFoodItemMutation } from "../services/api/canteen/foodItem";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -73,20 +74,25 @@ export default function MUIDeleteModal({
   handleClose,
   userId,
   category,
+  foodItem,
 }) {
   const [deleteUserByAdmin, { data: userData, error: userError }] =
     useDeleteUserByAdminMutation();
   const [deleteFoodCategory, { data: categoryData, error: categoryError }] =
     useDeleteFoodCategoryMutation();
+  const [deleteFoodItem, { data: foodItemData, error: foodItemError }] =
+    useDeleteFoodItemMutation();
 
-  const data = userData || categoryData;
-  const error = userError || categoryError;
+  const data = userData || categoryData || foodItemData;
+  const error = userError || categoryError || foodItemError;
 
   const handleAgree = () => {
     if (userId) {
       deleteUserByAdmin(userId);
     } else if (category?._id) {
       deleteFoodCategory(category._id);
+    } else if (foodItem?._id) {
+      deleteFoodItem(foodItem._id);
     }
 
     handleClose();
@@ -112,7 +118,11 @@ export default function MUIDeleteModal({
           id="customized-dialog-title"
           onClose={handleClose}
         >
-          {userId ? "Delete Profile" : "Delete Food Category"}
+          {userId
+            ? "Delete Profile"
+            : category
+            ? "Delete Food Category"
+            : "Delete Food Item"}
         </BootstrapDialogTitle>
         <DialogContent dividers>
           <Container component="main" maxWidth="sm" sx={{ mb: 2 }}>
@@ -125,9 +135,11 @@ export default function MUIDeleteModal({
               }}
             >
               <Typography>
-                {userId
-                  ? "Are You sure you want to delete this user?"
-                  : `Are You sure you want to delete ${category?.name} category?`}
+                {foodItem
+                  ? `Are You sure you want to delete ${foodItem?.name} item?`
+                  : category
+                  ? `Are You sure you want to delete ${category?.name} category?`
+                  : "Are You sure you want to delete this user?"}
               </Typography>
             </Box>
           </Container>
