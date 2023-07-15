@@ -13,7 +13,7 @@ import { useForgotPasswordMutation } from "../services/api/admin/auth";
 import { useNavigate } from "react-router-dom";
 import MUILoading from "../component/MUILoading";
 import MUIToast from "../component/MUIToast";
-import "./login.css";
+import "../styles/login.css";
 const initialValues = {
   email: "",
   confirmEmail: "",

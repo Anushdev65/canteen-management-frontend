@@ -1,37 +1,48 @@
 import AddIcon from "@mui/icons-material/Add";
 import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined";
 import EditIcon from "@mui/icons-material/Edit";
-import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
 import { Box, Fab, Grid, Tooltip, Zoom } from "@mui/material";
 import React, { useEffect, useMemo, useState } from "react";
-import MOCK_DATA from "./MOCK_DATA.json";
+import { useNavigate } from "react-router-dom";
 import { usePagination, useRowSelect, useSortBy, useTable } from "react-table";
+import { useLazyGetAllFoodItemQuery } from "../../../../services/api/canteen/foodItem";
 import { IndeterminateCheckbox } from "../../../IndeterminateCheckbox";
 import { COLUMNS } from "./Column";
-import "../../../table.css";
+import FoodItemPopModel from "../popupmodel/FoodItemPopModel";
+import MUIDeleteModal from "../../../MUIDeleteModal";
+import "../../../../styles/usertable.css";
 
-const FoodTable = () => {
+const FoodItemTable = () => {
   const columns = useMemo(() => COLUMNS, []);
-  const data = useMemo(() => MOCK_DATA, []);
+  const [trigger, { data }] = useLazyGetAllFoodItemQuery();
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
   const [sortBy, setSortBy] = useState("");
   const [openModal, setOpenModal] = useState(false);
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    trigger({ _page: currentPage, _brake: rowsPerPage, _sort: sortBy });
+  }, [currentPage, rowsPerPage, sortBy, trigger]);
+
+  const tableData = useMemo(
+    () => data?.data?.results || [],
+    [data?.data?.results]
+  );
 
   const {
     getTableProps,
     getTableBodyProps,
     headerGroups,
-    rows,
     page,
     prepareRow,
     selectedFlatRows,
   } = useTable(
     {
       columns,
-      data,
-      initialState: { pageSize: 10 },
+      data: tableData,
+      initialState: { pageSize: 20 },
       stateReducer: (state, action) => {
         if (
           action.type === "toggleRowSelected" &&
@@ -57,6 +68,11 @@ const FoodTable = () => {
         return [
           {
             id: "selection",
+            // Header: ({ getToggleAllRowsSelectedProps }) => {
+            //   return (
+            //     <IndeterminateCheckbox {...getToggleAllRowsSelectedProps()} />
+            //   );
+            // },
             Cell: ({ row }) => {
               return (
                 <IndeterminateCheckbox {...row.getToggleRowSelectedProps()} />
@@ -97,8 +113,30 @@ const FoodTable = () => {
     setOpenDeleteModal(true);
   };
 
+  const handleAddFoodItem = () => {
+    navigate("/create-fooditem");
+  };
+
+  const handleCloseModal = () => {
+    setOpenModal(false);
+  };
+
+  const handleCloseDeleteModal = () => {
+    setOpenDeleteModal(false);
+  };
+
   return (
     <>
+      <FoodItemPopModel
+        open={openModal}
+        handleClose={handleCloseModal}
+        foodId={selectedFlatRows[0]?.original._id}
+      />
+      <MUIDeleteModal
+        open={openDeleteModal}
+        handleClose={handleCloseDeleteModal}
+        foodItem={selectedFlatRows[0]?.original}
+      />
       <Grid container justifyContent="space-between" sx={{ mb: 2 }}>
         <Grid item>
           <Tooltip
@@ -110,7 +148,7 @@ const FoodTable = () => {
               color="primary"
               aria-label="add"
               size="small"
-              onClick={() => {}}
+              onClick={handleAddFoodItem}
             >
               <AddIcon />
             </Fab>
@@ -143,48 +181,51 @@ const FoodTable = () => {
           </Grid>
         )}
       </Grid>
-      <table {...getTableProps()}>
-        <thead>
-          {headerGroups.map((headerGroup) => (
-            <tr {...headerGroup.getHeaderGroupProps()}>
-              {headerGroup.headers.map((column) => (
-                <th
-                  {...column.getHeaderProps(column.getSortByToggleProps())}
-                  onClick={() => {
-                    if (column.id !== "selection") {
-                      handleSort(column);
-                    }
-                  }}
-                >
-                  {column.render("Header")}
-                  <span>
-                    {sortBy === column.id
-                      ? " ↑"
-                      : sortBy === `-${column.id}`
-                      ? " ↓"
-                      : ""}
-                  </span>
-                </th>
-              ))}
-            </tr>
-          ))}
-        </thead>
-        <tbody {...getTableBodyProps()}>
-          {page.map((row) => {
-            prepareRow(row);
-            return (
-              <tr {...row.getRowProps()}>
-                {row.cells.map((cell) => {
-                  return (
-                    <td {...cell.getCellProps()}>{cell.render("Cell")}</td>
-                  );
-                })}
+      <div className="table-container">
+        <table {...getTableProps()}>
+          <thead>
+            {headerGroups.map((headerGroup) => (
+              <tr {...headerGroup.getHeaderGroupProps()}>
+                {headerGroup.headers.map((column) => (
+                  <th
+                    {...column.getHeaderProps(column.getSortByToggleProps())}
+                    onClick={() => {
+                      if (column.id !== "selection") {
+                        handleSort(column);
+                      }
+                    }}
+                  >
+                    {column.render("Header")}
+                    <span>
+                      {sortBy === column.id
+                        ? " ↑"
+                        : sortBy === `-${column.id}`
+                        ? " ↓"
+                        : ""}
+                    </span>
+                  </th>
+                ))}
               </tr>
-            );
-          })}
-        </tbody>
-      </table>
+            ))}
+          </thead>
+          <tbody {...getTableBodyProps()}>
+            {page.map((row) => {
+              prepareRow(row);
+              return (
+                <tr {...row.getRowProps()}>
+                  {row.cells.map((cell) => {
+                    return (
+                      <td {...cell.getCellProps()}>{cell.render("Cell")}</td>
+                    );
+                  })}
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
       <div
+        className="pegnation"
         style={{
           display: "flex",
           justifyContent: "center",
@@ -204,28 +245,31 @@ const FoodTable = () => {
         <span>
           Page{" "}
           <strong>
-            {data.currentPage} of {data.totalPage}
+            {data?.data.currentPage} of {data?.data?.totalPage}
           </strong>
         </span>
-        <button disabled={!data.hasPreviousPage} onClick={() => handlePage(1)}>
+        <button
+          disabled={!data?.data?.hasPreviousPage}
+          onClick={() => handlePage(1)}
+        >
           {"<<"}
         </button>
         <button
-          onClick={() => handlePage(data.currentPage - 1)}
-          disabled={!data.hasPreviousPage}
+          onClick={() => handlePage(data?.data?.currentPage - 1)}
+          disabled={!data?.data?.hasPreviousPage}
         >
           Previous
         </button>
         <button
-          onClick={() => handlePage(data.currentPage + 1)}
-          disabled={!data.hasNextPage}
+          onClick={() => handlePage(data?.data?.currentPage + 1)}
+          disabled={!data?.data?.hasNextPage}
         >
           {" "}
           Next
         </button>
         <button
-          disabled={!data.hasNextPage}
-          onClick={() => handlePage(data.totalPage)}
+          disabled={!data?.data?.hasNextPage}
+          onClick={() => handlePage(data?.data?.totalPage)}
         >
           {">>"}
         </button>
@@ -233,4 +277,4 @@ const FoodTable = () => {
     </>
   );
 };
-export default FoodTable;
+export default FoodItemTable;

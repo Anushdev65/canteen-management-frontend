@@ -20,7 +20,7 @@ import {
   useLazyGetUserByIdQuery,
 } from "../services/api/admin/auth";
 import MUIModal from "./MUIModal";
-
+import "../styles/profile.css";
 const MyProfile = () => {
   const { id } = useParams();
   const { data: myProfileData } = useGetMyProfileQuery();
@@ -55,6 +55,7 @@ const MyProfile = () => {
   return (
     <>
       <MUIModal open={openModal} handleClose={handleCloseModal} />
+
       <Container component="main">
         <CssBaseline />
         <Box
@@ -97,27 +98,21 @@ const MyProfile = () => {
             />
           </Container>
 
-          <Typography
-            component="h1"
-            variant="h5"
-            mt={1}
-            style={{
-              textAlign: "left",
-              marginLeft: "135px",
-            }}
-          >
-            Myprofile
-            <Button
-              variant="contained"
-              sx={{
-                marginLeft: "460px",
-              }}
-              onClick={handleEditProfile}
-            >
-              <EditOutlinedIcon />
-              Edit Profile
-            </Button>
+          <Typography className="myprofile" component="h1" variant="h5" mt={1}>
+            {data?.data.firstName && data?.data.lastName
+              ? `${data.data.firstName} ${data.data.lastName}`
+              : "My profile"}
           </Typography>
+
+          <Button
+            className="button-btn"
+            variant="contained"
+            onClick={handleEditProfile}
+          >
+            <EditOutlinedIcon />
+            Edit Profile
+          </Button>
+
           <Box
             sx={{
               mt: 3,
@@ -133,15 +128,19 @@ const MyProfile = () => {
                 container
                 spacing={2}
                 style={{
-                  marginRight: "50px",
-                  height: "160px",
+                  marginRight: "15px",
+                  height: "130px",
                   textAlign: "left",
-                  marginTop: "0.5px",
+                  // marginTop: "0.5px",
                 }}
               >
                 <Grid item xs={12}>
                   <Typography
-                    sx={{ display: "flex", gap: "10px", flexDirection: "row" }}
+                    sx={{
+                      display: "flex",
+                      gap: "10px",
+                      flexDirection: "row",
+                    }}
                   >
                     <PersonIcon sx={{ position: "relative", bottom: "2px" }} />
                     {data.data.firstName} {data.data.lastName}
@@ -150,7 +149,11 @@ const MyProfile = () => {
 
                 <Grid item xs={12}>
                   <Typography
-                    sx={{ display: "flex", gap: "10px", flexDirection: "row" }}
+                    sx={{
+                      display: "flex",
+                      gap: "10px",
+                      flexDirection: "row",
+                    }}
                   >
                     <EmailIcon sx={{ position: "relative", bottom: "2px" }} />
                     {data.data.email}
@@ -158,7 +161,11 @@ const MyProfile = () => {
                 </Grid>
                 <Grid item xs={12}>
                   <Typography
-                    sx={{ display: "flex", gap: "10px", flexDirection: "row" }}
+                    sx={{
+                      display: "flex",
+                      gap: "10px",
+                      flexDirection: "row",
+                    }}
                   >
                     <PhoneIcon sx={{ position: "relative", bottom: "2px" }} />
                     {data.data.phoneNumber}
@@ -166,7 +173,11 @@ const MyProfile = () => {
                 </Grid>
                 <Grid item xs={12}>
                   <Typography
-                    sx={{ display: "flex", gap: "10px", flexDirection: "row" }}
+                    sx={{
+                      display: "flex",
+                      gap: "10px",
+                      flexDirection: "row",
+                    }}
                   >
                     {" "}
                     {getGenderIcon()}
@@ -176,14 +187,20 @@ const MyProfile = () => {
                 </Grid>
                 <Grid item xs={12}>
                   <Typography
-                    sx={{ display: "flex", gap: "10px", flexDirection: "row" }}
+                    sx={{
+                      display: "flex",
+                      gap: "10px",
+                      flexDirection: "row",
+                    }}
                   >
                     <GroupsIcon sx={{ position: "relative", bottom: "2px" }} />
-                    {data.data.roles.map((role) =>
-                      role.toLowerCase() === "admin"
-                        ? role.charAt(0).toUpperCase() + role.slice(1)
-                        : role
-                    )}
+                    {data.data.roles
+                      .map((role) =>
+                        role.toLowerCase() === "admin"
+                          ? role.charAt(0).toUpperCase() + role.slice(1)
+                          : role
+                      )
+                      .join(",")}
                   </Typography>
                 </Grid>
               </Grid>

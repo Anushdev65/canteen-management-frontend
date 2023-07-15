@@ -8,7 +8,7 @@ import { userRegistrationSchema } from "../schema/YupSchema";
 import { useRegisterUserMutation } from "../services/api/admin/auth";
 import MUILoading from "../component/MUILoading";
 import MUIToast from "../component/MUIToast";
-
+import "../styles/create.css";
 const initialValues = {
   firstName: "",
   lastName: "",
@@ -40,11 +40,11 @@ const CreateUser = () => {
       },
     });
   return (
-    <>
+    <div className="main-container">
       {isLoading ? (
         <MUILoading />
       ) : (
-        <Container component="main" maxWidth="xs">
+        <Container component="main" maxWidth="xs" className="container">
           <CssBaseline />
           <Box
             sx={{
@@ -82,7 +82,7 @@ const CreateUser = () => {
       ) : (
         <></>
       )}
-    </>
+    </div>
   );
 };
 

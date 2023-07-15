@@ -12,17 +12,14 @@ import { styled } from "@mui/material/styles";
 import { useFormik } from "formik";
 import PropTypes from "prop-types";
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import { userUpdateProfileSchema } from "../schema/YupSchema";
+import { foodItemSchema } from "../../../../schema/YupCanteenSchema";
 import {
-  useGetMyProfileQuery,
-  useLazyGetUserByIdQuery,
-  useUpdateProfileMutation,
-  useUpdateUserByAdminMutation,
-} from "../services/api/admin/auth";
-import MUIToast from "./MUIToast";
-import SigninForm from "./SigninForm";
-import "../styles/muimodal.css";
+  useLazyGetFoodItemByIdQuery,
+  useUpdateFoodItemMutation,
+} from "../../../../services/api/canteen/foodItem";
+import "../../../../styles/muimodal.css";
+import MUIToast from "../../../MUIToast";
+import FoodItemForm from "../form/FoodItemForm";
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
@@ -95,28 +92,15 @@ BootstrapDialogTitle.propTypes = {
   onClose: PropTypes.func.isRequired,
 };
 
-export default function MUIModal({ open, handleClose, userId }) {
-  const { id: idParam } = useParams();
-  const { data: adminInfo } = useGetMyProfileQuery();
-  // const { data: userData } = useGetUserByIdQuery(id);
-  // const { data: userDataTable } = useGetUserByIdQuery(userId);
-  const [trigger, { data: userData }] = useLazyGetUserByIdQuery();
-  const id = idParam || userId;
+export default function FoodItemPopModel({ open, handleClose, foodId }) {
+  const [trigger, { data: foodInfo }] = useLazyGetFoodItemByIdQuery();
+  const [updateFoodItem, { data, error }] = useUpdateFoodItemMutation();
 
   useEffect(() => {
-    if (id) {
-      trigger(id);
+    if (foodId) {
+      trigger(foodId);
     }
-  }, [trigger, id]);
-
-  const userInfo = id ? userData : adminInfo;
-  const [updateProfile, { data: adminUpdate, error: adminError }] =
-    useUpdateProfileMutation();
-  const [updateUserByAdmin, { data: userUpdate, error: userUpdateError }] =
-    useUpdateUserByAdminMutation();
-
-  const data = adminUpdate || userUpdate;
-  const error = adminError || userUpdateError;
+  }, [foodId, trigger]);
 
   const {
     handleBlur,
@@ -129,37 +113,30 @@ export default function MUIModal({ open, handleClose, userId }) {
   } = useFormik({
     enableReinitialize: true,
     initialValues: {
-      firstName: userInfo?.data?.firstName || "",
-      lastName: userInfo?.data?.lastName || "",
-      role: userInfo?.data?.roles?.length ? userInfo?.data?.roles : [],
-      phoneNumber: userInfo?.data?.phoneNumber || "",
-      gender: userInfo?.data?.gender || "",
-      userImage: userInfo?.data?.profile || "",
+      name: foodInfo?.data?.name || "",
+      description: foodInfo?.data?.description || "",
+      category: foodInfo?.data?.category?._id || "",
+      tags: foodInfo?.data?.tags[0] || "",
+      rate: foodInfo?.data?.rate || "",
+      discountedRate: foodInfo?.data?.discountedRate || "",
+      foodImage: foodInfo?.data?.foodImage || "",
     },
-    validationSchema: userUpdateProfileSchema,
+    validationSchema: foodItemSchema,
     onSubmit: (values, action) => {
       const body = {
-        firstName: values.firstName,
-        lastName: values.lastName,
-        gender: values.gender,
-        phoneNumber: `${values.phoneNumber}`,
-        roles: values.role,
-        profile: values.userImage,
+        name: values.name,
+        description: values.description,
+        category: values.category,
+        tags: values.tags,
+        rate: values.rate,
+        discountedRate: values.discountedRate,
+        foodImage: values.foodImage,
       };
-
-      id ? updateUserByAdmin({ body, id }) : updateProfile(body);
+      updateFoodItem({ body, id: foodId });
       action.resetForm();
       handleClose();
     },
   });
-
-  useEffect(() => {
-    if (data) {
-      console.log(data);
-    } else if (error) {
-      console.log(error);
-    }
-  }, [data, error]);
 
   return (
     <div>
@@ -184,7 +161,7 @@ export default function MUIModal({ open, handleClose, userId }) {
             handleClose();
           }}
         >
-          Update Profile
+          Update FoodItem
         </BootstrapDialogTitle>
         <DialogContent dividers className="custom-dialog">
           <Container component="main" maxWidth="sm" sx={{ mb: 2 }}>
@@ -196,35 +173,32 @@ export default function MUIModal({ open, handleClose, userId }) {
                 alignItems: "center",
               }}
             >
-              <SigninForm
+              <FoodItemForm
                 handleBlur={handleBlur}
                 touched={touched}
                 errors={errors}
                 handleChange={handleChange}
                 handleSubmit={handleSubmit}
                 values={values}
-                updateProfile={true}
-                user={userInfo?.data}
-                id={id}
+                updateItem={true}
               />
             </Box>
           </Container>
         </DialogContent>
       </BootstrapDialog>
-      {data ? (
+      {data && (
         <MUIToast
           initialValue={true}
           message={data.message}
           severity="success"
         />
-      ) : error ? (
+      )}{" "}
+      {error && (
         <MUIToast
           initialValue={true}
           message={error.data.message}
           severity="error"
         />
-      ) : (
-        <></>
       )}
     </div>
   );
