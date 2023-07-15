@@ -7,18 +7,42 @@ export default function FoodItemAutoComplete({
   value,
   onChange,
   options,
-  error,
+  errors,
+  touched,
+  componentName,
+  onBlur,
 }) {
+  const isOptionEqualToValue = (option, value) => {
+    return option?.id === value?.id;
+  };
+
+  const handleAutocompleteChange = (event, newValue) => {
+    onChange(event.target.name, newValue);
+  };
+
   return (
-    <Autocomplete
-      value={value === "" ? null : value}
-      options={options}
-      onChange={onChange}
-      ListboxProps={{ style: { maxHeight: 200, overflow: "auto" } }}
-      renderInput={(params) => (
-        <TextField id="index" {...params} label={label} error={error} />
+    <>
+      {componentName && (
+        <React.Fragment>
+          <Autocomplete
+            value={value === "" ? null : value}
+            options={options}
+            onChange={handleAutocompleteChange}
+            ListboxProps={{ style: { maxHeight: 200, overflow: "auto" } }}
+            renderInput={(params) => (
+              <TextField
+                id="index"
+                label={label}
+                onBlur={onBlur}
+                name={componentName}
+                error={touched?.componentName && errors?.componentName}
+                {...params}
+              />
+            )}
+            isOptionEqualToValue={isOptionEqualToValue}
+          />
+        </React.Fragment>
       )}
-      isOptionEqualToValue={(option, value) => option.label === value}
-    />
+    </>
   );
 }

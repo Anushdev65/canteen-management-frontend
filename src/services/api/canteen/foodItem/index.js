@@ -86,6 +86,7 @@ export const {
   useLazyGetAllFoodItemQuery,
   useGetAllFoodItemQuery,
   useGetFoodItemByIdQuery,
+  useLazyGetFoodItemByIdQuery,
   useUpdateFoodItemMutation,
   useUpdateFoodMenuMutation,
   useDeleteFoodItemMutation,

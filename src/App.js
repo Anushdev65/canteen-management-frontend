@@ -6,6 +6,7 @@ import MUINavbar from "./component/MUINavbar";
 import MyProfile from "./component/MyProfile";
 import UpdatePasswordForm from "./component/UpdatePasswordForm";
 import FoodCategory from "./component/canteen/foodCategory/table/FoodCategory";
+import FoodItemTable from "./component/canteen/foodItem/table/FoodItemTable";
 import ConfirmPassword from "./pages/ConfirmPAssword";
 import ForgotPassword from "./pages/ForgotPassword";
 import LoginForm from "./pages/LoginForm";
@@ -34,7 +35,8 @@ function App() {
           </Route>
           <Route element={<CanteenRoute />}>
             <Route path="/food-category" element={<FoodCategory />} />
-            <Route path="/food-item" element={<CreateFoodItem />} />
+            <Route path="/food-item" element={<FoodItemTable />} />
+            <Route path="/create-fooditem" element={<CreateFoodItem />} />
           </Route>
         </Route>
       </Route>
