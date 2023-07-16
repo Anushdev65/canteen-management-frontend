@@ -5,7 +5,7 @@ const MUIError = ({ touch, error, value }) => {
   if (touch && error && !value) {
     return (
       <Typography variant="body2" color="error">
-        {error}
+        {String(error)}
       </Typography>
     );
   }

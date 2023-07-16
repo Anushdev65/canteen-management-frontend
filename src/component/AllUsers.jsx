@@ -33,12 +33,6 @@ const AllUsers = () => {
     [data?.data?.results]
   );
 
-  // const columnIcons = {
-  //   email: <MailOutlineIcon />,
-  //   phoneNumber: <LocalPhoneIcon />,
-  //   gender: <TransgenderIcon />,
-  // };
-
   useEffect(() => {
     trigger({ _page: currentPage, _brake: rowsPerPage, _sort: sortBy });
   }, [currentPage, rowsPerPage, sortBy, trigger]);
@@ -119,11 +113,7 @@ const AllUsers = () => {
     );
   };
 
-  // useEffect(() => {
-  //   console.log(selectedFlatRows[0]?.original);
-  // }, [selectedFlatRows]);
   const handleViewProfile = () => {
-    // console.log(selectedFlatRows[0]?.original._id);
     navigate(`/view-user/${selectedFlatRows[0]?.original._id}`);
   };
 

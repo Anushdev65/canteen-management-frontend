@@ -21,26 +21,29 @@ const SigninForm = ({
   createUser,
   id,
 }) => {
-  const handleImageUpload = useCallback((image) => {
-    handleChange({
-      target: {
-        name: "userImage",
-        value: image,
-      },
-    });
-    handleBlur({
-      target: {
-        name: "userImage",
-      },
-    });
-  }, []);
+  const handleImageUpload = useCallback(
+    (image) => {
+      handleChange({
+        target: {
+          name: "userImage",
+          value: image,
+        },
+      });
+      handleBlur({
+        target: {
+          name: "userImage",
+        },
+      });
+    },
+    [handleBlur, handleChange]
+  );
 
   return (
     <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
       <Grid container spacing={2}>
         <Grid item xs={12} sm={6}>
           <TextField
-            error={touched.firstName && errors.firstName}
+            error={Boolean(touched.firstName && errors.firstName)}
             autoComplete="off"
             name="firstName"
             required
@@ -59,7 +62,7 @@ const SigninForm = ({
         </Grid>
         <Grid item xs={12} sm={6}>
           <TextField
-            error={touched.lastName && errors.lastName}
+            error={Boolean(touched.lastName && errors.lastName)}
             required
             fullWidth
             id="lastName"
@@ -79,7 +82,7 @@ const SigninForm = ({
         {!updateProfile && (
           <Grid item xs={12}>
             <TextField
-              error={touched.email && errors.email}
+              error={Boolean(touched.email && errors.email)}
               required
               fullWidth
               id="email"
@@ -100,7 +103,7 @@ const SigninForm = ({
         {(id || createUser || user?.roles?.includes("admin")) && (
           <Grid item xs={12}>
             <MUIMultiSelect
-              error={touched.role && errors.role}
+              error={Boolean(touched.role && errors.role)}
               required
               fullWidth
               id="role"
@@ -116,7 +119,7 @@ const SigninForm = ({
         )}
         <Grid item xs={12}>
           <TextField
-            error={touched.phoneNumber && errors.phoneNumber}
+            error={Boolean(touched.phoneNumber && errors.phoneNumber)}
             required
             fullWidth
             id="phoneNumber"

@@ -6,7 +6,7 @@ const AddCategory = ({ handleBlur, touched, errors, handleChange, values }) => {
   return (
     <React.Fragment>
       <TextField
-        error={touched.name && errors.name}
+        error={Boolean(touched.name && errors.name)}
         autoComplete="off"
         name="name"
         required
