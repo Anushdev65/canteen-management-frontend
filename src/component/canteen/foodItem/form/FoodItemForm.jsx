@@ -30,7 +30,7 @@ export default function FoodItemForm({
     handleChange({
       target: {
         name: "category",
-        value: newValue?.id,
+        value: newValue?.id || "",
       },
     });
   };
@@ -39,7 +39,7 @@ export default function FoodItemForm({
     handleChange({
       target: {
         name: "tags",
-        value: newValue?.label,
+        value: newValue?.label || "",
       },
     });
   };
@@ -79,7 +79,7 @@ export default function FoodItemForm({
             <Grid container spacing={2}>
               <Grid item xs={12}>
                 <TextField
-                  error={touched.name && errors.name}
+                  error={Boolean(touched.name && errors.name)}
                   autoComplete="off"
                   name="name"
                   required
@@ -98,7 +98,7 @@ export default function FoodItemForm({
               </Grid>
               <Grid item xs={12}>
                 <TextField
-                  error={touched.description && errors.description}
+                  error={Boolean(touched.description && errors.description)}
                   autoComplete="off"
                   name="description"
                   fullWidth
@@ -121,7 +121,6 @@ export default function FoodItemForm({
                     errors={errors}
                     touched={touched}
                     autoComplete="off"
-                    componentName={"category"}
                     required
                     fullWidth
                     id="category"
@@ -142,9 +141,10 @@ export default function FoodItemForm({
               )}
               <Grid item xs={12}>
                 <FoodItemAutoComplete
+                  name="tags"
                   errors={errors}
+                  touched={touched}
                   autoComplete="off"
-                  componentName={"tags"}
                   required
                   fullWidth
                   id="tags"
@@ -162,7 +162,7 @@ export default function FoodItemForm({
               </Grid>
               <Grid item xs={12} sm={6}>
                 <TextField
-                  error={touched.rate && errors.rate}
+                  error={Boolean(touched.rate && errors.rate)}
                   autoComplete="off"
                   name="rate"
                   required
@@ -181,7 +181,9 @@ export default function FoodItemForm({
               </Grid>
               <Grid item xs={12} sm={6}>
                 <TextField
-                  error={touched.discountedRate && errors.discountedRate}
+                  error={Boolean(
+                    touched.discountedRate && errors.discountedRate
+                  )}
                   autoComplete="off"
                   name="discountedRate"
                   fullWidth

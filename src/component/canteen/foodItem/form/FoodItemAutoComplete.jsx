@@ -9,8 +9,8 @@ export default function FoodItemAutoComplete({
   options,
   errors,
   touched,
-  componentName,
   onBlur,
+  name,
 }) {
   const isOptionEqualToValue = (option, value) => {
     return option?.id === value?.id;
@@ -22,7 +22,7 @@ export default function FoodItemAutoComplete({
 
   return (
     <>
-      {componentName && (
+      {name && (
         <React.Fragment>
           <Autocomplete
             value={value === "" ? null : value}
@@ -34,8 +34,8 @@ export default function FoodItemAutoComplete({
                 id="index"
                 label={label}
                 onBlur={onBlur}
-                name={componentName}
-                error={touched?.componentName && errors?.componentName}
+                name={name}
+                error={Boolean(touched?.[name] && errors?.[name])}
                 {...params}
               />
             )}
