@@ -16,7 +16,7 @@ import AdminsRoute from "./utils/AdminsRoute";
 import CanteenRoute from "./utils/CanteenRoute";
 import ProtectedRoute from "./utils/ProtectedRoute";
 import CreateFoodItem from "./component/canteen/foodItem/foodItem/CreateFoodItem";
-import GenerateMenu from "./component/canteen/generateMenu/GenerateMenu";
+import GenerateMenu from "./component/canteen/generateMenu/table/GenerateMenu";
 
 function App() {
   return (
