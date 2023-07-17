@@ -7,7 +7,13 @@ import { useGetAllFoodCategoryQuery } from "../../../../services/api/canteen/foo
 import DropZoneComp from "../../../DropZoneComp";
 import MUIError from "../../../MUIError";
 import FoodItemAutoComplete from "./FoodItemAutoComplete";
-import "./fooditem.css";
+import FastfoodIcon from "@mui/icons-material/Fastfood";
+import DescriptionIcon from "@mui/icons-material/Description";
+import CategoryIcon from "@mui/icons-material/Category";
+import StyleIcon from "@mui/icons-material/Style";
+import DiscountIcon from "@mui/icons-material/Discount";
+import CurrencyRupeeIcon from "@mui/icons-material/CurrencyRupee";
+import "../../../../foodstyles/fooditem.css";
 export const tags = [
   { label: "breakfast" },
   { label: "lunch" },
@@ -67,170 +73,206 @@ export default function FoodItemForm({
   }));
 
   return (
-    <Box
-      component={"form"}
-      noValidate
-      onSubmit={handleSubmit}
-      sx={{ display: "flex", justifyContent: "center" }}
-    >
-      <Grid container mr={"2rem"}>
-        <Grid item>
-          <Box sx={{ mt: 3 }} name="signinform">
-            <Grid container spacing={2}>
-              <Grid item xs={12}>
-                <TextField
-                  error={Boolean(touched.name && errors.name)}
-                  autoComplete="off"
-                  name="name"
-                  required
-                  fullWidth
-                  id="name"
-                  label="Food Name"
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  value={values.name}
-                />
-                <MUIError
-                  touch={touched.name}
-                  error={errors.name}
-                  value={false}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  error={Boolean(touched.description && errors.description)}
-                  autoComplete="off"
-                  name="description"
-                  fullWidth
-                  id="description"
-                  label="Description"
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  value={values.description}
-                />
-                <MUIError
-                  touch={touched.description}
-                  error={errors.description}
-                  value={false}
-                />
-              </Grid>
-              {category && (
+    <div className="textfild-components">
+      <Box
+        component={"form"}
+        noValidate
+        onSubmit={handleSubmit}
+        sx={{ display: "flex", justifyContent: "center" }}
+      >
+        <Grid container mr={"2rem"}>
+          <Grid item>
+            <Box sx={{ mt: 3 }} name="signinform">
+              <Grid container spacing={4}>
                 <Grid item xs={12}>
-                  <FoodItemAutoComplete
-                    name="category"
-                    errors={errors}
-                    touched={touched}
-                    autoComplete="off"
-                    required
-                    fullWidth
-                    id="category"
-                    label="Category"
-                    onChange={handleCategoryChange}
-                    onBlur={handleBlur}
-                    value={
-                      category.find((cat) => cat.id === values.category) || null
-                    }
-                    options={category}
-                  />
-                  <MUIError
-                    touch={touched.category}
-                    error={errors.category}
-                    value={false}
-                  />
+                  <div className="fastfood">
+                    <FastfoodIcon className="Icon" />
+                    <div className="text">
+                      <TextField
+                        error={Boolean(touched.name && errors.name)}
+                        autoComplete="off"
+                        name="name"
+                        required
+                        fullWidth
+                        id="name"
+                        label="Food Name"
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        value={values.name}
+                      />
+                      <MUIError
+                        touch={touched.name}
+                        error={errors.name}
+                        value={false}
+                      />
+                    </div>
+                  </div>
                 </Grid>
-              )}
-              <Grid item xs={12}>
-                <FoodItemAutoComplete
-                  name="tags"
-                  errors={errors}
-                  touched={touched}
-                  autoComplete="off"
-                  required
-                  fullWidth
-                  id="tags"
-                  label="Tags"
-                  onChange={handleTagsChange}
-                  onBlur={handleBlur}
-                  value={values.tags}
-                  options={tags}
-                />
-                <MUIError
-                  touch={touched.tags}
-                  error={errors.tags}
-                  value={false}
-                />
+                <Grid item xs={12}>
+                  <div className="description">
+                    <DescriptionIcon className="Icon" />
+                    <div className="text">
+                      <TextField
+                        error={Boolean(
+                          touched.description && errors.description
+                        )}
+                        autoComplete="off"
+                        name="description"
+                        fullWidth
+                        id="description"
+                        label="Description"
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        value={values.description}
+                      />
+                      <MUIError
+                        touch={touched.description}
+                        error={errors.description}
+                        value={false}
+                      />
+                    </div>
+                  </div>
+                </Grid>
+                {category && (
+                  <Grid item xs={12}>
+                    <div className="category">
+                      <CategoryIcon className="Icon" />
+                      <div className="text">
+                        <FoodItemAutoComplete
+                          name="category"
+                          errors={errors}
+                          touched={touched}
+                          autoComplete="off"
+                          required
+                          fullWidth
+                          id="category"
+                          label="Category"
+                          onChange={handleCategoryChange}
+                          onBlur={handleBlur}
+                          value={
+                            category.find(
+                              (cat) => cat.id === values.category
+                            ) || null
+                          }
+                          options={category}
+                        />
+                        <MUIError
+                          touch={touched.category}
+                          error={errors.category}
+                          value={false}
+                        />
+                      </div>
+                    </div>
+                  </Grid>
+                )}
+                <Grid item xs={12}>
+                  <div className="tags">
+                    <StyleIcon className="Icon" />
+                    <div className="text">
+                      <FoodItemAutoComplete
+                        name="tags"
+                        errors={errors}
+                        touched={touched}
+                        autoComplete="off"
+                        required
+                        fullWidth
+                        id="tags"
+                        label="Tags"
+                        onChange={handleTagsChange}
+                        onBlur={handleBlur}
+                        value={values.tags}
+                        options={tags}
+                      />
+                      <MUIError
+                        touch={touched.tags}
+                        error={errors.tags}
+                        value={false}
+                      />
+                    </div>
+                  </div>
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                  <div className="price">
+                    <CurrencyRupeeIcon className="Icon" />
+                    <div className="text">
+                      <TextField
+                        error={Boolean(touched.rate && errors.rate)}
+                        autoComplete="off"
+                        name="rate"
+                        required
+                        fullWidth
+                        id="rate"
+                        label="Rate"
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        value={values.rate}
+                      />
+                      <MUIError
+                        touch={touched.rate}
+                        error={errors.rate}
+                        value={false}
+                      />
+                    </div>
+                  </div>
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                  <div className="discount-price">
+                    <DiscountIcon className="Icon" />
+                    <div className="text">
+                      <TextField
+                        error={Boolean(
+                          touched.discountedRate && errors.discountedRate
+                        )}
+                        autoComplete="off"
+                        name="discountedRate"
+                        fullWidth
+                        id="discountedRate"
+                        label="Discounted Rate"
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        value={values.discountedRate}
+                      />
+                      <MUIError
+                        touch={touched.discountedRate}
+                        error={errors.discountedRate}
+                        value={false}
+                      />
+                    </div>
+                  </div>
+                </Grid>
               </Grid>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  error={Boolean(touched.rate && errors.rate)}
-                  autoComplete="off"
-                  name="rate"
-                  required
-                  fullWidth
-                  id="rate"
-                  label="Rate"
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  value={values.rate}
-                />
-                <MUIError
-                  touch={touched.rate}
-                  error={errors.rate}
-                  value={false}
-                />
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  error={Boolean(
-                    touched.discountedRate && errors.discountedRate
-                  )}
-                  autoComplete="off"
-                  name="discountedRate"
-                  fullWidth
-                  id="discountedRate"
-                  label="Discounted Rate"
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  value={values.discountedRate}
-                />
-                <MUIError
-                  touch={touched.discountedRate}
-                  error={errors.discountedRate}
-                  value={false}
-                />
-              </Grid>
-            </Grid>
-            <Button
-              type="submit"
+              <Button
+                type="submit"
+                fullWidth
+                variant="contained"
+                sx={{ mt: 5, mb: 2 }}
+              >
+                {updateItem ? "Update Food Item" : "Create Food Item"}
+              </Button>
+            </Box>
+          </Grid>
+        </Grid>
+        <Grid container className="dropzone-container">
+          <Grid item>
+            <DropZoneComp
+              error={touched.foodImage && errors.foodImage}
               fullWidth
-              variant="contained"
-              sx={{ mt: 3, mb: 2 }}
-            >
-              {updateItem ? "Update Food Item" : "Create Food Item"}
-            </Button>
-          </Box>
+              id="foodImage"
+              name="foodImage"
+              autoComplete="off"
+              value={values.foodImage}
+              onChange={handleChange}
+              onBlur={handleBlur}
+              handleImageUpload={handleImageUpload}
+            />
+            <MUIError
+              touch={touched.foodImage}
+              error={errors.foodImage}
+              value={values.foodImage}
+            />
+          </Grid>
         </Grid>
-      </Grid>
-      <Grid container className="dropzone-container">
-        <Grid item>
-          <DropZoneComp
-            error={touched.foodImage && errors.foodImage}
-            fullWidth
-            id="foodImage"
-            name="foodImage"
-            autoComplete="off"
-            value={values.foodImage}
-            onChange={handleChange}
-            onBlur={handleBlur}
-            handleImageUpload={handleImageUpload}
-          />
-          <MUIError
-            touch={touched.foodImage}
-            error={errors.foodImage}
-            value={values.foodImage}
-          />
-        </Grid>
-      </Grid>
-    </Box>
+      </Box>
+    </div>
   );
 }
