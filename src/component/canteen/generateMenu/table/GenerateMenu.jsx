@@ -1,18 +1,34 @@
 import AddIcon from "@mui/icons-material/Add";
-import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined";
-import EditIcon from "@mui/icons-material/Edit";
-import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
-import { Box, Fab, Grid, Tooltip, Zoom } from "@mui/material";
+import {
+  Fab,
+  Grid,
+  Tooltip,
+  Typography,
+  Zoom,
+  ownerDocument,
+} from "@mui/material";
+import dayjs from "dayjs";
 import React, { useEffect, useMemo, useState } from "react";
-import GENERATE_MENU from "./GENERATE_MENU.json";
 import { usePagination, useRowSelect, useSortBy, useTable } from "react-table";
-import { IndeterminateCheckbox } from "../../IndeterminateCheckbox";
-import { COLUMNS } from "./Column";
-import "../../table.css";
+import {
+  useGetAllFoodItemQuery,
+  useUpdateFoodMenuMutation,
+} from "../../../../services/api/canteen/foodItem";
+import "../../../../styles/usertable.css";
+import { IndeterminateCheckbox } from "../../../IndeterminateCheckbox";
+import COLUMNS from "./Column";
+import MUIToast from "../../../MUIToast";
 
 const GenerateMenu = () => {
+  const [updateFoodMenu, { data: foodMenu, error: foodMenuError, message }] =
+    useUpdateFoodMenuMutation();
   const columns = useMemo(() => COLUMNS, []);
-  const data = useMemo(() => GENERATE_MENU, []);
+  const { data } = useGetAllFoodItemQuery();
+
+  const tableData = useMemo(
+    () => data?.data?.results || [],
+    [data?.data?.results]
+  );
 
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
@@ -24,31 +40,14 @@ const GenerateMenu = () => {
     getTableProps,
     getTableBodyProps,
     headerGroups,
-    rows,
     page,
     prepareRow,
     selectedFlatRows,
   } = useTable(
     {
       columns,
-      data,
+      data: tableData,
       initialState: { pageSize: 15 },
-      stateReducer: (state, action) => {
-        if (
-          action.type === "toggleRowSelected" &&
-          Object.keys(state.selectedRowIds).length
-        ) {
-          const newState = { ...state };
-
-          newState.selectedRowIds = {
-            [action.id]: true,
-          };
-
-          return newState;
-        }
-
-        return state;
-      },
     },
     useSortBy,
     usePagination,
@@ -90,57 +89,58 @@ const GenerateMenu = () => {
     );
   };
 
-  const handleEditProfile = () => {
-    setOpenModal(true);
-  };
-
-  const handleDeleteProfile = () => {
-    setOpenDeleteModal(true);
+  const handleAddMenu = () => {
+    const dataTOSend = selectedFlatRows.map((row) => ({
+      id: row.original._id,
+      availableTime: {
+        from: row.values.from.format("YYYY-MM-DDTHH:mm:ss"),
+        to: row.values.to.format("YYYY-MM-DDTHH:mm:ss"),
+      },
+      initialQuantity: row.values.initialQuantity,
+      availableQuantity: row.values.availableQuantity,
+    }));
+    updateFoodMenu(dataTOSend);
   };
 
   return (
     <>
+      {foodMenu && (
+        <MUIToast
+          initialValue={true}
+          message={foodMenu.message}
+          severity="success"
+        />
+      )}
+      {foodMenuError && (
+        <MUIToast
+          initialValue={true}
+          message={foodMenuError.data.message}
+          severity="error"
+        />
+      )}
+
       <Grid container justifyContent="space-between" sx={{ mb: 2 }}>
         <Grid item>
-          <Tooltip
-            title="Add Menu"
-            placement="right-start"
-            TransitionComponent={Zoom}
-          >
-            <Fab
-              color="primary"
-              aria-label="add"
-              size="small"
-              onClick={() => {}}
-            >
-              <AddIcon />
-            </Fab>
-          </Tooltip>
+          <Typography component="h1" variant="h5">
+            Todays Menu
+          </Typography>
         </Grid>
         {selectedFlatRows.length > 0 && (
           <Grid item>
-            <Box sx={{ display: "flex", gap: "10px" }}>
-              <Tooltip
-                title="Update menu"
-                placement="top"
-                TransitionComponent={Zoom}
-                onClick={handleEditProfile}
+            <Tooltip
+              title="Add Menu"
+              placement="right-start"
+              TransitionComponent={Zoom}
+            >
+              <Fab
+                color="primary"
+                aria-label="add"
+                size="small"
+                onClick={handleAddMenu}
               >
-                <Fab color="primary" aria-label="view" size="small">
-                  <EditIcon />
-                </Fab>
-              </Tooltip>
-              <Tooltip
-                title="Delete menu"
-                placement="top"
-                TransitionComponent={Zoom}
-                onClick={handleDeleteProfile}
-              >
-                <Fab color="primary" aria-label="view" size="small">
-                  <DeleteOutlinedIcon />
-                </Fab>
-              </Tooltip>
-            </Box>
+                <AddIcon />
+              </Fab>
+            </Tooltip>
           </Grid>
         )}
       </Grid>
@@ -185,7 +185,7 @@ const GenerateMenu = () => {
           })}
         </tbody>
       </table>
-      <div
+      {/* <div
         style={{
           display: "flex",
           justifyContent: "center",
@@ -230,7 +230,7 @@ const GenerateMenu = () => {
         >
           {">>"}
         </button>
-      </div>
+      </div> */}
     </>
   );
 };
