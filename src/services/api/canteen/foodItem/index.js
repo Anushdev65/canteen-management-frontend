@@ -59,7 +59,7 @@ export const foodItemApi = createApi({
     }),
 
     updateFoodMenu: builder.mutation({
-      query: ({ body }) => {
+      query: (body) => {
         return {
           url: `/food`,
           method: "PATCH",
