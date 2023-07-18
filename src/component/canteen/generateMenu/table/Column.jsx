@@ -42,9 +42,9 @@ const COLUMNS = [
             row.values.to = value;
           };
 
-          row.values.to =
-            dayjs(row.original.availableTime?.to) ||
-            dayjs(new Date()).add(6, "hour");
+          row.values.to = row.original.availableTime?.to
+            ? dayjs(row.original.availableTime.to)
+            : dayjs().add(6, "hours");
 
           return (
             <FoodAvailableTime

@@ -94,6 +94,8 @@ const GenerateMenu = () => {
     updateFoodMenu(dataTOSend);
   };
 
+  console.log(selectedFlatRows);
+
   return (
     <>
       {foodMenu && (
