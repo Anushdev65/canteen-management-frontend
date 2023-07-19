@@ -88,6 +88,7 @@ export default function UpdatePasswordForm() {
               component="h6"
               variant="h6"
               sx={{ fontWeight: "bold", fontSize: 12 }}
+              id="contain-update"
             >
               Password must be minimum of eight characters, with no space , at
               least one uppercase letter, one lowercase letter, one number and
