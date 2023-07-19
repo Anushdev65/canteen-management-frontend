@@ -23,7 +23,8 @@ const COLUMNS = [
             row.values.from = value;
           };
 
-          row.values.from = dayjs(row.values.from) || dayjs(new Date());
+          row.values.from =
+            dayjs(row.original.availableTime?.from) || dayjs(new Date());
 
           return (
             <FoodAvailableTime
@@ -41,8 +42,9 @@ const COLUMNS = [
             row.values.to = value;
           };
 
-          row.values.to =
-            dayjs(row.values.to) || dayjs(new Date()).add(6, "hour");
+          row.values.to = row.original.availableTime?.to
+            ? dayjs(row.original.availableTime.to)
+            : dayjs().add(6, "hours");
 
           return (
             <FoodAvailableTime

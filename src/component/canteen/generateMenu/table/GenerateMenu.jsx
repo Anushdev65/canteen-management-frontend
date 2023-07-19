@@ -1,14 +1,6 @@
 import AddIcon from "@mui/icons-material/Add";
-import {
-  Fab,
-  Grid,
-  Tooltip,
-  Typography,
-  Zoom,
-  ownerDocument,
-} from "@mui/material";
-import dayjs from "dayjs";
-import React, { useEffect, useMemo, useState } from "react";
+import { Fab, Grid, Tooltip, Typography, Zoom } from "@mui/material";
+import React, { useMemo, useState } from "react";
 import { usePagination, useRowSelect, useSortBy, useTable } from "react-table";
 import {
   useGetAllFoodItemQuery,
@@ -16,8 +8,8 @@ import {
 } from "../../../../services/api/canteen/foodItem";
 import "../../../../styles/usertable.css";
 import { IndeterminateCheckbox } from "../../../IndeterminateCheckbox";
-import COLUMNS from "./Column";
 import MUIToast from "../../../MUIToast";
+import COLUMNS from "./Column";
 
 const GenerateMenu = () => {
   const [updateFoodMenu, { data: foodMenu, error: foodMenuError, message }] =
@@ -101,6 +93,8 @@ const GenerateMenu = () => {
     }));
     updateFoodMenu(dataTOSend);
   };
+
+  console.log(selectedFlatRows);
 
   return (
     <>
