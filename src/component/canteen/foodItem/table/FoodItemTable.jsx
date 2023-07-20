@@ -10,8 +10,14 @@ import { IndeterminateCheckbox } from "../../../IndeterminateCheckbox";
 import { COLUMNS } from "./Column";
 import FoodItemPopModel from "../popupmodel/FoodItemPopModel";
 import MUIDeleteModal from "../../../MUIDeleteModal";
-import "../../../../styles/usertable.css";
-
+import "../../../../foodstyles/foodtable.css";
+import DescriptionIcon from "@mui/icons-material/Description";
+import DriveFileRenameOutlineIcon from "@mui/icons-material/DriveFileRenameOutline";
+import CategoryIcon from "@mui/icons-material/Category";
+import StyleIcon from "@mui/icons-material/Style";
+import DiscountIcon from "@mui/icons-material/Discount";
+import CurrencyRupeeIcon from "@mui/icons-material/CurrencyRupee";
+import TaskAltIcon from "@mui/icons-material/TaskAlt";
 const FoodItemTable = () => {
   const columns = useMemo(() => COLUMNS, []);
   const [trigger, { data }] = useLazyGetAllFoodItemQuery();
@@ -145,7 +151,7 @@ const FoodItemTable = () => {
             TransitionComponent={Zoom}
           >
             <Fab
-              color="primary"
+              id="icon-add"
               aria-label="add"
               size="small"
               onClick={handleAddFoodItem}
@@ -163,7 +169,7 @@ const FoodItemTable = () => {
                 TransitionComponent={Zoom}
                 onClick={handleEditProfile}
               >
-                <Fab color="primary" aria-label="view" size="small">
+                <Fab id="icon-edit" aria-label="view" size="small">
                   <EditIcon />
                 </Fab>
               </Tooltip>
@@ -173,7 +179,7 @@ const FoodItemTable = () => {
                 TransitionComponent={Zoom}
                 onClick={handleDeleteProfile}
               >
-                <Fab color="primary" aria-label="view" size="small">
+                <Fab id="icon-delete" aria-label="view" size="small">
                   <DeleteOutlinedIcon />
                 </Fab>
               </Tooltip>
@@ -181,51 +187,111 @@ const FoodItemTable = () => {
           </Grid>
         )}
       </Grid>
-      <div className="table-container">
-        <table {...getTableProps()}>
-          <thead>
-            {headerGroups.map((headerGroup) => (
-              <tr {...headerGroup.getHeaderGroupProps()}>
-                {headerGroup.headers.map((column) => (
-                  <th
-                    {...column.getHeaderProps(column.getSortByToggleProps())}
-                    onClick={() => {
-                      if (column.id !== "selection") {
-                        handleSort(column);
-                      }
-                    }}
-                  >
-                    {column.render("Header")}
+
+      <table {...getTableProps()} className="foodItem-container">
+        <thead className="Item-header">
+          {headerGroups.map((headerGroup) => (
+            <tr {...headerGroup.getHeaderGroupProps()}>
+              {headerGroup.headers.map((column) => (
+                <th
+                  {...column.getHeaderProps(column.getSortByToggleProps())}
+                  onClick={() => {
+                    if (column.id !== "selection") {
+                      handleSort(column);
+                    }
+                  }}
+                >
+                  {column.id === "selection" ? (
                     <span>
-                      {sortBy === column.id
-                        ? " ↑"
-                        : sortBy === `-${column.id}`
-                        ? " ↓"
-                        : ""}
+                      <TaskAltIcon
+                        className="icon-fooditem"
+                        {...column.getHeaderProps()}
+                      />
+                      {column.render("Header")}
                     </span>
-                  </th>
-                ))}
+                  ) : (
+                    <>
+                      {column.id === "name" && (
+                        <span>
+                          {column.id === "name" && (
+                            <DriveFileRenameOutlineIcon className="icon-fooditem" />
+                          )}
+                          {column.render("Header")}
+                        </span>
+                      )}
+                      {column.id === "rate" && (
+                        <span>
+                          {column.id === "rate" && (
+                            <CurrencyRupeeIcon className="icon-fooditem" />
+                          )}
+                          {column.render("Header")}
+                        </span>
+                      )}
+                      {column.id === "discountedRate" && (
+                        <span>
+                          {column.id === "discountedRate" && (
+                            <DiscountIcon className="icon-fooditem" />
+                          )}
+                          {column.render("Header")}
+                        </span>
+                      )}
+                      {column.id === "category.name" && (
+                        <span>
+                          {column.id === "category.name" && (
+                            <CategoryIcon className="icon-fooditem" />
+                          )}
+                          {column.render("Header")}
+                        </span>
+                      )}
+                      {column.id === "description" && (
+                        <span>
+                          {column.id === "description" && (
+                            <DescriptionIcon className="icon-fooditem" />
+                          )}
+                          {column.render("Header")}
+                        </span>
+                      )}
+                      {column.id === "tags" && (
+                        <span>
+                          {column.id === "tags" && (
+                            <StyleIcon className="icon-fooditem" />
+                          )}
+                          {column.render("Header")}
+                        </span>
+                      )}
+                    </>
+                  )}
+                  {/* {column.render("Header")} */}
+                  <span>
+                    {sortBy === column.id
+                      ? " ↑"
+                      : sortBy === `-${column.id}`
+                      ? " ↓"
+                      : ""}
+                  </span>
+                </th>
+              ))}
+            </tr>
+          ))}
+        </thead>
+        <tbody {...getTableBodyProps()} className="fooditem-body">
+          {page.map((row) => {
+            prepareRow(row);
+            return (
+              <tr {...row.getRowProps()}>
+                {row.cells.map((cell) => {
+                  return (
+                    <td {...cell.getCellProps()}>{cell.render("Cell")}</td>
+                  );
+                })}
               </tr>
-            ))}
-          </thead>
-          <tbody {...getTableBodyProps()}>
-            {page.map((row) => {
-              prepareRow(row);
-              return (
-                <tr {...row.getRowProps()}>
-                  {row.cells.map((cell) => {
-                    return (
-                      <td {...cell.getCellProps()}>{cell.render("Cell")}</td>
-                    );
-                  })}
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
-      </div>
+            );
+          })}
+        </tbody>
+      </table>
+
       <div
-        className="pegnation"
+        className="pegnation-foodtable"
         style={{
           display: "flex",
           justifyContent: "center",

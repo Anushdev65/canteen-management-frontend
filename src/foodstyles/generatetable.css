@@ -1,0 +1,69 @@
+@import url('https://fonts.googleapis.com/css2?family=Josefin+Sans&family=Roboto+Mono&display=swap&family=Didact+Gothic&display=swap');
+
+
+#generat-header{
+    background-color: rgb(232, 233, 233);
+    font-family: 'Josefin Sans', sans-serif;
+}
+
+.generatetable-container{
+    border-collapse: collapse;
+    box-shadow: 7px 7px 3px 0 rgba(182, 184, 184, 0.7);
+        transition: box-shadow 0.3;
+        color: rgb(34, 34, 34)
+}
+
+.generatetable-container:hover {
+    box-shadow: 10px 10px 6px 0 rgba(90, 90, 90, 0.7);
+}
+.generatetable-container td,
+.generatetable-container th {
+    border: 1px solid #e7e7e7;
+    padding: 8px;
+}
+
+.generatetable-container tr:nth-child(even) {
+    background-color: rgb(247, 248, 238);
+}
+
+.generatetable-container tr:hover {
+    background-color: #f1f1f1;
+}
+
+#generate-icon{
+    color: white;
+    background-color: rgb(165, 44, 165);
+}
+#generate-icon:hover{
+ background-color: rgb(59, 207, 66);
+}
+.todays-menu{
+font-weight: bold;
+font-family: 'Didact Gothic', sans-serif;
+}
+
+/*Foodquantity*/
+.foodquantity{
+    background-color: rgb(237, 243, 243);
+}
+
+/*foodavilable-time*/
+.foodavilable-time{
+background-color: rgb(237, 243, 243);
+ 
+}
+.Icon-food{
+ position: relative;
+ top: 2px;
+right: 6px;
+color: rgb(114, 113, 113);
+}
+.Icon-checkbox{
+position: relative;
+top: 14px;
+right: 6px;
+color: rgb(114, 113, 113);
+}
+
+
+

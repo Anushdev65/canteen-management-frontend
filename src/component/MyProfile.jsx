@@ -106,7 +106,13 @@ const MyProfile = () => {
               mt={1}
             >
               {data?.data.firstName && data?.data.lastName
-                ? `${data.data.firstName} ${data.data.lastName}`
+                ? `${
+                    data.data.firstName.charAt(0).toUpperCase() +
+                    data.data.firstName.slice(1)
+                  } ${
+                    data.data.lastName.charAt(0).toUpperCase() +
+                    data.data.lastName.slice(1)
+                  }`
                 : "My profile"}
             </Typography>
 
@@ -151,7 +157,10 @@ const MyProfile = () => {
                       <PersonIcon
                         sx={{ position: "relative", bottom: "2px" }}
                       />
-                      {data.data.firstName} {data.data.lastName}
+                      {data.data.firstName.charAt(0).toUpperCase() +
+                        data.data.firstName.slice(1)}{" "}
+                      {data.data.lastName.charAt(0).toUpperCase() +
+                        data.data.lastName.slice(1)}
                     </Typography>
                   </Grid>
 
@@ -205,10 +214,10 @@ const MyProfile = () => {
                         sx={{ position: "relative", bottom: "2px" }}
                       />
                       {data.data.roles
-                        .map((role) =>
-                          role.toLowerCase() === "admin"
-                            ? role.charAt(0).toUpperCase() + role.slice(1)
-                            : role
+                        .map(
+                          (role) =>
+                            role.charAt(0).toUpperCase() +
+                            role.slice(1).toLowerCase()
                         )
                         .join(",")}
                     </Typography>

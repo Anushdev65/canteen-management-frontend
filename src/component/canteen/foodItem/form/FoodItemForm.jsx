@@ -83,7 +83,7 @@ export default function FoodItemForm({
         <Grid container mr={"2rem"}>
           <Grid item>
             <Box sx={{ mt: 3 }} name="signinform">
-              <Grid container spacing={4}>
+              <Grid container spacing={5}>
                 <Grid item xs={12}>
                   <div className="fastfood">
                     <FastfoodIcon className="Icon" />
