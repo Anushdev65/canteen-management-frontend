@@ -111,6 +111,49 @@ const navDataCanteen = [
     icon: <AccountBoxIcon />,
     link: "/myprofile",
   },
+  {
+    name: "Update Password",
+    icon: <EnhancedEncryptionOutlinedIcon />,
+    link: "/auth/update-password",
+  },
+];
+
+const navDataRest = [
+  {
+    name: "DeerwalkFoods",
+    icon: <FoodBankOutlinedIcon />,
+    link: "https://deerwalkfoods.com/",
+  },
+  {
+    name: "FeedBack",
+    icon: <FeedbackIcon />,
+    link: "https://deerwalkfoods.com/",
+  },
+  {
+    name: "Reports",
+    icon: <ReceiptLongIcon />,
+    link: "https://deerwalkfoods.com/",
+  },
+  {
+    name: "Todays Menu",
+    icon: <MenuBookOutlinedIcon />,
+    link: "/food-menu",
+  },
+  {
+    name: "My Order",
+    icon: <FastfoodOutlinedIcon />,
+    link: "/food-myorder",
+  },
+  {
+    name: "My Profile",
+    icon: <AccountBoxIcon />,
+    link: "/myprofile",
+  },
+  {
+    name: "Update Password",
+    icon: <EnhancedEncryptionOutlinedIcon />,
+    link: "/auth/update-password",
+  },
 ];
 
 const openedMixin = (theme) => ({
@@ -326,7 +369,9 @@ export default function MUINavbar() {
               <List>
                 {myData?.roles.includes("admin")
                   ? renderList(navDataAdmin)
-                  : renderList(navDataCanteen)}
+                  : myData?.roles.includes("canteen")
+                  ? renderList(navDataCanteen)
+                  : renderList(navDataRest)}
               </List>
               <Divider />
               <List>

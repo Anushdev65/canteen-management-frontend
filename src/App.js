@@ -6,7 +6,11 @@ import MUINavbar from "./component/MUINavbar";
 import MyProfile from "./component/MyProfile";
 import UpdatePasswordForm from "./component/UpdatePasswordForm";
 import FoodCategory from "./component/canteen/foodCategory/table/FoodCategory";
+import CreateFoodItem from "./component/canteen/foodItem/foodItem/CreateFoodItem";
 import FoodItemTable from "./component/canteen/foodItem/table/FoodItemTable";
+import GenerateMenu from "./component/canteen/generateMenu/table/GenerateMenu";
+import MyOrder from "./component/foodOrder/myOrder/MyOrder";
+import MenuTable from "./component/foodOrder/table/MenuTable";
 import ConfirmPassword from "./pages/ConfirmPAssword";
 import ForgotPassword from "./pages/ForgotPassword";
 import LoginForm from "./pages/LoginForm";
@@ -14,9 +18,8 @@ import ResetPassword from "./pages/ResetPassword";
 import SignUp from "./pages/SignUp.jsx";
 import AdminsRoute from "./utils/AdminsRoute";
 import CanteenRoute from "./utils/CanteenRoute";
+import FoodOrderRoute from "./utils/FoodOrderRoute";
 import ProtectedRoute from "./utils/ProtectedRoute";
-import CreateFoodItem from "./component/canteen/foodItem/foodItem/CreateFoodItem";
-import GenerateMenu from "./component/canteen/generateMenu/table/GenerateMenu";
 
 function App() {
   return (
@@ -24,12 +27,14 @@ function App() {
       <Route element={<ProtectedRoute />}>
         <Route path="/" element={<MUINavbar />}>
           <Route path="/myprofile" element={<MyProfile />} />
+          <Route
+            path="/auth/update-password"
+            element={<UpdatePasswordForm />}
+          />
+
           <Route element={<AdminsRoute />}>
             <Route path="/allusers" element={<AllUsers />} />
-            <Route
-              path="/auth/update-password"
-              element={<UpdatePasswordForm />}
-            />
+
             <Route path="/create-user" element={<CreateUser />} />
 
             <Route path="/view-user/:id" element={<MyProfile />} />
@@ -39,6 +44,11 @@ function App() {
             <Route path="/food-item" element={<FoodItemTable />} />
             <Route path="/create-fooditem" element={<CreateFoodItem />} />
             <Route path="/generate-menu" element={<GenerateMenu />} />
+          </Route>
+
+          <Route element={<FoodOrderRoute />}>
+            <Route path="/food-menu" index element={<MenuTable />} />
+            <Route path="/food-myorder" index element={<MyOrder />} />
           </Route>
         </Route>
       </Route>

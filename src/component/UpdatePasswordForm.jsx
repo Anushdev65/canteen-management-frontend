@@ -53,7 +53,7 @@ export default function UpdatePasswordForm() {
         removeLevelInfo();
       }, 3000);
     }
-  }, [navigate, data, isSuccess]);
+  }, [resetForm, navigate, data, isSuccess]);
 
   return (
     <>

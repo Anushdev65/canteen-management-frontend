@@ -1,24 +1,23 @@
 import AddIcon from "@mui/icons-material/Add";
+import FastfoodIcon from "@mui/icons-material/Fastfood";
+import TaskAltIcon from "@mui/icons-material/TaskAlt";
 import { Fab, Grid, Tooltip, Typography, Zoom } from "@mui/material";
 import React, { useEffect, useMemo, useState } from "react";
 import { usePagination, useRowSelect, useSortBy, useTable } from "react-table";
+import "../../../../foodstyles/generatetable.css";
 import {
-  useGetAllFoodItemQuery,
   useLazyGetAllFoodItemQuery,
   useUpdateFoodMenuMutation,
 } from "../../../../services/api/canteen/foodItem";
-import "../../../../foodstyles/generatetable.css";
 import { IndeterminateCheckbox } from "../../../IndeterminateCheckbox";
 import MUIToast from "../../../MUIToast";
 import COLUMNS from "./Column";
-import FastfoodIcon from "@mui/icons-material/Fastfood";
-import TaskAltIcon from "@mui/icons-material/TaskAlt";
 
 const GenerateMenu = () => {
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
   const [sortBy, setSortBy] = useState("");
-  const [updateFoodMenu, { data: foodMenu, error: foodMenuError, message }] =
+  const [updateFoodMenu, { data: foodMenu, error: foodMenuError }] =
     useUpdateFoodMenuMutation();
   const columns = useMemo(() => COLUMNS, []);
   const [trigger, { data }] = useLazyGetAllFoodItemQuery();
