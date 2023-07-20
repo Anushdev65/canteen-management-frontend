@@ -6,10 +6,12 @@ import {
   useGetAllFoodItemQuery,
   useUpdateFoodMenuMutation,
 } from "../../../../services/api/canteen/foodItem";
-import "../../../../styles/usertable.css";
+import "../../../../foodstyles/generatetable.css";
 import { IndeterminateCheckbox } from "../../../IndeterminateCheckbox";
 import MUIToast from "../../../MUIToast";
 import COLUMNS from "./Column";
+import FastfoodIcon from "@mui/icons-material/Fastfood";
+import TaskAltIcon from "@mui/icons-material/TaskAlt";
 
 const GenerateMenu = () => {
   const [updateFoodMenu, { data: foodMenu, error: foodMenuError, message }] =
@@ -115,7 +117,7 @@ const GenerateMenu = () => {
 
       <Grid container justifyContent="space-between" sx={{ mb: 2 }}>
         <Grid item>
-          <Typography component="h1" variant="h5">
+          <Typography component="h1" variant="h5" className="todays-menu">
             Todays Menu
           </Typography>
         </Grid>
@@ -127,7 +129,7 @@ const GenerateMenu = () => {
               TransitionComponent={Zoom}
             >
               <Fab
-                color="primary"
+                id="generate-icon"
                 aria-label="add"
                 size="small"
                 onClick={handleAddMenu}
@@ -138,8 +140,8 @@ const GenerateMenu = () => {
           </Grid>
         )}
       </Grid>
-      <table {...getTableProps()}>
-        <thead>
+      <table {...getTableProps()} className="generatetable-container">
+        <thead id="generat-header">
           {headerGroups.map((headerGroup) => (
             <tr {...headerGroup.getHeaderGroupProps()}>
               {headerGroup.headers.map((column) => (
@@ -151,7 +153,30 @@ const GenerateMenu = () => {
                     }
                   }}
                 >
-                  {column.render("Header")}
+                  {column.id === "selection" ? (
+                    <span>
+                      <TaskAltIcon
+                        className="Icon-checkbox"
+                        {...column.getHeaderProps()}
+                      />
+                      {column.render("Header")}
+                    </span>
+                  ) : (
+                    <>
+                      {column.id === "name" && (
+                        <span>
+                          {column.id === "name" && (
+                            <FastfoodIcon className="Icon-food" />
+                          )}
+                          {column.render("Header")}
+                        </span>
+                      )}
+
+                      {column.id !== "name" && (
+                        <span>{column.render("Header")}</span>
+                      )}
+                    </>
+                  )}
                   <span>
                     {sortBy === column.id
                       ? " ↑"

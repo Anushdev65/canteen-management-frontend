@@ -1,6 +1,6 @@
 import { TextField } from "@mui/material";
 import React, { useState } from "react";
-
+import "../../../../foodstyles/generatetable.css";
 const FoodQuantity = ({ onChange, label, value }) => {
   const [newValue, setNewValue] = useState(value);
 
@@ -11,9 +11,10 @@ const FoodQuantity = ({ onChange, label, value }) => {
   };
   return (
     <TextField
+      className="foodquantity"
       required
       autoComplete="off"
-      id="outlined-number"
+      id="outlined-number" //for food add
       label={label}
       value={newValue}
       onChange={newHandle}
