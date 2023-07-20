@@ -1,6 +1,6 @@
 import * as Yup from "yup";
 
-const categoryNameRegex = /^[A-Za-z]+$/;
+const categoryNameRegex = /^[a-z]{3,30}( [a-z]{3,30}){0,2}$/;
 const numberRegex = /^[0-9]*$/;
 
 export const foodCategoryNameSchema = Yup.object({

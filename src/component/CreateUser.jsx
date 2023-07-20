@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import SigninForm from "./SigninForm";
 import CssBaseline from "@mui/material/CssBaseline";
 import Box from "@mui/material/Box";
@@ -20,25 +20,38 @@ const initialValues = {
 };
 
 const CreateUser = () => {
-  const [registerUser, { isLoading, data, error }] = useRegisterUserMutation();
-  const { handleBlur, touched, errors, handleChange, handleSubmit, values } =
-    useFormik({
-      initialValues,
-      validationSchema: userRegistrationSchema,
-      onSubmit: (values, action) => {
-        const body = {
-          firstName: values.firstName,
-          lastName: values.lastName,
-          email: values.email,
-          gender: values.gender,
-          phoneNumber: values.phoneNumber,
-          roles: values.role,
-          profile: values.userImage || "localhost:8000/defaultProfile.png",
-        };
-        registerUser(body);
-        action.resetForm();
-      },
-    });
+  const [registerUser, { isLoading, data, error, isSuccess }] =
+    useRegisterUserMutation();
+  const {
+    handleBlur,
+    touched,
+    errors,
+    handleChange,
+    handleSubmit,
+    values,
+    resetForm,
+  } = useFormik({
+    initialValues,
+    validationSchema: userRegistrationSchema,
+    onSubmit: (values) => {
+      const body = {
+        firstName: values.firstName,
+        lastName: values.lastName,
+        email: values.email,
+        gender: values.gender,
+        phoneNumber: values.phoneNumber,
+        roles: values.role,
+        profile: values.userImage || "http://localhost:8000/defaultProfile.png",
+      };
+      registerUser(body);
+    },
+  });
+
+  useEffect(() => {
+    if (isSuccess) {
+      resetForm();
+    }
+  }, [resetForm, isSuccess]);
   return (
     <div className="main-container">
       {isLoading ? (

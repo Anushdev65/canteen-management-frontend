@@ -1,22 +1,22 @@
-import * as React from "react";
-import Avatar from "@mui/material/Avatar";
-import Button from "@mui/material/Button";
-import CssBaseline from "@mui/material/CssBaseline";
-import TextField from "@mui/material/TextField";
-import Link from "@mui/material/Link";
-import Grid from "@mui/material/Grid";
-import Box from "@mui/material/Box";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
-import Typography from "@mui/material/Typography";
+import Avatar from "@mui/material/Avatar";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
 import Container from "@mui/material/Container";
+import CssBaseline from "@mui/material/CssBaseline";
+import Grid from "@mui/material/Grid";
+import Link from "@mui/material/Link";
+import TextField from "@mui/material/TextField";
+import Typography from "@mui/material/Typography";
 import { useFormik } from "formik";
-import { userLoginSchema } from "../schema/YupSchema";
+import * as React from "react";
+import { useNavigate } from "react-router-dom";
 import MUIError from "../component/MUIError";
-import { useLoginUserMutation } from "../services/api/admin/auth";
+import MUILoading from "../component/MUILoading";
 import MUIToast from "../component/MUIToast";
 import { setLevelInfo, setUSerInfo } from "../localStorage/localStorage";
-import { useNavigate } from "react-router-dom";
-import MUILoading from "../component/MUILoading";
+import { userLoginSchema } from "../schema/YupSchema";
+import { useLoginUserMutation } from "../services/api/admin/auth";
 import "../styles/login.css";
 
 const initialValues = {
@@ -26,18 +26,25 @@ const initialValues = {
 
 export default function LoginForm() {
   const navigate = useNavigate();
-  const [loginUser, { data, isLoading, error }] = useLoginUserMutation();
-  const { handleBlur, touched, errors, handleChange, handleSubmit, values } =
-    useFormik({
-      initialValues,
-      validationSchema: userLoginSchema,
-      onSubmit: (values, action) => {
-        loginUser(values);
-        action.resetForm();
-      },
-    });
+  const [loginUser, { data, error, isSuccess }] = useLoginUserMutation();
+  const {
+    handleBlur,
+    touched,
+    errors,
+    handleChange,
+    handleSubmit,
+    values,
+    resetForm,
+  } = useFormik({
+    initialValues,
+    validationSchema: userLoginSchema,
+    onSubmit: (values) => {
+      loginUser(values);
+    },
+  });
 
   React.useEffect(() => {
+    if (isSuccess) resetForm();
     setLevelInfo({
       token: data?.data.token,
     });
@@ -47,11 +54,7 @@ export default function LoginForm() {
         navigate("/");
       }, 1000);
     }
-  }, [data, navigate]);
-
-  React.useEffect(() => {
-    console.log(data);
-  }, [data]);
+  }, [resetForm, data, navigate, isSuccess]);
 
   return (
     <>
@@ -71,7 +74,7 @@ export default function LoginForm() {
         ) : (
           <></>
         )}
-        {isLoading || data ? (
+        {data ? (
           <MUILoading />
         ) : (
           <Container
@@ -112,7 +115,7 @@ export default function LoginForm() {
                 <Grid container spacing={2}>
                   <Grid item xs={12} sx={{ marginTop: "20px" }}>
                     <TextField
-                      error={touched.email && errors.email}
+                      error={Boolean(touched.email && errors.email)}
                       required
                       fullWidth
                       id="email"
@@ -131,7 +134,7 @@ export default function LoginForm() {
                   </Grid>
                   <Grid item xs={12} sx={{ marginTop: "10px" }}>
                     <TextField
-                      error={touched.password && errors.password}
+                      error={Boolean(touched.password && errors.password)}
                       required
                       fullWidth
                       name="password"

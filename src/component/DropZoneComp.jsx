@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect } from "react";
+import React, { useEffect, useMemo } from "react";
 import { useDropzone } from "react-dropzone";
 import { useUploadImageMutation } from "../services/api/imageUpload";
 
@@ -82,7 +82,7 @@ function DropZoneComp({ handleImageUpload, value }) {
           }}
         >
           <img
-            src={`http://${value}`}
+            src={`${value}`}
             alt="Dropped"
             style={{ maxWidth: "100%", height: "10rem" }}
           />

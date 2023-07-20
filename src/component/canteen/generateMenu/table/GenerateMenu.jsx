@@ -1,9 +1,10 @@
 import AddIcon from "@mui/icons-material/Add";
 import { Fab, Grid, Tooltip, Typography, Zoom } from "@mui/material";
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { usePagination, useRowSelect, useSortBy, useTable } from "react-table";
 import {
   useGetAllFoodItemQuery,
+  useLazyGetAllFoodItemQuery,
   useUpdateFoodMenuMutation,
 } from "../../../../services/api/canteen/foodItem";
 import "../../../../styles/usertable.css";
@@ -12,21 +13,22 @@ import MUIToast from "../../../MUIToast";
 import COLUMNS from "./Column";
 
 const GenerateMenu = () => {
+  const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [sortBy, setSortBy] = useState("");
   const [updateFoodMenu, { data: foodMenu, error: foodMenuError, message }] =
     useUpdateFoodMenuMutation();
   const columns = useMemo(() => COLUMNS, []);
-  const { data } = useGetAllFoodItemQuery();
+  const [trigger, { data }] = useLazyGetAllFoodItemQuery();
+
+  useEffect(() => {
+    trigger({ _page: currentPage, _brake: rowsPerPage, _sort: sortBy });
+  }, [currentPage, rowsPerPage, sortBy, trigger]);
 
   const tableData = useMemo(
     () => data?.data?.results || [],
     [data?.data?.results]
   );
-
-  const [rowsPerPage, setRowsPerPage] = useState(10);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [sortBy, setSortBy] = useState("");
-  const [openModal, setOpenModal] = useState(false);
-  const [openDeleteModal, setOpenDeleteModal] = useState(false);
 
   const {
     getTableProps,
@@ -65,10 +67,12 @@ const GenerateMenu = () => {
     const selectedRowsPerPage = e.target.value;
     setRowsPerPage(selectedRowsPerPage);
     setCurrentPage(1);
+    trigger({ _page: 1, _brake: selectedRowsPerPage });
   };
 
   const handlePage = (pageNumber) => {
     setCurrentPage(pageNumber);
+    trigger({ _page: pageNumber, _brake: rowsPerPage });
   };
 
   const handleSort = (column) => {
@@ -93,8 +97,6 @@ const GenerateMenu = () => {
     }));
     updateFoodMenu(dataTOSend);
   };
-
-  console.log(selectedFlatRows);
 
   return (
     <>
@@ -179,7 +181,8 @@ const GenerateMenu = () => {
           })}
         </tbody>
       </table>
-      {/* <div
+      <div
+        className="pegnation"
         style={{
           display: "flex",
           justifyContent: "center",
@@ -199,32 +202,35 @@ const GenerateMenu = () => {
         <span>
           Page{" "}
           <strong>
-            {data.currentPage} of {data.totalPage}
+            {data?.data.currentPage} of {data?.data?.totalPage}
           </strong>
         </span>
-        <button disabled={!data.hasPreviousPage} onClick={() => handlePage(1)}>
+        <button
+          disabled={!data?.data?.hasPreviousPage}
+          onClick={() => handlePage(1)}
+        >
           {"<<"}
         </button>
         <button
-          onClick={() => handlePage(data.currentPage - 1)}
-          disabled={!data.hasPreviousPage}
+          onClick={() => handlePage(data?.data?.currentPage - 1)}
+          disabled={!data?.data?.hasPreviousPage}
         >
           Previous
         </button>
         <button
-          onClick={() => handlePage(data.currentPage + 1)}
-          disabled={!data.hasNextPage}
+          onClick={() => handlePage(data?.data?.currentPage + 1)}
+          disabled={!data?.data?.hasNextPage}
         >
           {" "}
           Next
         </button>
         <button
-          disabled={!data.hasNextPage}
-          onClick={() => handlePage(data.totalPage)}
+          disabled={!data?.data?.hasNextPage}
+          onClick={() => handlePage(data?.data?.totalPage)}
         >
           {">>"}
         </button>
-      </div> */}
+      </div>
     </>
   );
 };

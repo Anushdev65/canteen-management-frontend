@@ -20,27 +20,34 @@ const initialValues = {
 };
 
 export default function ForgotPassword() {
-  const [forgotPassword, { isLoading, data, error }] =
+  const [forgotPassword, { isLoading, data, error, isSuccess }] =
     useForgotPasswordMutation();
   const navigate = useNavigate();
 
-  const { handleBlur, touched, errors, handleChange, handleSubmit, values } =
-    useFormik({
-      initialValues,
-      validationSchema: forgotPasswordSchema,
-      onSubmit: (values, action) => {
-        forgotPassword({ email: values.email });
-        action.resetForm();
-      },
-    });
+  const {
+    handleBlur,
+    touched,
+    errors,
+    handleChange,
+    handleSubmit,
+    values,
+    resetForm,
+  } = useFormik({
+    initialValues,
+    validationSchema: forgotPasswordSchema,
+    onSubmit: (values) => {
+      forgotPassword({ email: values.email });
+    },
+  });
 
   React.useEffect(() => {
+    if (isSuccess) resetForm();
     if (data) {
       setTimeout(() => {
         navigate("/login");
       }, 3000);
     }
-  }, [data, navigate]);
+  }, [resetForm, data, navigate, isSuccess]);
 
   return (
     <>
