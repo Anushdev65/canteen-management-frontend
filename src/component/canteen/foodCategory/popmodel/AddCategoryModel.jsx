@@ -69,7 +69,10 @@ export default function AddCategoryModel({ open, handleClose, category }) {
       >
         <DialogTitle textAlign={"center"}>Add Food Category</DialogTitle>
         <DialogContent>
-          <DialogContentText sx={{ marginBottom: "10px" }}>
+          <DialogContentText
+            sx={{ marginBottom: "10px" }}
+            className="text-category"
+          >
             Please specify the food category so that it can be featured to this
             system.
           </DialogContentText>

@@ -8,8 +8,11 @@ import { useLazyGetAllFoodCategoryQuery } from "../../../../services/api/canteen
 import { COLUMNS } from "./Column";
 import { IndeterminateCheckbox } from "../../../IndeterminateCheckbox";
 import MUIDeleteModal from "../../../MUIDeleteModal";
-import "../../../table.css";
+import "../../../../foodstyles/table.css";
 import AddCategoryModel from "../popmodel/AddCategoryModel";
+import CategoryIcon from "@mui/icons-material/Category";
+import TaskAltIcon from "@mui/icons-material/TaskAlt";
+import TagIcon from "@mui/icons-material/Tag";
 
 const FoodCategory = () => {
   const [trigger, { data }] = useLazyGetAllFoodCategoryQuery();
@@ -139,7 +142,7 @@ const FoodCategory = () => {
             TransitionComponent={Zoom}
           >
             <Fab
-              color="primary"
+              id="addicon"
               aria-label="add"
               size="small"
               onClick={handleAddCategory}
@@ -157,7 +160,7 @@ const FoodCategory = () => {
                 TransitionComponent={Zoom}
                 onClick={handleEditCategory}
               >
-                <Fab color="primary" aria-label="view" size="small">
+                <Fab id="editIcon" aria-label="view" size="small">
                   <EditIcon />
                 </Fab>
               </Tooltip>
@@ -167,7 +170,7 @@ const FoodCategory = () => {
                 TransitionComponent={Zoom}
                 onClick={handleDeleteCategory}
               >
-                <Fab color="primary" aria-label="view" size="small">
+                <Fab id="deleteIcon" aria-label="view" size="small">
                   <DeleteOutlinedIcon />
                 </Fab>
               </Tooltip>
@@ -176,8 +179,8 @@ const FoodCategory = () => {
         )}
       </Grid>
       <div>
-        <table {...getTableProps()}>
-          <thead>
+        <table {...getTableProps()} className="foodtable-container">
+          <thead className="food-header">
             {headerGroups.map((headerGroup) => (
               <tr {...headerGroup.getHeaderGroupProps()}>
                 {headerGroup.headers.map((column) => (
@@ -189,7 +192,37 @@ const FoodCategory = () => {
                       }
                     }}
                   >
-                    {column.render("Header")}
+                    {column.id === "selection" ? (
+                      <span>
+                        <TaskAltIcon
+                          className="icons"
+                          {...column.getHeaderProps()}
+                        />
+                        {column.render("Header")}
+                      </span>
+                    ) : (
+                      <span>
+                        {column.id === "name" && (
+                          <>
+                            <div className="header-icon">
+                              <CategoryIcon className="icons" />
+                              <span>{column.render("Header")}</span>
+                            </div>
+                          </>
+                        )}
+                        {column.id !== "name" && column.id !== "SN" && (
+                          <span>{column.render("Header")}</span>
+                        )}
+                        {column.id === "SN" && (
+                          <>
+                            <div className="header-icon">
+                              <TagIcon className="icons" />
+                              <span>{column.render("Header")}</span>
+                            </div>
+                          </>
+                        )}
+                      </span>
+                    )}
                     <span>
                       {sortBy === column.id
                         ? " ↑"
@@ -219,7 +252,7 @@ const FoodCategory = () => {
         </table>
       </div>
       <div
-        className="pegnation"
+        className="pegnation-category"
         style={{
           display: "flex",
           justifyContent: "center",
