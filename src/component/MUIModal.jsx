@@ -153,6 +153,7 @@ export default function MUIModal({ open, handleClose, userId }) {
       };
 
       id ? updateUserByAdmin({ body, id }) : updateProfile(body);
+      handleClose();
     },
   });
 
@@ -162,7 +163,6 @@ export default function MUIModal({ open, handleClose, userId }) {
       setUSerInfo({ user: data?.data });
       resetForm();
       handleReset();
-      handleClose();
     }
   }, [handleReset, resetForm, id, data, isSuccess, dispatch, handleClose]);
 

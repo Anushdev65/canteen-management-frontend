@@ -103,6 +103,7 @@ const FoodCategory = () => {
   };
 
   const handleCloseModal = useCallback(() => {
+    console.log("handleCloseCalled");
     setOpenModal(false);
   }, []);
 
@@ -135,22 +136,24 @@ const FoodCategory = () => {
         category={selectedFlatRows[0]?.original}
       />
       <Grid container justifyContent="space-between" sx={{ mb: 2 }}>
-        <Grid item>
-          <Tooltip
-            title="Add Category"
-            placement="right-start"
-            TransitionComponent={Zoom}
-          >
-            <Fab
-              id="addicon"
-              aria-label="add"
-              size="small"
-              onClick={handleAddCategory}
+        {
+          <Grid item>
+            <Tooltip
+              title="Add Category"
+              placement="right-start"
+              TransitionComponent={Zoom}
             >
-              <AddIcon />
-            </Fab>
-          </Tooltip>
-        </Grid>
+              <Fab
+                id="addicon"
+                aria-label="add"
+                size="small"
+                onClick={handleAddCategory}
+              >
+                <AddIcon />
+              </Fab>
+            </Tooltip>
+          </Grid>
+        }
         {selectedFlatRows.length > 0 && (
           <Grid item>
             <Box sx={{ display: "flex", gap: "10px" }}>

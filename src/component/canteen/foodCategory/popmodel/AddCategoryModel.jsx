@@ -24,10 +24,6 @@ export default function AddCategoryModel({ open, handleClose, category }) {
     { data: updateFood, error: updateError, isSuccess: updateSuccess },
   ] = useUpdateFoodCategoryMutation();
 
-  const data = createFood || updateFood;
-  const error = createError || updateError;
-  const isSuccess = createSuccess || updateSuccess;
-
   const {
     handleBlur,
     touched,
@@ -51,12 +47,12 @@ export default function AddCategoryModel({ open, handleClose, category }) {
     },
   });
   useEffect(() => {
-    if (isSuccess) {
+    if (createSuccess || updateSuccess) {
       resetForm();
-      handleClose();
       handleReset();
+      handleClose();
     }
-  }, [resetForm, handleClose, handleReset, isSuccess]);
+  }, [resetForm, handleReset, createSuccess, updateSuccess, handleClose]);
 
   return (
     <div>
@@ -90,20 +86,33 @@ export default function AddCategoryModel({ open, handleClose, category }) {
           </Button>
         </DialogActions>
       </Dialog>
-      {data ? (
+      {createSuccess && (
         <MUIToast
           initialValue={true}
-          message={data.message}
+          message={createFood?.message}
           severity="success"
         />
-      ) : error ? (
+      )}
+      {updateSuccess && (
         <MUIToast
           initialValue={true}
-          message={error.data.message}
+          message={updateFood?.message}
+          severity="success"
+        />
+      )}
+      {createError && (
+        <MUIToast
+          initialValue={true}
+          message={createError.data.message}
           severity="error"
         />
-      ) : (
-        <></>
+      )}
+      {updateError && (
+        <MUIToast
+          initialValue={true}
+          message={updateError.data.message}
+          severity="error"
+        />
       )}
     </div>
   );
