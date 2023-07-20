@@ -13,7 +13,7 @@ import {
   Grid,
   Typography,
 } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import {
   useGetMyProfileQuery,
@@ -40,9 +40,9 @@ const MyProfile = () => {
     setOpenModal(true);
   };
 
-  const handleCloseModal = () => {
+  const handleCloseModal = useCallback(() => {
     setOpenModal(false);
-  };
+  }, []);
 
   const getGenderIcon = () => {
     if (data && data.data.gender === "female") {

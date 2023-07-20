@@ -3,7 +3,7 @@ import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined";
 import EditIcon from "@mui/icons-material/Edit";
 import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
 import { Box, Fab, Grid, Tooltip, Zoom } from "@mui/material";
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { usePagination, useRowSelect, useSortBy, useTable } from "react-table";
 import { useLazyGetAllUsersQuery } from "../services/api/admin/auth";
@@ -117,9 +117,9 @@ const AllUsers = () => {
     navigate(`/view-user/${selectedFlatRows[0]?.original._id}`);
   };
 
-  const handleCloseModal = () => {
+  const handleCloseModal = useCallback(() => {
     setOpenModal(false);
-  };
+  }, []);
 
   const handleCloseDeleteModal = () => {
     setOpenDeleteModal(false);

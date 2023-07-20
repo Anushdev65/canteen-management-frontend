@@ -9,23 +9,10 @@ import DialogTitle from "@mui/material/DialogTitle";
 import IconButton from "@mui/material/IconButton";
 import Slide from "@mui/material/Slide";
 import { styled } from "@mui/material/styles";
-import { useFormik } from "formik";
 import PropTypes from "prop-types";
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import { setUSerInfo } from "../localStorage/localStorage";
-import { userUpdateProfileSchema } from "../schema/YupSchema";
-import {
-  useGetMyProfileQuery,
-  useLazyGetUserByIdQuery,
-  useUpdateProfileMutation,
-  useUpdateUserByAdminMutation,
-} from "../services/api/admin/auth";
-import "../styles/muimodal.css";
-import MUIToast from "./MUIToast";
-import SigninForm from "./SigninForm";
-import { setUser } from "../features/auth/authSlice";
-import { useDispatch } from "react-redux";
+import "../../../styles/muimodal.css";
+import { Typography } from "@mui/material";
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
@@ -98,80 +85,11 @@ BootstrapDialogTitle.propTypes = {
   onClose: PropTypes.func.isRequired,
 };
 
-export default function MUIModal({ open, handleClose, userId }) {
-  const { id: idParam } = useParams();
-  const { data: adminInfo } = useGetMyProfileQuery();
-  const [trigger, { data: userData }] = useLazyGetUserByIdQuery();
-  const id = idParam || userId;
-  const dispatch = useDispatch();
-  // const { data: userData } = useGetUserByIdQuery(id);
-  // const { data: userDataTable } = useGetUserByIdQuery(userId);
-
-  useEffect(() => {
-    if (id) {
-      trigger(id);
-    }
-  }, [trigger, id]);
-
-  const userInfo = id ? userData : adminInfo;
-  const [updateProfile, { data: adminUpdate, error: adminError, isSuccess }] =
-    useUpdateProfileMutation();
-  const [updateUserByAdmin, { data: userUpdate, error: userUpdateError }] =
-    useUpdateUserByAdminMutation();
-
-  const data = adminUpdate || userUpdate;
-  const error = adminError || userUpdateError;
-
-  const {
-    handleBlur,
-    touched,
-    errors,
-    handleChange,
-    handleSubmit,
-    values,
-    handleReset,
-    resetForm,
-  } = useFormik({
-    enableReinitialize: true,
-    initialValues: {
-      firstName: userInfo?.data?.firstName || "",
-      lastName: userInfo?.data?.lastName || "",
-      role: userInfo?.data?.roles?.length ? userInfo?.data?.roles : [],
-      phoneNumber: userInfo?.data?.phoneNumber || "",
-      gender: userInfo?.data?.gender || "",
-      userImage: userInfo?.data?.profile || "",
-    },
-    validationSchema: userUpdateProfileSchema,
-    onSubmit: (values, action) => {
-      const body = {
-        firstName: values.firstName,
-        lastName: values.lastName,
-        gender: values.gender,
-        phoneNumber: `${values.phoneNumber}`,
-        roles: values.role,
-        profile: values.userImage,
-      };
-
-      id ? updateUserByAdmin({ body, id }) : updateProfile(body);
-    },
-  });
-
-  useEffect(() => {
-    if (isSuccess && !id) {
-      dispatch(setUser(data?.data));
-      setUSerInfo({ user: data?.data });
-      resetForm();
-      handleReset();
-      handleClose();
-    }
-  }, [handleReset, resetForm, id, data, isSuccess, dispatch, handleClose]);
-
+export default function CheckOut({ open, handleClose, userId }) {
   return (
     <div>
       <BootstrapDialog
         onClose={() => {
-          values.userImage = "";
-          handleReset();
           handleClose();
         }}
         aria-labelledby="customized-dialog-title"
@@ -185,11 +103,10 @@ export default function MUIModal({ open, handleClose, userId }) {
         <BootstrapDialogTitle
           id="customized-dialog-title"
           onClose={() => {
-            handleReset();
             handleClose();
           }}
         >
-          Update Profile
+          Your Order
         </BootstrapDialogTitle>
         <DialogContent dividers className="custom-dialog">
           <Container component="main" maxWidth="sm" sx={{ mb: 2 }}>
@@ -201,36 +118,11 @@ export default function MUIModal({ open, handleClose, userId }) {
                 alignItems: "center",
               }}
             >
-              <SigninForm
-                handleBlur={handleBlur}
-                touched={touched}
-                errors={errors}
-                handleChange={handleChange}
-                handleSubmit={handleSubmit}
-                values={values}
-                updateProfile={true}
-                user={userInfo?.data}
-                id={id}
-              />
+              <Typography>Here is your order</Typography>
             </Box>
           </Container>
         </DialogContent>
       </BootstrapDialog>
-      {data ? (
-        <MUIToast
-          initialValue={true}
-          message={data.message}
-          severity="success"
-        />
-      ) : error ? (
-        <MUIToast
-          initialValue={true}
-          message={error.data.message}
-          severity="error"
-        />
-      ) : (
-        <></>
-      )}
     </div>
   );
 }
