@@ -17,7 +17,6 @@ import CanteenRoute from "./utils/CanteenRoute";
 import ProtectedRoute from "./utils/ProtectedRoute";
 import CreateFoodItem from "./component/canteen/foodItem/foodItem/CreateFoodItem";
 import GenerateMenu from "./component/canteen/generateMenu/table/GenerateMenu";
-import OrderStatus from "./component/canteen/orderStatus/OrderStatus";
 
 function App() {
   return (
@@ -40,7 +39,6 @@ function App() {
             <Route path="/food-item" element={<FoodItemTable />} />
             <Route path="/create-fooditem" element={<CreateFoodItem />} />
             <Route path="/generate-menu" element={<GenerateMenu />} />
-            <Route path="/order-status" element={<OrderStatus />} />
           </Route>
         </Route>
       </Route>
