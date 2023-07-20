@@ -4,79 +4,84 @@ import {
   getExpandedRowModel,
   useTableInstance,
 } from "@tanstack/react-table";
-import React, { useState } from "react";
+import React, { useCallback, useMemo, useState } from "react";
 import STUDENTS from "./students.json";
+import CheckOut from "../popModel/CheckOut";
 
 const table = createTable();
 const defaultData = [...STUDENTS];
-const defaultColumns = [
-  table.createDataColumn("firstName", {
-    id: "Item",
-    header: (props) => (
-      <>
-        <button
-          type="button"
-          style={{ cursor: "pointer" }}
-          onClick={props.instance.getToggleAllRowsExpandedHandler()}
-        >
-          {props.instance.getIsAllRowsExpanded() ? "👇" : "👉"}
-        </button>
-        Item
-      </>
-    ),
-    cell: (props) => {
-      return (
-        <div style={{ paddingLeft: `${props.row.depth * 2}rem` }}>
-          {props.row.getCanExpand() ? (
+const MenuTable = () => {
+  const [expanded, setExpanded] = useState({});
+  const [openModal, setOpenModal] = useState(false);
+  const columns = useMemo(
+    () => [
+      table.createDataColumn("firstName", {
+        id: "Item",
+        header: (props) => (
+          <>
             <button
               type="button"
               style={{ cursor: "pointer" }}
-              onClick={props.row.getToggleExpandedHandler()}
+              onClick={props.instance.getToggleAllRowsExpandedHandler()}
             >
-              {props.row.getIsExpanded() ? "👇" : "👉"}
+              {props.instance.getIsAllRowsExpanded() ? "👇" : "👉"}
             </button>
-          ) : (
-            "🤲"
-          )}
+            Item
+          </>
+        ),
+        cell: (props) => {
+          return (
+            <div style={{ paddingLeft: `${props.row.depth * 2}rem` }}>
+              {props.row.getCanExpand() ? (
+                <button
+                  type="button"
+                  style={{ cursor: "pointer" }}
+                  onClick={props.row.getToggleExpandedHandler()}
+                >
+                  {props.row.getIsExpanded() ? "👇" : "👉"}
+                </button>
+              ) : (
+                "🤲"
+              )}
 
-          {props.getValue()}
-        </div>
-      );
-    },
-  }),
-  table.createDataColumn("middleName", {
-    id: "Img",
-  }),
-  table.createDataColumn("lastName", {
-    id: "Available Time",
-  }),
+              {props.getValue()}
+            </div>
+          );
+        },
+      }),
+      table.createDataColumn("middleName", {
+        id: "Img",
+      }),
+      table.createDataColumn("lastName", {
+        id: "Available Time",
+      }),
 
-  table.createDataColumn("age", {
-    id: "Rate",
-  }),
+      table.createDataColumn("age", {
+        id: "Rate",
+      }),
 
-  table.createDataColumn((row) => row.phone[1], {
-    id: "Sub rate",
-  }),
-  table.createDataColumn((row) => row.phone[2], {
-    id: "Int Quantity",
-  }),
+      table.createDataColumn((row) => row.phone[1], {
+        id: "Sub rate",
+      }),
+      table.createDataColumn((row) => row.phone[2], {
+        id: "Int Quantity",
+      }),
 
-  table.createDataColumn("email", {
-    id: "Available Quantity",
-  }),
+      table.createDataColumn("email", {
+        id: "Available Quantity",
+      }),
 
-  table.createDataColumn("date_of_birth", {
-    id: "Price",
-  }),
-];
-const MenuTable = () => {
-  const [expanded, setExpanded] = useState({});
+      table.createDataColumn("date_of_birth", {
+        id: "Price",
+      }),
+    ],
+    []
+  );
   const selectedItem = [];
 
   const instance = useTableInstance(table, {
     data: defaultData,
-    columns: defaultColumns,
+    columns,
     state: {
       expanded,
     },
@@ -104,6 +109,10 @@ const MenuTable = () => {
       selectedItem.push({ foodItem: row.original, quantity: e.target.value });
   };
 
+  const handleCloseModal = useCallback(() => {
+    setOpenModal(false);
+  }, []);
+
   const handleSubmit = () => {
     const finalOrder = [
       ...selectedItem?.map((item) => ({
@@ -113,10 +122,13 @@ const MenuTable = () => {
     ];
 
     console.log(finalOrder);
+
+    setOpenModal(true);
   };
 
   return (
     <div>
+      <CheckOut open={openModal} handleClose={handleCloseModal} />
       <table border={1}>
         <thead>
           {instance.getHeaderGroups().map((headerGroup) => (

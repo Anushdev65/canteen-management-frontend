@@ -2,7 +2,7 @@ import AddIcon from "@mui/icons-material/Add";
 import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined";
 import EditIcon from "@mui/icons-material/Edit";
 import { Box, Fab, Grid, Tooltip, Zoom } from "@mui/material";
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { usePagination, useRowSelect, useSortBy, useTable } from "react-table";
 import { useLazyGetAllFoodItemQuery } from "../../../../services/api/canteen/foodItem";
@@ -123,9 +123,9 @@ const FoodItemTable = () => {
     navigate("/create-fooditem");
   };
 
-  const handleCloseModal = () => {
+  const handleCloseModal = useCallback(() => {
     setOpenModal(false);
-  };
+  }, []);
 
   const handleCloseDeleteModal = () => {
     setOpenDeleteModal(false);

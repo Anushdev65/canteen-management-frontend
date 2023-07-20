@@ -142,7 +142,7 @@ const navDataRest = [
   {
     name: "My Order",
     icon: <FastfoodOutlinedIcon />,
-    link: "/food-category",
+    link: "/food-myorder",
   },
   {
     name: "My Profile",
