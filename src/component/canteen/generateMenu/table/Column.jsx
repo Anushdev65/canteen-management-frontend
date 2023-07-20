@@ -4,10 +4,6 @@ import FoodQuantity from "./FoodQuantity";
 import dayjs from "dayjs";
 import "../../../../foodstyles/generatetable.css";
 
-// const Subheader = () => {
-//   return <div style={{ color: "rgb(52, 107, 107)" }}>Available From</div>;
-// };
-
 const COLUMNS = [
   {
     Header: "SN",
@@ -16,6 +12,7 @@ const COLUMNS = [
   {
     Header: "Food Items",
     accessor: "name",
+    Cell: ({ row }) => <div style={{ width: "210px" }}>{row.values.name}</div>,
   },
   {
     Header: "Available",
