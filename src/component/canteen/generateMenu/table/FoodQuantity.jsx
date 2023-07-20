@@ -1,7 +1,7 @@
 import { TextField } from "@mui/material";
 import React, { useState } from "react";
-
-const FoodQuantity = ({ onChange, label, value }) => {
+import "../../../../foodstyles/generatetable.css";
+const FoodQuantity = ({ onChange, label, value, disable }) => {
   const [newValue, setNewValue] = useState(value);
 
   const newHandle = (e) => {
@@ -11,6 +11,8 @@ const FoodQuantity = ({ onChange, label, value }) => {
   };
   return (
     <TextField
+      className="foodquantity"
+      disabled={disable}
       required
       autoComplete="off"
       id="outlined-number"

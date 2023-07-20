@@ -8,6 +8,7 @@ import MUILoading from "../component/MUILoading";
 import MUIToast from "../component/MUIToast";
 import SignInLogo from "../component/SignInLogo";
 import SigninForm from "../component/SigninForm";
+import { useEffect } from "react";
 
 const initialValues = {
   firstName: "",
@@ -20,25 +21,39 @@ const initialValues = {
 };
 
 export default function SignUp() {
-  const [registerUser, { isLoading, data, error }] = useRegisterUserMutation();
-  const { handleBlur, touched, errors, handleChange, handleSubmit, values } =
-    useFormik({
-      initialValues,
-      validationSchema: userRegistrationSchema,
-      onSubmit: (values, action) => {
-        const body = {
-          firstName: values.firstName,
-          lastName: values.lastName,
-          email: values.email,
-          gender: values.gender,
-          phoneNumber: values.phoneNumber,
-          roles: values.role,
-          profile: values.userImage || "localhost:8000/defaultProfile.png",
-        };
-        registerUser(body);
-        action.resetForm();
-      },
-    });
+  const [registerUser, { isLoading, data, error, isSuccess }] =
+    useRegisterUserMutation();
+  const {
+    handleBlur,
+    touched,
+    errors,
+    handleChange,
+    handleSubmit,
+    values,
+    resetForm,
+  } = useFormik({
+    initialValues,
+    validationSchema: userRegistrationSchema,
+    onSubmit: (values) => {
+      const body = {
+        firstName: values.firstName,
+        lastName: values.lastName,
+        email: values.email,
+        gender: values.gender,
+        phoneNumber: values.phoneNumber,
+        roles: values.role,
+        profile: values.userImage || "localhost:8000/defaultProfile.png",
+      };
+      registerUser(body);
+    },
+  });
+
+  useEffect(() => {
+    if (isSuccess) {
+      resetForm();
+    }
+  }, [isSuccess, resetForm]);
+
   return (
     <>
       {isLoading ? (

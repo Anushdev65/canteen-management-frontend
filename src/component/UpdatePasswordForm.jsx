@@ -22,31 +22,38 @@ const initialValues = {
 };
 
 export default function UpdatePasswordForm() {
-  const [updatePassword, { isLoading, data, error }] =
+  const [updatePassword, { isLoading, data, error, isSuccess }] =
     useUpdatePasswordMutation();
   const navigate = useNavigate();
 
-  const { handleBlur, touched, errors, handleChange, handleSubmit, values } =
-    useFormik({
-      initialValues,
-      validationSchema: userResetPasswordSchema,
-      onSubmit: (values, action) => {
-        updatePassword({
-          password: values.password,
-          oldPassword: values.oldPassword,
-        });
-        action.resetForm();
-      },
-    });
+  const {
+    handleBlur,
+    touched,
+    errors,
+    handleChange,
+    handleSubmit,
+    values,
+    resetForm,
+  } = useFormik({
+    initialValues,
+    validationSchema: userResetPasswordSchema,
+    onSubmit: (values) => {
+      updatePassword({
+        password: values.password,
+        oldPassword: values.oldPassword,
+      });
+    },
+  });
 
   React.useEffect(() => {
+    if (isSuccess) resetForm();
     if (data) {
       setTimeout(() => {
         navigate("/login");
         removeLevelInfo();
       }, 3000);
     }
-  }, [navigate, data]);
+  }, [navigate, data, isSuccess]);
 
   return (
     <>
@@ -88,6 +95,7 @@ export default function UpdatePasswordForm() {
               component="h6"
               variant="h6"
               sx={{ fontWeight: "bold", fontSize: 12 }}
+              id="contain-update"
             >
               Password must be minimum of eight characters, with no space , at
               least one uppercase letter, one lowercase letter, one number and

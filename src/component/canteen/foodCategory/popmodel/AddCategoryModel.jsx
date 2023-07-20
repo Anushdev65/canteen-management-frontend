@@ -5,6 +5,7 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import { useFormik } from "formik";
+import { useEffect } from "react";
 import { foodCategoryNameSchema } from "../../../../schema/YupCanteenSchema";
 import {
   useCreateFoodCategoryMutation,
@@ -14,13 +15,19 @@ import MUIToast from "../../../MUIToast";
 import AddCategory from "../form/AddCategory";
 
 export default function AddCategoryModel({ open, handleClose, category }) {
-  const [createFoodCategory, { data: createFood, error: createError }] =
-    useCreateFoodCategoryMutation();
-  const [updateFoodCategory, { data: updateFood, error: updateError }] =
-    useUpdateFoodCategoryMutation();
+  const [
+    createFoodCategory,
+    { data: createFood, error: createError, isSuccess: createSuccess },
+  ] = useCreateFoodCategoryMutation();
+  const [
+    updateFoodCategory,
+    { data: updateFood, error: updateError, isSuccess: updateSuccess },
+  ] = useUpdateFoodCategoryMutation();
 
   const data = createFood || updateFood;
   const error = createError || updateError;
+  const isSuccess = createSuccess || updateSuccess;
+
   const {
     handleBlur,
     touched,
@@ -29,22 +36,27 @@ export default function AddCategoryModel({ open, handleClose, category }) {
     handleSubmit,
     values,
     handleReset,
+    resetForm,
   } = useFormik({
     enableReinitialize: true,
     initialValues: { name: category?.name || "" },
     validationSchema: foodCategoryNameSchema,
-    onSubmit: (values, action) => {
+    onSubmit: (values) => {
       const body = {
         name: values.name,
       };
       category
         ? updateFoodCategory({ body, id: category._id })
         : createFoodCategory(body);
-      action.resetForm();
-      handleClose();
-      handleReset();
     },
   });
+  useEffect(() => {
+    if (isSuccess) {
+      resetForm();
+      handleClose();
+      handleReset();
+    }
+  }, [resetForm, handleClose, handleReset, isSuccess]);
 
   return (
     <div>
@@ -57,7 +69,10 @@ export default function AddCategoryModel({ open, handleClose, category }) {
       >
         <DialogTitle textAlign={"center"}>Add Food Category</DialogTitle>
         <DialogContent>
-          <DialogContentText sx={{ marginBottom: "10px" }}>
+          <DialogContentText
+            sx={{ marginBottom: "10px" }}
+            className="text-category"
+          >
             Please specify the food category so that it can be featured to this
             system.
           </DialogContentText>

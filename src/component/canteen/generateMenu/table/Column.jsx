@@ -2,6 +2,11 @@ import React from "react";
 import FoodAvailableTime from "./FoodAvailableTime";
 import FoodQuantity from "./FoodQuantity";
 import dayjs from "dayjs";
+import "../../../../foodstyles/generatetable.css";
+
+// const Subheader = () => {
+//   return <div style={{ color: "rgb(52, 107, 107)" }}>Available From</div>;
+// };
 
 const COLUMNS = [
   {
@@ -14,9 +19,11 @@ const COLUMNS = [
   },
   {
     Header: "Available",
+
     columns: [
       {
         Header: "Available From",
+
         accessor: "from",
         Cell: ({ row }) => {
           const handleFromChange = (value) => {
@@ -34,6 +41,7 @@ const COLUMNS = [
           );
         },
       },
+
       {
         Header: "Available To",
         accessor: "to",
@@ -86,8 +94,8 @@ const COLUMNS = [
           return (
             <FoodQuantity
               onChange={handleChange}
-              label={"Available Quantity"}
               value={row.values.availableQuantity || ""}
+              disable={true}
             />
           );
         },

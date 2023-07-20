@@ -40,7 +40,7 @@ const PasswordForm = ({
           <Grid container spacing={2}>
             <Grid item xs={12}>
               <TextField
-                error={touched.password && errors.password}
+                error={Boolean(touched.password && errors.password)}
                 required
                 fullWidth
                 name="password"
@@ -60,7 +60,9 @@ const PasswordForm = ({
             </Grid>
             <Grid item xs={12}>
               <TextField
-                error={touched.confirmPassword && errors.confirmPassword}
+                error={Boolean(
+                  touched.confirmPassword && errors.confirmPassword
+                )}
                 required
                 fullWidth
                 name="confirmPassword"

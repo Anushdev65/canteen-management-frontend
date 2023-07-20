@@ -78,11 +78,10 @@
   /*pegnation*/
   .pegnation{
     margin-top: 20px;
-    margin-left: 55%;
-    display: flex;
-      justify-content: flex-end;
+      display: flex;
+      float: right;
       flex-direction: row;
-      gap: 10px
+      gap: 10px;
   }
 
   /*header*/
@@ -92,8 +91,7 @@
    text-align: end;
     font-size: 17px;
   /* display: inline-block; */
-  /* vertical-align: middle; */
-   
+  /* vertical-align: middle; */ 
  padding-left:20px;
   };
 

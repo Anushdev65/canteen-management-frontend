@@ -14,21 +14,26 @@ const initialValues = {
 };
 
 export default function ResetPassword() {
-  const [resetPassword, { data, isLoading, error }] =
+  const [resetPassword, { data, isLoading, error, isSuccess }] =
     useResetPasswordMutation();
   const [searchparams] = useSearchParams();
   const navigate = useNavigate();
 
-  const { handleBlur, touched, errors, handleChange, handleSubmit, values } =
-    useFormik({
-      initialValues,
-      validationSchema: userPasswordSchema,
-      onSubmit: (values, action) => {
-        resetPassword({ password: values.password });
-        action.resetForm();
-        removeLevelInfo();
-      },
-    });
+  const {
+    handleBlur,
+    touched,
+    errors,
+    handleChange,
+    handleSubmit,
+    values,
+    resetForm,
+  } = useFormik({
+    initialValues,
+    validationSchema: userPasswordSchema,
+    onSubmit: (values, action) => {
+      resetPassword({ password: values.password });
+    },
+  });
 
   React.useEffect(() => {
     setLevelInfo({
@@ -37,13 +42,17 @@ export default function ResetPassword() {
   }, [searchparams]);
 
   React.useEffect(() => {
-    console.log(data);
+    if (isSuccess) {
+      resetForm();
+      removeLevelInfo();
+    }
+
     if (data?.success) {
       setTimeout(() => {
         navigate("/login");
       }, 3000);
     }
-  }, [data, navigate]);
+  }, [data, navigate, isSuccess, resetForm]);
 
   return (
     <>
