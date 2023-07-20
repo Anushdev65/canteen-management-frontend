@@ -17,6 +17,8 @@ import CanteenRoute from "./utils/CanteenRoute";
 import ProtectedRoute from "./utils/ProtectedRoute";
 import CreateFoodItem from "./component/canteen/foodItem/foodItem/CreateFoodItem";
 import GenerateMenu from "./component/canteen/generateMenu/table/GenerateMenu";
+import MenuTable from "./component/foodOrder/table/MenuTable";
+import FoodOrderRoute from "./utils/FoodOrderRoute";
 
 function App() {
   return (
@@ -24,12 +26,14 @@ function App() {
       <Route element={<ProtectedRoute />}>
         <Route path="/" element={<MUINavbar />}>
           <Route path="/myprofile" element={<MyProfile />} />
+          <Route
+            path="/auth/update-password"
+            element={<UpdatePasswordForm />}
+          />
+
           <Route element={<AdminsRoute />}>
             <Route path="/allusers" element={<AllUsers />} />
-            <Route
-              path="/auth/update-password"
-              element={<UpdatePasswordForm />}
-            />
+
             <Route path="/create-user" element={<CreateUser />} />
 
             <Route path="/view-user/:id" element={<MyProfile />} />
@@ -39,6 +43,10 @@ function App() {
             <Route path="/food-item" element={<FoodItemTable />} />
             <Route path="/create-fooditem" element={<CreateFoodItem />} />
             <Route path="/generate-menu" element={<GenerateMenu />} />
+          </Route>
+
+          <Route element={<FoodOrderRoute />}>
+            <Route path="/food-menu" index element={<MenuTable />} />
           </Route>
         </Route>
       </Route>
