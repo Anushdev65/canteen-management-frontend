@@ -94,7 +94,8 @@ BootstrapDialogTitle.propTypes = {
 
 export default function FoodItemPopModel({ open, handleClose, foodId }) {
   const [trigger, { data: foodInfo }] = useLazyGetFoodItemByIdQuery();
-  const [updateFoodItem, { data, error }] = useUpdateFoodItemMutation();
+  const [updateFoodItem, { data, error, isSuccess }] =
+    useUpdateFoodItemMutation();
 
   useEffect(() => {
     if (foodId) {
@@ -110,6 +111,7 @@ export default function FoodItemPopModel({ open, handleClose, foodId }) {
     handleSubmit,
     values,
     handleReset,
+    resetForm,
   } = useFormik({
     enableReinitialize: true,
     initialValues: {
@@ -122,7 +124,7 @@ export default function FoodItemPopModel({ open, handleClose, foodId }) {
       foodImage: foodInfo?.data?.foodImage || "",
     },
     validationSchema: foodItemSchema,
-    onSubmit: (values, action) => {
+    onSubmit: (values) => {
       const body = {
         name: values.name,
         description: values.description,
@@ -133,10 +135,15 @@ export default function FoodItemPopModel({ open, handleClose, foodId }) {
         foodImage: values.foodImage,
       };
       updateFoodItem({ body, id: foodId });
-      action.resetForm();
-      handleClose();
     },
   });
+
+  useEffect(() => {
+    if (isSuccess) {
+      resetForm();
+      handleClose();
+    }
+  }, [resetForm, isSuccess, handleClose]);
 
   return (
     <div>

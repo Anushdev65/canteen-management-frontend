@@ -15,34 +15,47 @@ import FoodItemForm from "../form/FoodItemForm";
 const defaultTheme = createTheme();
 
 export default function CreateFoodItem() {
-  const [createFoodItem, { data, error }] = useCreateFoodItemMutation();
-  const { handleBlur, touched, errors, handleChange, handleSubmit, values } =
-    useFormik({
-      enableReinitialize: true,
-      initialValues: {
-        name: "",
-        description: "",
-        category: "",
-        tags: "",
-        rate: "",
-        discountedRate: "",
-        foodImage: "",
-      },
-      validationSchema: foodItemSchema,
-      onSubmit: (values, action) => {
-        const body = {
-          name: values.name,
-          description: values.description,
-          category: values.category,
-          tags: values.tags,
-          rate: values.rate,
-          discountedRate: values.discountedRate,
-          foodImage: values.foodImage,
-        };
-        createFoodItem(body);
-        action.resetForm();
-      },
-    });
+  const [createFoodItem, { data, error, isSuccess }] =
+    useCreateFoodItemMutation();
+  const {
+    handleBlur,
+    touched,
+    errors,
+    handleChange,
+    handleSubmit,
+    values,
+    resetForm,
+  } = useFormik({
+    enableReinitialize: true,
+    initialValues: {
+      name: "",
+      description: "",
+      category: "",
+      tags: "",
+      rate: "",
+      discountedRate: "",
+      foodImage: "",
+    },
+    validationSchema: foodItemSchema,
+    onSubmit: (values) => {
+      const body = {
+        name: values.name,
+        description: values.description,
+        category: values.category,
+        tags: values.tags,
+        rate: values.rate,
+        discountedRate: values.discountedRate,
+        foodImage: values.foodImage,
+      };
+      createFoodItem(body);
+    },
+  });
+
+  React.useEffect(() => {
+    if (isSuccess) {
+      resetForm();
+    }
+  }, [resetForm, isSuccess]);
   return (
     <React.Fragment>
       <Box>
