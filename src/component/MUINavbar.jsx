@@ -27,15 +27,14 @@ import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import { styled, useTheme } from "@mui/material/styles";
 import * as React from "react";
-import { NavLink, Outlet, useNavigate, useParams } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { NavLink, Outlet } from "react-router-dom";
+import { setUser } from "../features/auth/authSlice";
 import { getUserInfo, removeLevelInfo } from "../localStorage/localStorage";
-import {
-  useLazyGetUserByIdQuery,
-  useLogOutMutation,
-} from "../services/api/admin/auth";
+import { useLogOutMutation } from "../services/api/admin/auth";
+import "../styles/navbar.css";
 import MUILoading from "./MUILoading";
 import MUIToast from "./MUIToast";
-import "../styles/navbar.css";
 const drawerWidth = 240;
 
 const navDataAdmin = [
@@ -181,14 +180,26 @@ const Drawer = styled(MuiDrawer, {
 
 export default function MUINavbar() {
   const [isScrolled, setIsScrolled] = React.useState(false);
-  const { id } = useParams();
   const theme = useTheme();
   const [open, setOpen] = React.useState(true);
-  // const { data: myData } = useGetMyProfileQuery();
-  const myData = getUserInfo();
-  const [trigger, { data: userData }] = useLazyGetUserByIdQuery();
+
   const [logOut, { data, isSuccess }] = useLogOutMutation();
-  const navigate = useNavigate();
+  const myData = useSelector((state) => state.auth.user) || {};
+  // const myData = stateData;
+
+  const dispatch = useDispatch();
+
+  React.useEffect(() => {
+    const myData = getUserInfo();
+    if (myData?.user?._id) {
+      dispatch(setUser(myData.user));
+    }
+  }, [dispatch]);
+
+  // const { id } = useParams();
+  // const { data: myData } = useGetMyProfileQuery();
+  // const [trigger, { data: userData }] = useLazyGetUserByIdQuery();
+  // const navigate = useNavigate();
 
   // React.useEffect(() => {
   //   if (id) {
@@ -201,14 +212,10 @@ export default function MUINavbar() {
       setIsScrolled(window.scrollY > 0);
     };
     window.addEventListener("scroll", handleScroll);
-
-    if (id) {
-      trigger(id);
-    }
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };
-  }, [id, trigger]);
+  }, []);
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -262,101 +269,99 @@ export default function MUINavbar() {
       {isSuccess ? (
         <MUILoading />
       ) : (
-        <Box sx={{ display: "flex" }}>
-          <CssBaseline />
-          <AppBar position="fixed" open={open}>
-            <div className={`nav-container ${isScrolled ? "scrolled" : ""}`}>
-              <Toolbar>
-                <IconButton
-                  color="inherit"
-                  aria-label="open drawer"
-                  onClick={handleDrawerOpen}
-                  edge="start"
-                  sx={{
-                    marginRight: 5,
-                    ...(open && { display: "none" }),
-                  }}
-                >
-                  <MenuIcon />
-                </IconButton>
-                <Typography
-                  component="h1"
-                  variant="h6"
-                  color="inherit"
-                  noWrap
-                  sx={{ flexGrow: 1 }}
-                >
-                  Deerwalk Food System
-                </Typography>
-                {myData && (
-                  <img
-                    src={
-                      id
-                        ? `http://${userData?.data.profile}`
-                        : `http://${myData.user.profile}`
-                    }
-                    alt=""
-                    style={{
-                      height: "40px",
-                      width: "40px",
-                      marginRight: "16px",
-                      borderRadius: "100%",
-                    }}
-                  />
-                )}
-              </Toolbar>
-            </div>
-          </AppBar>
-          <Drawer variant="permanent" open={open}>
-            <DrawerHeader>
-              <img src="/deerwalklogo.jpeg" alt="" width="170px" />
-              <IconButton onClick={handleDrawerClose}>
-                {theme.direction === "rtl" ? (
-                  <ChevronRightIcon />
-                ) : (
-                  <ChevronLeftIcon />
-                )}
-              </IconButton>
-            </DrawerHeader>
-            <Divider />
-            <List>
-              {myData?.user.roles.includes("admin")
-                ? renderList(navDataAdmin)
-                : renderList(navDataCanteen)}
-            </List>
-            <Divider />
-            <List>
-              <ListItem disablePadding sx={{ display: "block" }}>
-                <ListItemButton
-                  sx={{
-                    minHeight: 48,
-                    justifyContent: open ? "initial" : "center",
-                    px: 2.5,
-                  }}
-                  onClick={handleLogOut}
-                >
-                  <ListItemIcon
+        Object.keys(myData).length !== 0 && (
+          <Box sx={{ display: "flex" }}>
+            <CssBaseline />
+            <AppBar position="fixed" open={open}>
+              <div className={`nav-container ${isScrolled ? "scrolled" : ""}`}>
+                <Toolbar>
+                  <IconButton
+                    color="inherit"
+                    aria-label="open drawer"
+                    onClick={handleDrawerOpen}
+                    edge="start"
                     sx={{
-                      minWidth: 0,
-                      mr: open ? 3 : "auto",
-                      justifyContent: "center",
+                      marginRight: 5,
+                      ...(open && { display: "none" }),
                     }}
                   >
-                    <LogoutOutlinedIcon />
-                  </ListItemIcon>
-                  <ListItemText
-                    primary="LogOut"
-                    sx={{ opacity: open ? 1 : 0 }}
-                  />
-                </ListItemButton>
-              </ListItem>
-            </List>
-          </Drawer>
-          <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
-            <DrawerHeader />
-            <Outlet />
+                    <MenuIcon />
+                  </IconButton>
+                  <Typography
+                    component="h1"
+                    variant="h6"
+                    color="inherit"
+                    noWrap
+                    sx={{ flexGrow: 1 }}
+                  >
+                    Deerwalk Food System
+                  </Typography>
+                  {myData && (
+                    <img
+                      src={`${myData?.profile}` || ""}
+                      alt=""
+                      style={{
+                        height: "40px",
+                        width: "40px",
+                        marginRight: "16px",
+                        borderRadius: "100%",
+                      }}
+                    />
+                  )}
+                </Toolbar>
+              </div>
+            </AppBar>
+            <Drawer variant="permanent" open={open}>
+              <DrawerHeader>
+                <img src="/deerwalklogo.jpeg" alt="" width="170px" />
+                <IconButton onClick={handleDrawerClose}>
+                  {theme.direction === "rtl" ? (
+                    <ChevronRightIcon />
+                  ) : (
+                    <ChevronLeftIcon />
+                  )}
+                </IconButton>
+              </DrawerHeader>
+              <Divider />
+              <List>
+                {myData?.roles.includes("admin")
+                  ? renderList(navDataAdmin)
+                  : renderList(navDataCanteen)}
+              </List>
+              <Divider />
+              <List>
+                <ListItem disablePadding sx={{ display: "block" }}>
+                  <ListItemButton
+                    sx={{
+                      minHeight: 48,
+                      justifyContent: open ? "initial" : "center",
+                      px: 2.5,
+                    }}
+                    onClick={handleLogOut}
+                  >
+                    <ListItemIcon
+                      sx={{
+                        minWidth: 0,
+                        mr: open ? 3 : "auto",
+                        justifyContent: "center",
+                      }}
+                    >
+                      <LogoutOutlinedIcon />
+                    </ListItemIcon>
+                    <ListItemText
+                      primary="LogOut"
+                      sx={{ opacity: open ? 1 : 0 }}
+                    />
+                  </ListItemButton>
+                </ListItem>
+              </List>
+            </Drawer>
+            <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
+              <DrawerHeader />
+              <Outlet />
+            </Box>
           </Box>
-        </Box>
+        )
       )}
     </>
   );

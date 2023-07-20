@@ -17,7 +17,6 @@ const FoodAvailableTime = ({ value, handleFromChange, handleToChange }) => {
             onChange={handleFromChange || handleToChange}
           />
         </DemoContainer>
-        {/*for time*/}
       </LocalizationProvider>
     </>
   );

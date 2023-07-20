@@ -94,8 +94,8 @@ const COLUMNS = [
           return (
             <FoodQuantity
               onChange={handleChange}
-              label={"Available Quantity"}
               value={row.values.availableQuantity || ""}
+              disable={true}
             />
           );
         },

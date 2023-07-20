@@ -13,6 +13,7 @@ import { useFormik } from "formik";
 import PropTypes from "prop-types";
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import { setUSerInfo } from "../localStorage/localStorage";
 import { userUpdateProfileSchema } from "../schema/YupSchema";
 import {
   useGetMyProfileQuery,
@@ -20,9 +21,11 @@ import {
   useUpdateProfileMutation,
   useUpdateUserByAdminMutation,
 } from "../services/api/admin/auth";
+import "../styles/muimodal.css";
 import MUIToast from "./MUIToast";
 import SigninForm from "./SigninForm";
-import "../styles/muimodal.css";
+import { setUser } from "../features/auth/authSlice";
+import { useDispatch } from "react-redux";
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
@@ -98,10 +101,11 @@ BootstrapDialogTitle.propTypes = {
 export default function MUIModal({ open, handleClose, userId }) {
   const { id: idParam } = useParams();
   const { data: adminInfo } = useGetMyProfileQuery();
-  // const { data: userData } = useGetUserByIdQuery(id);
-  // const { data: userDataTable } = useGetUserByIdQuery(userId);
   const [trigger, { data: userData }] = useLazyGetUserByIdQuery();
   const id = idParam || userId;
+  const dispatch = useDispatch();
+  // const { data: userData } = useGetUserByIdQuery(id);
+  // const { data: userDataTable } = useGetUserByIdQuery(userId);
 
   useEffect(() => {
     if (id) {
@@ -110,7 +114,7 @@ export default function MUIModal({ open, handleClose, userId }) {
   }, [trigger, id]);
 
   const userInfo = id ? userData : adminInfo;
-  const [updateProfile, { data: adminUpdate, error: adminError }] =
+  const [updateProfile, { data: adminUpdate, error: adminError, isSuccess }] =
     useUpdateProfileMutation();
   const [updateUserByAdmin, { data: userUpdate, error: userUpdateError }] =
     useUpdateUserByAdminMutation();
@@ -126,6 +130,7 @@ export default function MUIModal({ open, handleClose, userId }) {
     handleSubmit,
     values,
     handleReset,
+    resetForm,
   } = useFormik({
     enableReinitialize: true,
     initialValues: {
@@ -148,18 +153,18 @@ export default function MUIModal({ open, handleClose, userId }) {
       };
 
       id ? updateUserByAdmin({ body, id }) : updateProfile(body);
-      action.resetForm();
       handleClose();
     },
   });
 
   useEffect(() => {
-    if (data) {
-      console.log(data);
-    } else if (error) {
-      console.log(error);
+    if (isSuccess && !id) {
+      dispatch(setUser(data?.data));
+      setUSerInfo({ user: data?.data });
+      resetForm();
+      handleReset();
     }
-  }, [data, error]);
+  }, [handleReset, resetForm, id, data, isSuccess, dispatch, handleClose]);
 
   return (
     <div>
