@@ -28,7 +28,7 @@ import Typography from "@mui/material/Typography";
 import { styled, useTheme } from "@mui/material/styles";
 import * as React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { NavLink, Outlet } from "react-router-dom";
+import { NavLink, Outlet, useLocation } from "react-router-dom";
 import { setUser } from "../features/auth/authSlice";
 import { getUserInfo, removeLevelInfo } from "../localStorage/localStorage";
 import { useLogOutMutation } from "../services/api/admin/auth";
@@ -225,7 +225,8 @@ export default function MUINavbar() {
   const [isScrolled, setIsScrolled] = React.useState(false);
   const theme = useTheme();
   const [open, setOpen] = React.useState(true);
-
+  const [activeLink, setActiveLink] = React.useState("");
+  const location = useLocation();
   const [logOut, { data, isSuccess }] = useLogOutMutation();
   const myData = useSelector((state) => state.auth.user) || {};
   // const myData = stateData;
@@ -260,6 +261,23 @@ export default function MUINavbar() {
     };
   }, []);
 
+  React.useEffect(() => {
+    const storedActiveLink = localStorage.getItem("activeLink");
+    if (storedActiveLink) {
+      setActiveLink(storedActiveLink);
+    }
+
+    const activeNavItem = navDataAdmin
+      .concat(navDataCanteen, navDataRest)
+      .find((item) => {
+        return location.pathname === item.link;
+      });
+
+    if (activeNavItem) {
+      setActiveLink(activeNavItem.name);
+    }
+  }, [location.pathname]);
+
   const handleDrawerOpen = () => {
     setOpen(true);
   };
@@ -276,18 +294,40 @@ export default function MUINavbar() {
     }, 3000);
   };
 
+  const handleNavLinkClick = (name) => {
+    setActiveLink(name);
+    localStorage.setItem("activeLink", name);
+  };
+
   const renderList = (data) => {
     return data.map((item) => (
       <ListItem key={item.name} disablePadding sx={{ display: "block" }}>
         <NavLink
           to={item.link}
-          style={{ textDecoration: "none", color: "black" }}
+          style={{
+            textDecoration: "none",
+            color: "black",
+          }}
+          onClick={() => handleNavLinkClick(item.name)}
         >
           <ListItemButton
             sx={{
               minHeight: 48,
               justifyContent: open ? "initial" : "center",
               px: 2.5,
+              backgroundColor:
+                activeLink === item.name
+                  ? "rgba(124, 53, 118, 0.9)"
+                  : "transparent",
+              color: activeLink === item.name ? "white" : "black",
+
+              "&:hover": {
+                backgroundColor:
+                  activeLink === item.name
+                    ? "rgba(124, 53, 118, 0.9)"
+                    : "lightgray",
+                color: activeLink === item.name ? "white" : "black",
+              },
             }}
           >
             <ListItemIcon
@@ -295,6 +335,8 @@ export default function MUINavbar() {
                 minWidth: 0,
                 mr: open ? 3 : "auto",
                 justifyContent: "center",
+                color:
+                  activeLink === item.name ? "white" : "rgb(148, 147, 147)",
               }}
             >
               {item.icon}
