@@ -20,12 +20,14 @@ import AdminsRoute from "./utils/AdminsRoute";
 import CanteenRoute from "./utils/CanteenRoute";
 import FoodOrderRoute from "./utils/FoodOrderRoute";
 import ProtectedRoute from "./utils/ProtectedRoute";
+import LandingContent from "./component/landingContent/LandingContent";
 
 function App() {
   return (
     <Routes>
       <Route element={<ProtectedRoute />}>
         <Route path="/" element={<MUINavbar />}>
+          <Route index element={<LandingContent />} />
           <Route path="/myprofile" element={<MyProfile />} />
           <Route
             path="/auth/update-password"

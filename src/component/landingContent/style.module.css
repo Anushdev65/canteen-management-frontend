@@ -1,0 +1,45 @@
+.animationContainer {
+  margin-top: 17rem;
+  padding: 0;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.container {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  height: 60px;
+}
+
+.floatingText {
+  font-size: 50px;
+  white-space: nowrap;
+  position: absolute;
+  width: 100%;
+  left: 0;
+  animation: floatText 10s linear infinite;
+}
+
+@keyframes floatText {
+  0% {
+    transform: translateX(0%);
+    opacity: 0;
+  }
+  10% {
+    transform: translateX(10%);
+    opacity: 1;
+  }
+  50% {
+    transform: translateX(50%);
+    opacity: 1;
+  }
+  80% {
+    transform: translateX(80%);
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+}
