@@ -1,3 +1,7 @@
+const capitalizeFirstLetter = (str) => {
+  return str.charAt(0).toUpperCase() + str.slice(1);
+};
+
 export const COLUMNS = [
   {
     Header: "SN",
@@ -7,5 +11,9 @@ export const COLUMNS = [
   {
     Header: "Category",
     accessor: "name",
+    Cell: ({ row }) =>
+      // <div style={{ width: "210px" }}>
+      capitalizeFirstLetter(row.values.name),
+      // </div>
   },
 ];

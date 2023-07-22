@@ -7,6 +7,11 @@ import {
 import React, { useCallback, useMemo, useState } from "react";
 import CheckOut from "../popModel/CheckOut";
 import STUDENTS from "./students.json";
+import KeyboardDoubleArrowRightIcon from "@mui/icons-material/KeyboardDoubleArrowRight";
+import KeyboardDoubleArrowDownIcon from "@mui/icons-material/KeyboardDoubleArrowDown";
+import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
+import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+import "../../../menuorder/menutable.css";
 
 const table = createTable();
 const defaultData = [...STUDENTS];
@@ -48,11 +53,16 @@ const MenuTable = () => {
         header: (props) => (
           <>
             <button
+              className="menu-button"
               type="button"
               style={{ cursor: "pointer" }}
               onClick={props.instance.getToggleAllRowsExpandedHandler()}
             >
-              {props.instance.getIsAllRowsExpanded() ? "👇" : "👉"}
+              {props.instance.getIsAllRowsExpanded() ? (
+                <KeyboardDoubleArrowDownIcon className="menu-icon" />
+              ) : (
+                <KeyboardDoubleArrowRightIcon className="menu-icon" />
+              )}
             </button>
             Item
           </>
@@ -62,11 +72,16 @@ const MenuTable = () => {
             <div style={{ paddingLeft: `${props.row.depth * 2}rem` }}>
               {props.row.getCanExpand() ? (
                 <button
+                  className="menu-button"
                   type="button"
                   style={{ cursor: "pointer" }}
                   onClick={props.row.getToggleExpandedHandler()}
                 >
-                  {props.row.getIsExpanded() ? "👇" : "👉"}
+                  {props.row.getIsExpanded() ? (
+                    <KeyboardArrowDownIcon className="menu-icon" />
+                  ) : (
+                    <KeyboardArrowRightIcon className="menu-icon" />
+                  )}
                 </button>
               ) : (
                 "🤲"
@@ -166,7 +181,7 @@ const MenuTable = () => {
         handleClose={handleCloseModal}
         userOrder={userOrder}
       />
-      <table border={1}>
+      <table border={1} className="menutable-container">
         <thead>
           {instance.getHeaderGroups().map((headerGroup) => (
             <tr key={headerGroup.id}>
@@ -206,7 +221,9 @@ const MenuTable = () => {
           ))}
         </tbody>
       </table>
-      <button onClick={handleSubmit}> Place order</button>
+      <button className="btn-button" onClick={handleSubmit}>
+        Place order
+      </button>
     </div>
   );
 };
