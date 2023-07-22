@@ -99,10 +99,6 @@ const COLUMNS = [
         accessor: "addQuantity",
         Cell: ({ row }) => {
           const [openModal, setOpenModal] = useState(false);
-          const [value, setValue] = useState(0);
-          const handleChange = (updatedValue) => {
-            row.values.addQuantity = updatedValue;
-          };
 
           const handleCloseModal = useCallback(() => {
             setOpenModal(false);
@@ -112,20 +108,19 @@ const COLUMNS = [
             setOpenModal(true);
           };
 
-          return (
-            <>
-              <AddCircleOutlineOutlinedIcon onClick={handleClick} />
-              <POPModel
-                open={openModal}
-                handleClose={handleCloseModal}
-                label={"AddQuantity"}
-                onChange={handleChange}
-                value={value}
-                setValue={setValue}
-                row={row}
-              />
-            </>
-          );
+          if (row.isSelected) {
+            return (
+              <>
+                <AddCircleOutlineOutlinedIcon onClick={handleClick} />
+                <POPModel
+                  open={openModal}
+                  handleClose={handleCloseModal}
+                  label={"Load Fund"}
+                  row={row}
+                />
+              </>
+            );
+          }
         },
       },
     ],

@@ -102,10 +102,7 @@ const GenerateMenu = () => {
       availableQuantity: row.values.availableQuantity,
     }));
     updateFoodMenu(dataTOSend);
-    // trigger();
   };
-
-  console.log(selectedFlatRows);
 
   return (
     <>
@@ -234,7 +231,7 @@ const GenerateMenu = () => {
         <span>
           Page{" "}
           <strong>
-            {data?.data.currentPage} of {data?.data?.totalPage}
+            {data?.data?.currentPage} of {data?.data?.totalPage}
           </strong>
         </span>
         <button
