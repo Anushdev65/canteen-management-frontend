@@ -1,4 +1,4 @@
-import AddIcon from "@mui/icons-material/Add";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import FastfoodIcon from "@mui/icons-material/Fastfood";
 import TaskAltIcon from "@mui/icons-material/TaskAlt";
 import { Fab, Grid, Tooltip, Typography, Zoom } from "@mui/material";
@@ -130,7 +130,7 @@ const GenerateMenu = () => {
         {selectedFlatRows.length > 0 && (
           <Grid item>
             <Tooltip
-              title="Add Menu"
+              title="Update Menu"
               placement="right-start"
               TransitionComponent={Zoom}
             >
@@ -140,7 +140,7 @@ const GenerateMenu = () => {
                 size="small"
                 onClick={handleAddMenu}
               >
-                <AddIcon />
+                <CheckCircleIcon />
               </Fab>
             </Tooltip>
           </Grid>

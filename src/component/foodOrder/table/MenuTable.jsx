@@ -181,7 +181,7 @@ const MenuTable = () => {
         handleClose={handleCloseModal}
         userOrder={userOrder}
       />
-      <table border={1} className="menutable-container">
+      <table className="menutable-container">
         <thead>
           {instance.getHeaderGroups().map((headerGroup) => (
             <tr key={headerGroup.id}>
