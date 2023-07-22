@@ -5,16 +5,45 @@ import {
   useTableInstance,
 } from "@tanstack/react-table";
 import React, { useCallback, useMemo, useState } from "react";
-import STUDENTS from "./students.json";
 import CheckOut from "../popModel/CheckOut";
+import STUDENTS from "./students.json";
 import KeyboardDoubleArrowRightIcon from "@mui/icons-material/KeyboardDoubleArrowRight";
 import KeyboardDoubleArrowDownIcon from "@mui/icons-material/KeyboardDoubleArrowDown";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import "../../../menuorder/menutable.css";
+
 const table = createTable();
 const defaultData = [...STUDENTS];
+
+const EditableCell = ({ getValue, instance, column, row }) => {
+  const initialValue = getValue();
+  const [value, setValue] = useState(initialValue);
+
+  const handleBlur = () => {
+    instance.options.meta.updateData(row, column.id, value);
+  };
+
+  if (column.id === "avlQuantity" && !row.getCanExpand())
+    return (
+      <input
+        type="number"
+        value={value}
+        min={0}
+        onChange={(e) => setValue(e.target.value)}
+        onBlur={handleBlur}
+      />
+    );
+  return <div>{value} </div>;
+};
+
+const defaultColumn = {
+  cell: (props) => <EditableCell {...props} />,
+};
 const MenuTable = () => {
+  const selectedItem = [];
+
+  const [userOrder, setUserOrder] = useState([]);
   const [expanded, setExpanded] = useState({});
   const [openModal, setOpenModal] = useState(false);
   const columns = useMemo(
@@ -81,8 +110,9 @@ const MenuTable = () => {
         id: "Int Quantity",
       }),
 
-      table.createDataColumn("email", {
-        id: "Available Quantity",
+      table.createDataColumn("quantity", {
+        id: "avlQuantity",
+        header: "Avl Quantity",
       }),
 
       table.createDataColumn("date_of_birth", {
@@ -91,11 +121,16 @@ const MenuTable = () => {
     ],
     []
   );
-  const selectedItem = [];
 
   const instance = useTableInstance(table, {
     data: defaultData,
     columns,
+    defaultColumn,
+    meta: {
+      updateData: (row, columnId, value) => {
+        handleChange(value, row);
+      },
+    },
     state: {
       expanded,
     },
@@ -105,7 +140,7 @@ const MenuTable = () => {
     getExpandedRowModel: getExpandedRowModel(),
   });
 
-  const handleChange = (e, row) => {
+  const handleChange = (value, row) => {
     const rowIncluded =
       selectedItem.length > 0
         ? selectedItem.filter(
@@ -115,34 +150,37 @@ const MenuTable = () => {
 
     if (rowIncluded.length)
       selectedItem.forEach((item) => {
-        if (item?.foodItem.email === row.original.email)
-          item.quantity = e.target.value;
+        if (item?.foodItem.email === row.original.email) item.quantity = value;
       });
 
     if (!rowIncluded.length)
-      selectedItem.push({ foodItem: row.original, quantity: e.target.value });
+      selectedItem.push({ foodItem: row.original, quantity: value });
   };
 
   const handleCloseModal = useCallback(() => {
     setOpenModal(false);
   }, []);
 
-  const handleSubmit = () => {
+  const handleSubmit = (e) => {
+    e.preventDefault();
     const finalOrder = [
       ...selectedItem?.map((item) => ({
-        food: item.foodItem.email,
+        food: item.foodItem,
         quantity: item.quantity,
       })),
     ];
+    setUserOrder(finalOrder);
 
-    console.log(finalOrder);
-
-    setOpenModal(true);
+    if (finalOrder.length > 0) setOpenModal(true);
   };
 
   return (
     <div>
-      <CheckOut open={openModal} handleClose={handleCloseModal} />
+      <CheckOut
+        open={openModal}
+        handleClose={handleCloseModal}
+        userOrder={userOrder}
+      />
       <table border={1} className="menutable-container">
         <thead>
           {instance.getHeaderGroups().map((headerGroup) => (
@@ -160,7 +198,7 @@ const MenuTable = () => {
             <tr key={row.id} className={`depth-${row.depth}`}>
               {row.getVisibleCells().map((cell) => (
                 <td key={cell.id}>
-                  {cell.column.id === "Available Quantity" ? (
+                  {/* {cell.column.id === "Available Quantity" ? (
                     <div style={{ paddingLeft: `${row.depth * 2}rem` }}>
                       {!row.getCanExpand() && (
                         <input
@@ -175,7 +213,8 @@ const MenuTable = () => {
                     </div>
                   ) : (
                     cell.renderCell()
-                  )}
+                  )} */}
+                  {cell.renderCell()}
                 </td>
               ))}
             </tr>

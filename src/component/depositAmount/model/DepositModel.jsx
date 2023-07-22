@@ -1,12 +1,6 @@
 import CloseIcon from "@mui/icons-material/Close";
 import ManageAccountsOutlinedIcon from "@mui/icons-material/ManageAccountsOutlined";
-import {
-  Button,
-  Checkbox,
-  FormControlLabel,
-  Grid,
-  TextField,
-} from "@mui/material";
+import { Button, Typography } from "@mui/material";
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -16,9 +10,16 @@ import DialogTitle from "@mui/material/DialogTitle";
 import IconButton from "@mui/material/IconButton";
 import Slide from "@mui/material/Slide";
 import { styled } from "@mui/material/styles";
+import { useFormik } from "formik";
 import PropTypes from "prop-types";
 import React, { useEffect, useState } from "react";
+import { fundLoadSchema } from "../../../schema/YupFundLoadSchema";
+import { useLoadFundByAdminMutation } from "../../../services/api/admin/auth";
 import "../../../styles/muimodal.css";
+import MUIError from "../../MUIError";
+import MUIToast from "../../MUIToast";
+import FundLoad from "../component/FundLoad";
+
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
@@ -91,11 +92,41 @@ BootstrapDialogTitle.propTypes = {
   onClose: PropTypes.func.isRequired,
 };
 
-export default function CheckOut({ open, handleClose, userOrder }) {
+export default function DepositModel({ open, handleClose, row }) {
+  const [loadFundByAdmin, { data, error, isSuccess }] =
+    useLoadFundByAdminMutation();
+  const {
+    touched,
+    errors,
+    values,
+    handleBlur,
+    handleChange,
+    handleSubmit,
+    handleReset,
+  } = useFormik({
+    initialValues: {
+      amount: "",
+    },
+    validationSchema: fundLoadSchema,
+    onSubmit: (values) => {
+      const body = {
+        amount: parseFloat(values.amount),
+      };
+      loadFundByAdmin({ body, id: row.original._id });
+    },
+  });
+
+  useEffect(() => {
+    if (isSuccess) {
+      handleClose();
+      handleReset();
+    }
+  }, [handleReset, isSuccess, handleClose]);
   return (
     <div>
       <BootstrapDialog
         onClose={() => {
+          handleReset();
           handleClose();
         }}
         aria-labelledby="customized-dialog-title"
@@ -109,84 +140,71 @@ export default function CheckOut({ open, handleClose, userOrder }) {
         <BootstrapDialogTitle
           id="customized-dialog-title"
           onClose={() => {
+            handleReset();
             handleClose();
           }}
         >
-          Your Order
+          Load Fund
         </BootstrapDialogTitle>
         <DialogContent dividers className="custom-dialog">
           <Container component="main" maxWidth="sm" sx={{ mb: 2 }}>
             <CssBaseline />
             <Box
               component="form"
-              noValidate
-              // onSubmit={handleSubmit}
-              sx={{ mt: 3 }}
+              onSubmit={handleSubmit}
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+              }}
             >
-              <Grid container spacing={2}>
-                <Grid item xs={12} sm={6}>
-                  <TextField
-                    autoComplete="given-name"
-                    name="firstName"
-                    required
-                    fullWidth
-                    id="firstName"
-                    label="First Name"
-                    autoFocus
-                  />
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                  <TextField
-                    required
-                    fullWidth
-                    id="lastName"
-                    label="Last Name"
-                    name="lastName"
-                    autoComplete="family-name"
-                  />
-                </Grid>
-                <Grid item xs={12}>
-                  <TextField
-                    required
-                    fullWidth
-                    id="email"
-                    label="Email Address"
-                    name="email"
-                    autoComplete="email"
-                  />
-                </Grid>
-                <Grid item xs={12}>
-                  <TextField
-                    required
-                    fullWidth
-                    name="password"
-                    label="Password"
-                    type="password"
-                    id="password"
-                    autoComplete="new-password"
-                  />
-                </Grid>
-                <Grid item xs={12}>
-                  <FormControlLabel
-                    control={
-                      <Checkbox value="allowExtraEmails" color="primary" />
-                    }
-                    label="I want to receive inspiration, marketing promotions and updates via email."
-                  />
-                </Grid>
-              </Grid>
-              <Button
-                type="submit"
+              <Typography mt={1} mb={2}>
+                {`This is fund load for ${row.original.firstName}`}
+              </Typography>
+              <FundLoad
+                label={"FundLoad"}
+                onChange={handleChange}
+                values={values}
+                error={Boolean(touched.amount && errors.amount)}
+                autoComplete="off"
+                name="amount"
+                required
                 fullWidth
+                id="amount"
+                onBlur={handleBlur}
+              />
+              <MUIError
+                touch={touched.amount}
+                error={errors.amount}
+                value={false}
+              />
+              <Button
+                id="button"
+                type="submit"
                 variant="contained"
+                size="large" // Use "small" size to reduce the button size
                 sx={{ mt: 3, mb: 2 }}
               >
-                Sign Up
+                {"Load Fund"}
               </Button>
             </Box>
           </Container>
         </DialogContent>
       </BootstrapDialog>
+      {data && (
+        <MUIToast
+          initialValue={true}
+          message={data.message}
+          severity="success"
+        />
+      )}
+      {error && (
+        <MUIToast
+          initialValue={true}
+          message={error.data.message}
+          severity="error"
+        />
+      )}
     </div>
   );
 }

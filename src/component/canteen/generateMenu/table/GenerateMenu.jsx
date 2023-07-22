@@ -2,6 +2,7 @@ import AddIcon from "@mui/icons-material/Add";
 import FastfoodIcon from "@mui/icons-material/Fastfood";
 import TaskAltIcon from "@mui/icons-material/TaskAlt";
 import { Fab, Grid, Tooltip, Typography, Zoom } from "@mui/material";
+import dayjs from "dayjs";
 import React, { useEffect, useMemo, useState } from "react";
 import { usePagination, useRowSelect, useSortBy, useTable } from "react-table";
 import "../../../../foodstyles/generatetable.css";
@@ -9,8 +10,8 @@ import {
   useLazyGetAllFoodItemQuery,
   useUpdateFoodMenuMutation,
 } from "../../../../services/api/canteen/foodItem";
-import { IndeterminateCheckbox } from "../../../IndeterminateCheckbox";
 import MUIToast from "../../../MUIToast";
+import { CheckBoxGenerateMenu } from "../component/CheckBoxGenerateMenu";
 import COLUMNS from "./Column";
 
 const GenerateMenu = () => {
@@ -54,7 +55,10 @@ const GenerateMenu = () => {
             id: "selection",
             Cell: ({ row }) => {
               return (
-                <IndeterminateCheckbox {...row.getToggleRowSelectedProps()} />
+                <CheckBoxGenerateMenu
+                  {...row.getToggleRowSelectedProps()}
+                  row={row}
+                />
               );
             },
           },
@@ -87,17 +91,21 @@ const GenerateMenu = () => {
   };
 
   const handleAddMenu = () => {
+    const today = dayjs().format("YYYY-MM-DD");
     const dataTOSend = selectedFlatRows.map((row) => ({
       id: row.original._id,
       availableTime: {
-        from: row.values.from.format("YYYY-MM-DDTHH:mm:ss"),
-        to: row.values.to.format("YYYY-MM-DDTHH:mm:ss"),
+        from: `${today}T${row.values.from.format("HH:mm:ss")}`,
+        to: `${today}T${row.values.to.format("HH:mm:ss")}`,
       },
       initialQuantity: row.values.initialQuantity,
       availableQuantity: row.values.availableQuantity,
     }));
     updateFoodMenu(dataTOSend);
+    // trigger();
   };
+
+  console.log(selectedFlatRows);
 
   return (
     <>
