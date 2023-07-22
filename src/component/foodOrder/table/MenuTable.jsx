@@ -1,3 +1,7 @@
+import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
+import KeyboardDoubleArrowDownIcon from "@mui/icons-material/KeyboardDoubleArrowDown";
+import KeyboardDoubleArrowRightIcon from "@mui/icons-material/KeyboardDoubleArrowRight";
 import {
   createTable,
   getCoreRowModel,
@@ -5,26 +9,24 @@ import {
   useTableInstance,
 } from "@tanstack/react-table";
 import React, { useCallback, useMemo, useState } from "react";
-import CheckOut from "../popModel/CheckOut";
-import STUDENTS from "./students.json";
-import KeyboardDoubleArrowRightIcon from "@mui/icons-material/KeyboardDoubleArrowRight";
-import KeyboardDoubleArrowDownIcon from "@mui/icons-material/KeyboardDoubleArrowDown";
-import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
-import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import "../../../menuorder/menutable.css";
+import { useGetAllFoodItemQuery } from "../../../services/api/canteen/foodItem";
+import { useGetAllFoodCategoryQuery } from "../../../services/api/canteen/foodcategory";
+import CheckOut from "../popModel/CheckOut";
+import ImageModel from "../popModel/ImageModel";
+import dayjs from "dayjs";
 
 const table = createTable();
-const defaultData = [...STUDENTS];
 
 const EditableCell = ({ getValue, instance, column, row }) => {
   const initialValue = getValue();
-  const [value, setValue] = useState(initialValue);
+  const [value, setValue] = useState(initialValue || "");
 
   const handleBlur = () => {
     instance.options.meta.updateData(row, column.id, value);
   };
 
-  if (column.id === "avlQuantity" && !row.getCanExpand())
+  if (column.id === "quantity" && !row.getCanExpand() && !row.originalSubRows)
     return (
       <input
         type="number"
@@ -40,15 +42,27 @@ const EditableCell = ({ getValue, instance, column, row }) => {
 const defaultColumn = {
   cell: (props) => <EditableCell {...props} />,
 };
+
 const MenuTable = () => {
   const selectedItem = [];
+  const [openImageModal, setOpenImageModal] = useState(false);
+  const [imgSrc, setImgSrc] = useState("");
+  const handleCloseImageModal = useCallback(() => {
+    setOpenImageModal(false);
+  }, []);
 
+  const handleImageEnlarge = (imgSrc) => {
+    setOpenImageModal(true);
+    setImgSrc(imgSrc);
+  };
+  const { data: foodItem } = useGetAllFoodItemQuery();
+  const { data: category } = useGetAllFoodCategoryQuery();
   const [userOrder, setUserOrder] = useState([]);
   const [expanded, setExpanded] = useState({});
   const [openModal, setOpenModal] = useState(false);
   const columns = useMemo(
     () => [
-      table.createDataColumn("firstName", {
+      table.createDataColumn("category", {
         id: "Item",
         header: (props) => (
           <>
@@ -92,38 +106,89 @@ const MenuTable = () => {
           );
         },
       }),
-      table.createDataColumn("middleName", {
+      table.createDataColumn("foodImage", {
         id: "Img",
+        cell: (props) => {
+          if (!props.row.getCanExpand() && !props.row.originalSubRows)
+            return (
+              <img
+                src={props.row.original.foodImage}
+                alt=""
+                height={30}
+                width={30}
+                onClick={() => handleImageEnlarge(props.row.original.foodImage)}
+              />
+            );
+        },
       }),
-      table.createDataColumn("lastName", {
+      table.createDataColumn("availableTime.from", {
         id: "Available Time",
+        cell: (props) => {
+          if (!props.row.getCanExpand() && !props.row.originalSubRows)
+            return (
+              <div>
+                {dayjs(props.row.original.availableTime.from).format("HH:mm A")}
+                {" -"}
+                {dayjs(props.row.original.availableTime.to).format("HH:mm A")}
+              </div>
+            );
+        },
       }),
 
-      table.createDataColumn("age", {
+      table.createDataColumn("rate", {
         id: "Rate",
       }),
 
-      table.createDataColumn((row) => row.phone[1], {
+      table.createDataColumn("discountedRate", {
         id: "Sub rate",
       }),
-      table.createDataColumn((row) => row.phone[2], {
+      table.createDataColumn("initialQuantity", {
         id: "Int Quantity",
       }),
 
-      table.createDataColumn("quantity", {
+      table.createDataColumn("availableQuantity", {
         id: "avlQuantity",
         header: "Avl Quantity",
       }),
 
-      table.createDataColumn("date_of_birth", {
-        id: "Price",
+      table.createDataColumn("quantity", {
+        id: "quantity",
+        header: "Quantity",
       }),
     ],
     []
   );
 
+  const filteredResults = useMemo(() => {
+    return category?.data?.results?.map((category) => {
+      const matchingResults = foodItem?.data?.results
+        .filter((result) => {
+          return result.category._id === category._id;
+        })
+        .map((result) => {
+          return {
+            ...result,
+            category: result.name,
+          };
+        });
+
+      return {
+        category: category.name,
+        foodImage: "",
+        availableTime: "",
+        rate: "",
+        discountedRate: "",
+        initialQuantity: "",
+        availableQuantity: "",
+        subRows: matchingResults?.length === 0 ? [] : matchingResults,
+      };
+    });
+  }, [category?.data?.results, foodItem?.data?.results]);
+
+  const tableData = useMemo(() => filteredResults || [], [filteredResults]);
+
   const instance = useTableInstance(table, {
-    data: defaultData,
+    data: tableData,
     columns,
     defaultColumn,
     meta: {
@@ -176,6 +241,11 @@ const MenuTable = () => {
 
   return (
     <div>
+      <ImageModel
+        open={openImageModal}
+        handleClose={handleCloseImageModal}
+        imgSrc={imgSrc}
+      />
       <CheckOut
         open={openModal}
         handleClose={handleCloseModal}
@@ -197,25 +267,7 @@ const MenuTable = () => {
           {instance.getRowModel().rows.map((row) => (
             <tr key={row.id} className={`depth-${row.depth}`}>
               {row.getVisibleCells().map((cell) => (
-                <td key={cell.id}>
-                  {/* {cell.column.id === "Available Quantity" ? (
-                    <div style={{ paddingLeft: `${row.depth * 2}rem` }}>
-                      {!row.getCanExpand() && (
-                        <input
-                          type="number"
-                          min={0}
-                          name={`email.${row.id}`}
-                          onChange={(e) => {
-                            handleChange(e, row);
-                          }}
-                        />
-                      )}
-                    </div>
-                  ) : (
-                    cell.renderCell()
-                  )} */}
-                  {cell.renderCell()}
-                </td>
+                <td key={cell.id}>{cell.renderCell()}</td>
               ))}
             </tr>
           ))}

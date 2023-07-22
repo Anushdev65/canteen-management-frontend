@@ -14,6 +14,7 @@ import StyleIcon from "@mui/icons-material/Style";
 import DiscountIcon from "@mui/icons-material/Discount";
 import CurrencyRupeeIcon from "@mui/icons-material/CurrencyRupee";
 import "../../../../foodstyles/fooditem.css";
+
 export const tags = [
   { label: "breakfast" },
   { label: "lunch" },
