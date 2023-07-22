@@ -34,7 +34,6 @@ export const COLUMNS = [
       const [openModal, setOpenModal] = useState(false);
 
       const handleCloseModal = useCallback(() => {
-        console.log("close called");
         setOpenModal(false);
       }, []);
 

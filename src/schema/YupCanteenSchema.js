@@ -47,3 +47,15 @@ export const foodItemSchema = Yup.object({
   tags: Yup.string().required("Tags required"),
   foodImage: Yup.string().required("Image required"),
 });
+
+export const incrementItemSchema = Yup.object({
+  quantity: Yup.string()
+    .required("Increment amount required.")
+    .test(
+      "increment-validation",
+      "Quantity must be greater than zero.",
+      function (value) {
+        return numberRegex.test(value) && parseInt(value) > 0;
+      }
+    ),
+});

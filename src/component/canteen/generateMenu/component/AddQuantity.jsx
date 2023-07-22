@@ -1,20 +1,18 @@
 import { TextField } from "@mui/material";
 import React from "react";
 import "../../../../foodstyles/generatetable.css";
-const AddQuantity = ({ onChange, label, setValue, value }) => {
-  const newHandle = (e) => {
-    const updatedValue = e.target.value;
-    onChange(updatedValue);
-    setValue(updatedValue);
-  };
+const AddQuantity = ({ onChange, label, values, onBlur, error, name }) => {
   return (
     <TextField
-      autoComplete="off"
       type="number"
+      name={name}
+      error={error}
+      autoComplete="off"
       id="outlined-number"
       label={label}
-      value={value}
-      onChange={newHandle}
+      value={values.quantity}
+      onChange={onChange}
+      onBlur={onBlur}
       InputLabelProps={{
         shrink: true,
       }}

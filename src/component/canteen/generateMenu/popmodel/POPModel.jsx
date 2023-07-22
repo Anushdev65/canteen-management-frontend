@@ -1,5 +1,6 @@
 import CloseIcon from "@mui/icons-material/Close";
 import ManageAccountsOutlinedIcon from "@mui/icons-material/ManageAccountsOutlined";
+import { Button } from "@mui/material";
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -9,11 +10,15 @@ import DialogTitle from "@mui/material/DialogTitle";
 import IconButton from "@mui/material/IconButton";
 import Slide from "@mui/material/Slide";
 import { styled } from "@mui/material/styles";
+import { useFormik } from "formik";
 import PropTypes from "prop-types";
 import React, { useEffect, useState } from "react";
-import AddQuantity from "../component/AddQuantity";
+import { incrementItemSchema } from "../../../../schema/YupCanteenSchema";
+import { useAddFoodAmountMutation } from "../../../../services/api/canteen/foodItem";
 import "../../../../styles/muimodal.css";
-import { Button } from "@mui/material";
+import MUIError from "../../../MUIError";
+import AddQuantity from "../component/AddQuantity";
+import MUIToast from "../../../MUIToast";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -87,22 +92,41 @@ BootstrapDialogTitle.propTypes = {
   onClose: PropTypes.func.isRequired,
 };
 
-export default function POPModel({
-  open,
-  handleClose,
-  onChange,
-  setValue,
-  value,
-  row,
-}) {
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log("clicked", value, row);
-  };
+export default function POPModel({ open, handleClose, row }) {
+  const [addFoodAmount, { data, error, isSuccess }] =
+    useAddFoodAmountMutation();
+  const {
+    touched,
+    errors,
+    values,
+    handleBlur,
+    handleChange,
+    handleSubmit,
+    handleReset,
+  } = useFormik({
+    initialValues: {
+      quantity: "",
+    },
+    validationSchema: incrementItemSchema,
+    onSubmit: (values) => {
+      const body = {
+        quantity: parseFloat(values.quantity),
+      };
+      addFoodAmount({ body, id: row.original._id });
+    },
+  });
+
+  useEffect(() => {
+    if (isSuccess) {
+      handleClose();
+      handleReset();
+    }
+  }, [handleReset, isSuccess, handleClose]);
   return (
     <div>
       <BootstrapDialog
         onClose={() => {
+          handleReset();
           handleClose();
         }}
         aria-labelledby="customized-dialog-title"
@@ -116,6 +140,7 @@ export default function POPModel({
         <BootstrapDialogTitle
           id="customized-dialog-title"
           onClose={() => {
+            handleReset();
             handleClose();
           }}
         >
@@ -134,10 +159,21 @@ export default function POPModel({
               }}
             >
               <AddQuantity
-                label={"AddQuantity"}
-                onChange={onChange}
-                value={value}
-                setValue={setValue}
+                label={"IncrementAmount"}
+                onChange={handleChange}
+                values={values}
+                error={Boolean(touched.quantity && errors.quantity)}
+                autoComplete="off"
+                name="quantity"
+                required
+                fullWidth
+                id="quantity"
+                onBlur={handleBlur}
+              />
+              <MUIError
+                touch={touched.quantity}
+                error={errors.quantity}
+                value={false}
               />
               <Button
                 id="button"
@@ -152,6 +188,20 @@ export default function POPModel({
           </Container>
         </DialogContent>
       </BootstrapDialog>
+      {data && (
+        <MUIToast
+          initialValue={true}
+          message={data.message}
+          severity="success"
+        />
+      )}
+      {error && (
+        <MUIToast
+          initialValue={true}
+          message={error.data.message}
+          severity="error"
+        />
+      )}
     </div>
   );
 }

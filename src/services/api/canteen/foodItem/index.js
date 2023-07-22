@@ -69,6 +69,17 @@ export const foodItemApi = createApi({
       invalidatesTags: ["getAllFoodItem"],
     }),
 
+    addFoodAmount: builder.mutation({
+      query: ({ body, id }) => {
+        return {
+          url: `/food/add-quantity/${id}`,
+          method: "PATCH",
+          body: body,
+        };
+      },
+      invalidatesTags: ["getAllFoodItem"],
+    }),
+
     deleteFoodItem: builder.mutation({
       query: (id) => {
         return {
@@ -90,4 +101,5 @@ export const {
   useUpdateFoodItemMutation,
   useUpdateFoodMenuMutation,
   useDeleteFoodItemMutation,
+  useAddFoodAmountMutation,
 } = foodItemApi;
