@@ -77,7 +77,6 @@ export const foodItemApi = createApi({
           body: body,
         };
       },
-      invalidatesTags: ["getAllFoodItem"],
     }),
 
     deleteFoodItem: builder.mutation({

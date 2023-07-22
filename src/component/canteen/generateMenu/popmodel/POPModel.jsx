@@ -19,6 +19,7 @@ import "../../../../styles/muimodal.css";
 import MUIError from "../../../MUIError";
 import AddQuantity from "../component/AddQuantity";
 import MUIToast from "../../../MUIToast";
+import CircularProgress from "@mui/material/CircularProgress";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -93,7 +94,7 @@ BootstrapDialogTitle.propTypes = {
 };
 
 export default function POPModel({ open, handleClose, row }) {
-  const [addFoodAmount, { data, error, isSuccess }] =
+  const [addFoodAmount, { data, error, isSuccess, isLoading }] =
     useAddFoodAmountMutation();
   const {
     touched,
@@ -118,10 +119,14 @@ export default function POPModel({ open, handleClose, row }) {
 
   useEffect(() => {
     if (isSuccess) {
-      handleClose();
-      handleReset();
+      setTimeout(() => {
+        handleClose();
+        handleReset();
+        window.location.href = "/generate-menu";
+      }, 3000);
     }
   }, [handleReset, isSuccess, handleClose]);
+
   return (
     <div>
       <BootstrapDialog
@@ -149,6 +154,7 @@ export default function POPModel({ open, handleClose, row }) {
         <DialogContent dividers className="custom-dialog">
           <Container component="main" maxWidth="sm" sx={{ mb: 2 }}>
             <CssBaseline />
+
             <Box
               component="form"
               onSubmit={handleSubmit}
@@ -158,32 +164,46 @@ export default function POPModel({ open, handleClose, row }) {
                 alignItems: "center",
               }}
             >
-              <AddQuantity
-                label={"IncrementAmount"}
-                onChange={handleChange}
-                values={values}
-                error={Boolean(touched.quantity && errors.quantity)}
-                autoComplete="off"
-                name="quantity"
-                required
-                fullWidth
-                id="quantity"
-                onBlur={handleBlur}
-              />
-              <MUIError
-                touch={touched.quantity}
-                error={errors.quantity}
-                value={false}
-              />
-              <Button
-                id="button"
-                type="submit"
-                variant="contained"
-                size="large" // Use "small" size to reduce the button size
-                sx={{ mt: 3, mb: 2 }}
-              >
-                {"Add Quantity"}
-              </Button>
+              {isLoading || data ? (
+                <Box
+                  sx={{
+                    marginTop: "45px",
+                    marginBottom: "45px",
+                  }}
+                >
+                  <CircularProgress />
+                </Box>
+              ) : (
+                <>
+                  <AddQuantity
+                    label={"IncrementAmount"}
+                    onChange={handleChange}
+                    values={values}
+                    error={Boolean(touched.quantity && errors.quantity)}
+                    autoComplete="off"
+                    name="quantity"
+                    required
+                    fullWidth
+                    id="quantity"
+                    onBlur={handleBlur}
+                  />
+                  <MUIError
+                    touch={touched.quantity}
+                    error={errors.quantity}
+                    value={false}
+                  />
+
+                  <Button
+                    id="button"
+                    type="submit"
+                    variant="contained"
+                    size="large" // Use "small" size to reduce the button size
+                    sx={{ mt: 3, mb: 2 }}
+                  >
+                    {"Add Quantity"}
+                  </Button>
+                </>
+              )}
             </Box>
           </Container>
         </DialogContent>
