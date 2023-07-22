@@ -5,7 +5,9 @@ const LandingContent = () => {
   return (
     <div className={styles.animationContainer}>
       <div className={styles.container}>
-        <div className={styles.floatingText}>Welcome to Deerwalk Foods</div>
+        <div className={styles.floatingText}>
+          <img src="logodeerwalk.png"></img>Welcome to Deerwalk Foods
+        </div>
       </div>
     </div>
   );

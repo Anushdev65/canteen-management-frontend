@@ -4,6 +4,10 @@ import FoodQuantity from "./FoodQuantity";
 import dayjs from "dayjs";
 import "../../../../foodstyles/generatetable.css";
 
+const capitalizeFirstLetter = (str) => {
+  return str.charAt(0).toUpperCase() + str.slice(1);
+};
+
 const COLUMNS = [
   {
     Header: "SN",
@@ -12,7 +16,11 @@ const COLUMNS = [
   {
     Header: "Food Items",
     accessor: "name",
-    Cell: ({ row }) => <div style={{ width: "210px" }}>{row.values.name}</div>,
+    Cell: ({ row }) => (
+      <div style={{ width: "210px" }}>
+        {capitalizeFirstLetter(row.values.name)}
+      </div>
+    ),
   },
   {
     Header: "Available",
