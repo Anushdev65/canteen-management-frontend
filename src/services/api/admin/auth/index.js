@@ -122,6 +122,16 @@ export const adminApi = createApi({
       invalidatesTags: ["getUserProfile", "getAllUsers"],
     }),
 
+    loadFundByAdmin: builder.mutation({
+      query: ({ body, id }) => {
+        return {
+          url: `/add-student-deposits/${id}`,
+          method: "POST",
+          body,
+        };
+      },
+    }),
+
     deleteUserByAdmin: builder.mutation({
       query: (id) => {
         return {
@@ -160,4 +170,5 @@ export const {
   useUpdateUserByAdminMutation,
   useDeleteUserByAdminMutation,
   useLazyGetUserByIdQuery,
+  useLoadFundByAdminMutation,
 } = adminApi;

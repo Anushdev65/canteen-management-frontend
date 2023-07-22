@@ -102,6 +102,7 @@ const GenerateMenu = () => {
       availableQuantity: row.values.availableQuantity,
     }));
     updateFoodMenu(dataTOSend);
+    // trigger();
   };
 
   console.log(selectedFlatRows);

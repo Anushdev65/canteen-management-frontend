@@ -1,3 +1,7 @@
+import AddCircleOutlineOutlinedIcon from "@mui/icons-material/AddCircleOutlineOutlined";
+import { useCallback, useState } from "react";
+import DepositModel from "./depositAmount/model/DepositModel";
+
 export const COLUMNS = [
   {
     Header: "First Name",
@@ -22,5 +26,35 @@ export const COLUMNS = [
   {
     Header: "Role",
     accessor: "roles",
+  },
+  {
+    Header: "Deposit",
+    accessor: "deposit",
+    Cell: ({ row }) => {
+      const [openModal, setOpenModal] = useState(false);
+
+      const handleCloseModal = useCallback(() => {
+        console.log("close called");
+        setOpenModal(false);
+      }, []);
+
+      const handleClick = () => {
+        setOpenModal(true);
+      };
+
+      if (row.isSelected) {
+        return (
+          <>
+            <AddCircleOutlineOutlinedIcon onClick={handleClick} />
+            <DepositModel
+              open={openModal}
+              handleClose={handleCloseModal}
+              label={"Load Fund"}
+              row={row}
+            />
+          </>
+        );
+      }
+    },
   },
 ];
