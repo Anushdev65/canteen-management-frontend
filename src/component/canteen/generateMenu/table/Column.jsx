@@ -1,8 +1,10 @@
-import React from "react";
-import FoodAvailableTime from "./FoodAvailableTime";
-import FoodQuantity from "./FoodQuantity";
+import AddCircleOutlineOutlinedIcon from "@mui/icons-material/AddCircleOutlineOutlined";
 import dayjs from "dayjs";
+import React, { useCallback, useState } from "react";
 import "../../../../foodstyles/generatetable.css";
+import FoodAvailableTime from "../component/FoodAvailableTime";
+import FoodQuantity from "../component/FoodQuantity";
+import POPModel from "../popmodel/POPModel";
 
 const COLUMNS = [
   {
@@ -15,7 +17,7 @@ const COLUMNS = [
     Cell: ({ row }) => <div style={{ width: "210px" }}>{row.values.name}</div>,
   },
   {
-    Header: "Available",
+    Header: "Available Time",
 
     columns: [
       {
@@ -84,16 +86,45 @@ const COLUMNS = [
         Header: "Available Quantity",
         accessor: "availableQuantity",
         Cell: ({ row }) => {
-          const handleChange = (updatedValue) => {
-            row.values.availableQuantity = updatedValue;
-          };
-
           return (
             <FoodQuantity
-              onChange={handleChange}
               value={row.values.availableQuantity || ""}
               disable={true}
             />
+          );
+        },
+      },
+      {
+        Header: "Add Quantity",
+        accessor: "addQuantity",
+        Cell: ({ row }) => {
+          const [openModal, setOpenModal] = useState(false);
+          const [value, setValue] = useState(0);
+          const handleChange = (updatedValue) => {
+            row.values.addQuantity = updatedValue;
+          };
+
+          const handleCloseModal = useCallback(() => {
+            setOpenModal(false);
+          }, []);
+
+          const handleClick = () => {
+            setOpenModal(true);
+          };
+
+          return (
+            <>
+              <AddCircleOutlineOutlinedIcon onClick={handleClick} />
+              <POPModel
+                open={openModal}
+                handleClose={handleCloseModal}
+                label={"AddQuantity"}
+                onChange={handleChange}
+                value={value}
+                setValue={setValue}
+                row={row}
+              />
+            </>
           );
         },
       },
