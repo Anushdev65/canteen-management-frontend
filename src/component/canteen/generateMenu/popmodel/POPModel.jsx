@@ -1,12 +1,5 @@
 import CloseIcon from "@mui/icons-material/Close";
 import ManageAccountsOutlinedIcon from "@mui/icons-material/ManageAccountsOutlined";
-import {
-  Button,
-  Checkbox,
-  FormControlLabel,
-  Grid,
-  TextField,
-} from "@mui/material";
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -18,7 +11,10 @@ import Slide from "@mui/material/Slide";
 import { styled } from "@mui/material/styles";
 import PropTypes from "prop-types";
 import React, { useEffect, useState } from "react";
-import "../../../styles/muimodal.css";
+import AddQuantity from "../component/AddQuantity";
+import "../../../../styles/muimodal.css";
+import { Button } from "@mui/material";
+
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
@@ -91,7 +87,18 @@ BootstrapDialogTitle.propTypes = {
   onClose: PropTypes.func.isRequired,
 };
 
-export default function CheckOut({ open, handleClose, userOrder }) {
+export default function POPModel({
+  open,
+  handleClose,
+  onChange,
+  setValue,
+  value,
+  row,
+}) {
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log("clicked", value, row);
+  };
   return (
     <div>
       <BootstrapDialog
@@ -112,76 +119,34 @@ export default function CheckOut({ open, handleClose, userOrder }) {
             handleClose();
           }}
         >
-          Your Order
+          Add Quantity
         </BootstrapDialogTitle>
         <DialogContent dividers className="custom-dialog">
           <Container component="main" maxWidth="sm" sx={{ mb: 2 }}>
             <CssBaseline />
             <Box
               component="form"
-              noValidate
-              // onSubmit={handleSubmit}
-              sx={{ mt: 3 }}
+              onSubmit={handleSubmit}
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+              }}
             >
-              <Grid container spacing={2}>
-                <Grid item xs={12} sm={6}>
-                  <TextField
-                    autoComplete="given-name"
-                    name="firstName"
-                    required
-                    fullWidth
-                    id="firstName"
-                    label="First Name"
-                    autoFocus
-                  />
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                  <TextField
-                    required
-                    fullWidth
-                    id="lastName"
-                    label="Last Name"
-                    name="lastName"
-                    autoComplete="family-name"
-                  />
-                </Grid>
-                <Grid item xs={12}>
-                  <TextField
-                    required
-                    fullWidth
-                    id="email"
-                    label="Email Address"
-                    name="email"
-                    autoComplete="email"
-                  />
-                </Grid>
-                <Grid item xs={12}>
-                  <TextField
-                    required
-                    fullWidth
-                    name="password"
-                    label="Password"
-                    type="password"
-                    id="password"
-                    autoComplete="new-password"
-                  />
-                </Grid>
-                <Grid item xs={12}>
-                  <FormControlLabel
-                    control={
-                      <Checkbox value="allowExtraEmails" color="primary" />
-                    }
-                    label="I want to receive inspiration, marketing promotions and updates via email."
-                  />
-                </Grid>
-              </Grid>
+              <AddQuantity
+                label={"AddQuantity"}
+                onChange={onChange}
+                value={value}
+                setValue={setValue}
+              />
               <Button
+                id="button"
                 type="submit"
-                fullWidth
                 variant="contained"
+                size="large" // Use "small" size to reduce the button size
                 sx={{ mt: 3, mb: 2 }}
               >
-                Sign Up
+                {"Add Quantity"}
               </Button>
             </Box>
           </Container>
