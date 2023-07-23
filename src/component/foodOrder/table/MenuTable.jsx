@@ -183,6 +183,10 @@ const MenuTable = () => {
           };
         });
 
+      const newData = matchingResults?.filter(
+        (result) => result.isInMenu === true
+      );
+
       return {
         category: category.name,
         foodImage: "",
@@ -191,7 +195,7 @@ const MenuTable = () => {
         discountedRate: "",
         initialQuantity: "",
         availableQuantity: "",
-        subRows: matchingResults?.length === 0 ? [] : matchingResults,
+        subRows: newData?.length === 0 ? [] : newData,
       };
     });
   }, [category?.data?.results, foodItem?.data?.results]);

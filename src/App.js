@@ -21,6 +21,7 @@ import AdminsRoute from "./utils/AdminsRoute";
 import CanteenRoute from "./utils/CanteenRoute";
 import FoodOrderRoute from "./utils/FoodOrderRoute";
 import ProtectedRoute from "./utils/ProtectedRoute";
+import TodaysOrder from "./component/foodOrder/canteenOrder/TodaysOrder";
 
 function App() {
   return (
@@ -46,6 +47,7 @@ function App() {
             <Route path="/food-item" element={<FoodItemTable />} />
             <Route path="/create-fooditem" element={<CreateFoodItem />} />
             <Route path="/generate-menu" element={<GenerateMenu />} />
+            <Route path="/todays-order" element={<TodaysOrder />} />
           </Route>
 
           <Route element={<FoodOrderRoute />}>
