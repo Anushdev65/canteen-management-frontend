@@ -38,14 +38,6 @@ box-shadow: 7px 7px 3px 0 rgba(182, 184, 184, 0.7);
     background-color: rgb(209, 207, 207);
 }
 
-
-/* .table-data td,
-.table-data th {
-    border: 1px solid #ddd;
-    padding: 8px;
-
-} */
-
 .menutable-container tr:nth-child(even) {
     background-color: #f5f3f3;
 

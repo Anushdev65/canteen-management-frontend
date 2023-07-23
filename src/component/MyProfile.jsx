@@ -5,6 +5,7 @@ import GroupsIcon from "@mui/icons-material/Groups";
 import MaleIcon from "@mui/icons-material/Male";
 import PersonIcon from "@mui/icons-material/Person";
 import PhoneIcon from "@mui/icons-material/Phone";
+import CurrencyRupeeIcon from "@mui/icons-material/CurrencyRupee";
 import {
   Box,
   Button,
@@ -25,7 +26,7 @@ const MyProfile = () => {
   const { id } = useParams();
   const { data: myProfileData } = useGetMyProfileQuery();
   const [trigger, { data: userData }] = useLazyGetUserByIdQuery();
-
+  const [totalBalance, setUserBalance] = useState(null);
   useEffect(() => {
     if (id) {
       trigger(id);
@@ -52,6 +53,15 @@ const MyProfile = () => {
     }
   };
 
+  //const userBalance = data?.data.balance;
+  useEffect(() => {
+    if (data) {
+      console.log("userData:", data);
+      setUserBalance(data?.data?.totalBalance);
+    }
+  }, [data]);
+  const isAdminOrCanteen =
+    data?.data.roles.includes("admin") || data?.data.roles.includes("canteen");
   return (
     <>
       <MUIModal open={openModal} handleClose={handleCloseModal} />
@@ -222,6 +232,20 @@ const MyProfile = () => {
                         .join(",")}
                     </Typography>
                   </Grid>
+                  {!isAdminOrCanteen && totalBalance !== null && (
+                    <Grid item xs={12}>
+                      <Typography
+                        sx={{
+                          display: "flex",
+                          gap: "10px",
+                          flexDirection: "row",
+                        }}
+                      >
+                        <CurrencyRupeeIcon /> Your Balance:
+                        {totalBalance}
+                      </Typography>
+                    </Grid>
+                  )}
                 </Grid>
               )}
             </Box>

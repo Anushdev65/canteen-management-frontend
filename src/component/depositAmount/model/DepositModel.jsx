@@ -19,7 +19,6 @@ import "../../../styles/muimodal.css";
 import MUIError from "../../MUIError";
 import MUIToast from "../../MUIToast";
 import FundLoad from "../component/FundLoad";
-
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
