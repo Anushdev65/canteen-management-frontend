@@ -174,6 +174,7 @@ const MenuTable = () => {
     return category?.data?.results?.map((category) => {
       const matchingResults = foodItem?.data?.results
         .filter((result) => {
+          console.log(result);
           return result.category._id === category._id;
         })
         .map((result) => {
@@ -262,65 +263,7 @@ const MenuTable = () => {
     }
   }, [isSuccess]);
 
-  return (
-    <>
-      {isLoading || data ? (
-        <MUILoading />
-      ) : (
-        <div>
-          <ImageModel
-            open={openImageModal}
-            handleClose={handleCloseImageModal}
-            imgSrc={imgSrc}
-          />
-          <table className="menutable-container">
-            <thead>
-              {instance.getHeaderGroups().map((headerGroup) => (
-                <tr key={headerGroup.id}>
-                  {headerGroup.headers.map((header) => (
-                    <th key={header.id} colSpan={header.colSpan}>
-                      {header.isPlaceholder ? null : header.renderHeader()}
-                    </th>
-                  ))}
-                </tr>
-              ))}
-            </thead>
-            <tbody>
-              {instance.getRowModel().rows.map((row) => (
-                <tr key={row.id} className={`depth-${row.depth}`}>
-                  {row.getVisibleCells().map((cell) => (
-                    <td key={cell.id}>{cell.renderCell()}</td>
-                  ))}
-                </tr>
-              ))}
-            </tbody>
-          </table>
-          <Button
-            className="btn-button"
-            onClick={handleSubmit}
-            // disabled={totalAmount > 0 ? false : true}
-          >
-            {totalAmount > 0 ? `Rs: ${totalAmount}` : "Place order"}
-          </Button>
-        </div>
-      )}
-
-      {data && (
-        <MUIToast
-          initialValue={true}
-          message={data.message}
-          severity="success"
-        />
-      )}
-      {error && (
-        <MUIToast
-          initialValue={true}
-          message={error.data.message}
-          severity="error"
-        />
-      )}
-    </>
-  );
+  return <></>;
 };
 
 export default MenuTable;

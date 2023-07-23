@@ -53,7 +53,6 @@ const MyProfile = () => {
     }
   };
 
-  //const userBalance = data?.data.balance;
   useEffect(() => {
     if (data) {
       console.log("userData:", data);
