@@ -25,7 +25,7 @@ export const foodOrderApi = createApi({
           body: body,
         };
       },
-      invalidatesTags: ["getAllOrders"],
+      invalidatesTags: ["getMyOrders"],
     }),
 
     getMyOrders: builder.query({
@@ -35,7 +35,7 @@ export const foodOrderApi = createApi({
           method: "GET",
         };
       },
-      providesTags: ["getAllOrders"],
+      providesTags: ["getMyOrders"],
     }),
 
     getAllOrders: builder.query({
@@ -47,6 +47,7 @@ export const foodOrderApi = createApi({
           method: "GET",
         };
       },
+      providesTags: ["getAllOrders"],
     }),
 
     cancelOrder: builder.mutation({
@@ -66,7 +67,7 @@ export const foodOrderApi = createApi({
           method: "PATCH",
         };
       },
-      invalidatesTags: ["getAllOrders"],
+      invalidatesTags: ["getAllOrders", "getMyOrders"],
     }),
 
     getServedOrders: builder.query({
@@ -85,6 +86,7 @@ export const foodOrderApi = createApi({
           method: "PATCH",
         };
       },
+      invalidatesTags: ["getAllOrders"],
     }),
   }),
 });
