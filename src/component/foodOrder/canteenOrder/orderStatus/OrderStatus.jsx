@@ -9,83 +9,131 @@ import {
 } from "@mui/material";
 import Stack from "@mui/material/Stack";
 import React, { useEffect, useState } from "react";
-import { useLazyGetAllOrdersQuery } from "../../../../services/api/foodOrder";
+import {
+  useCancelOrderMutation,
+  useDeliverOrderMutation,
+  useLazyGetAllOrdersQuery,
+  useServeOrderMutation,
+} from "../../../../services/api/foodOrder";
 import "./order.css";
-
-const tableData = [
-  {
-    id: 1,
-    name: "Nitan Thapa",
-    time: 30,
-    item: "Coffee",
-  },
-];
-
-const userId = [
-  1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22,
-  23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40,
-];
+import MUIToast from "../../../MUIToast";
 
 function OrderStatus({ user }) {
-  const [showTable, setShowTable] = useState(false);
-  const [currentButton, setCurrentButton] = useState(null);
+  const [userState, setuserState] = useState("");
+  const [showTable, setShowTable] = useState(true);
+  const [buttonStatus, setButtonStatus] = useState("onProcess");
   const [trigger, { data }] = useLazyGetAllOrdersQuery();
   const [onProcess, setOnProcess] = useState([]);
   const [served, setServed] = useState([]);
-  const [deliverd, setDelivered] = useState([]);
+  const [delivered, setDelivered] = useState([]);
+  const [expired, setExpired] = useState([]);
+  const [serveOrder, { data: serveData, error: serveError }] =
+    useServeOrderMutation();
+  const [deliverOrder, { data: deliverData, error: deliverError }] =
+    useDeliverOrderMutation();
+  const [cancelOrder, { data: cancelData, error: cancelError }] =
+    useCancelOrderMutation();
 
   useEffect(() => {
     trigger();
   }, [trigger]);
 
   const handleIdClicked = (id) => {
-    setCurrentButton("onProcess");
+    setButtonStatus("onProcess");
+
+    userState === id ? setuserState("") : setuserState(id);
     trigger({ _userId: id });
     setShowTable(true);
   };
 
-  const handleButtonClicked = (label) => {
-    setCurrentButton(label);
+  const handleButtonStatus = (label) => {
+    setButtonStatus(label);
     setShowTable(true);
-  };
-
-  const handleClick = (id) => {
-    console.log(`Button clicked for row with id ${id}`);
   };
 
   useEffect(() => {
     const onProcess = data?.data?.results?.filter(
       (data) => data.orderStatus === "onProcess"
     );
-
     const served = data?.data?.results?.filter(
       (data) => data.orderStatus === "served"
     );
     const delivered = data?.data?.results?.filter(
       (data) => data.orderStatus === "delivered"
     );
+    const expired = data?.data?.results?.filter(
+      (data) => data.orderStatus === "expired"
+    );
 
     setOnProcess(onProcess);
     setServed(served);
-    setDelivered(deliverd);
+    setExpired(expired);
+    setDelivered(delivered);
   }, [data]);
 
-  const renderButton = (row) => {
+  const handleServe = (id) => {
+    serveOrder(id);
+  };
+
+  const handleCancel = (id) => {
+    cancelOrder(id);
+  };
+
+  const handleDeliver = (id) => {
+    deliverOrder(id);
+  };
+
+  const renderButton = (id) => {
     return (
-      <React.Fragment>
-        <Button variant="contained" onClick={() => handleClick(row.id)}>
-          Ready
-        </Button>
-        {currentButton === "tobeServed" && (
-          <Button variant="contained" onClick={() => handleClick(row.id)}>
-            Reset
-          </Button>
-        )}
-        <Button variant="contained" onClick={() => handleClick(row.id)}>
-          Cancel
-        </Button>
-      </React.Fragment>
+      buttonStatus !== "expired" && (
+        <React.Fragment>
+          {buttonStatus === "onProcess" && (
+            <Button variant="contained" onClick={() => handleServe(id)}>
+              Serve
+            </Button>
+          )}
+          {buttonStatus === "served" && (
+            <Button variant="contained" onClick={() => handleDeliver(id)}>
+              Deliver
+            </Button>
+          )}
+          {(buttonStatus === "onProcess" || buttonStatus === "served") && (
+            <Button variant="contained" onClick={() => handleCancel(id)}>
+              Cancel
+            </Button>
+          )}
+        </React.Fragment>
+      )
     );
+  };
+
+  const handleAllUsers = () => {
+    trigger();
+    setShowTable(true);
+  };
+
+  const renderData = () => {
+    let filteredData = [];
+
+    if (buttonStatus === "onProcess") {
+      filteredData = onProcess || [];
+    } else if (buttonStatus === "served") {
+      filteredData = served || [];
+    } else if (buttonStatus === "delivered") {
+      filteredData = delivered || [];
+    } else if (buttonStatus === "expired") {
+      filteredData = expired || [];
+    }
+
+    return filteredData.map((result) => (
+      <TableRow key={result._id}>
+        <TableCell>{result._id}</TableCell>
+        <TableCell>{result.user.firstName}</TableCell>
+        <TableCell>{result.food.name}</TableCell>
+
+        <TableCell>{renderButton(result._id)}</TableCell>
+      </TableRow>
+    ));
   };
 
   return (
@@ -93,6 +141,7 @@ function OrderStatus({ user }) {
       <div className="container">
         <div className="order">
           <h3>Today's Order</h3>
+          <Button onClick={handleAllUsers}>All users</Button>
           <div>
             {user.map((user) => (
               <button
@@ -101,7 +150,7 @@ function OrderStatus({ user }) {
                 onClick={() => handleIdClicked(user._id)}
                 style={{ margin: "5px", padding: "10px", fontSize: "16px" }}
               >
-                {user._id}
+                {user.userId || user._id}
               </button>
             ))}
           </div>
@@ -111,21 +160,27 @@ function OrderStatus({ user }) {
           <Stack className="button" direction="row" spacing={2}>
             <Button
               variant="contained"
-              onClick={() => handleButtonClicked("onProcess")}
+              onClick={() => handleButtonStatus("onProcess")}
             >
               On Process
             </Button>
             <Button
               variant="contained"
-              onClick={() => handleButtonClicked("tobeServed")}
+              onClick={() => handleButtonStatus("served")}
             >
               To be Served
             </Button>
             <Button
               variant="contained"
-              onClick={() => handleButtonClicked("delivered")}
+              onClick={() => handleButtonStatus("delivered")}
             >
               Delivered
+            </Button>
+            <Button
+              variant="contained"
+              onClick={() => handleButtonStatus("expired")}
+            >
+              Expired
             </Button>
           </Stack>
           {showTable && (
@@ -140,22 +195,55 @@ function OrderStatus({ user }) {
                     <TableCell>Actions</TableCell>
                   </TableRow>
                 </TableHead>
-                <TableBody>
-                  {data?.data?.results?.map((result) => (
-                    <TableRow key={result._id}>
-                      <TableCell>{result._id}</TableCell>
-                      <TableCell>{result.user.firstName}</TableCell>
-                      <TableCell>{result.food.name}</TableCell>
-
-                      <TableCell>{renderButton(result)}</TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
+                <TableBody>{renderData()}</TableBody>
               </Table>
             </TableContainer>
           )}
         </div>
       </div>
+      {serveData && (
+        <MUIToast
+          initialValue={true}
+          message={serveData.message}
+          severity="success"
+        />
+      )}
+      {serveError && (
+        <MUIToast
+          initialValue={true}
+          message={serveError.data.message}
+          severity="error"
+        />
+      )}
+      {deliverData && (
+        <MUIToast
+          initialValue={true}
+          message={deliverData.message}
+          severity="success"
+        />
+      )}
+      {deliverError && (
+        <MUIToast
+          initialValue={true}
+          message={deliverError.data.message}
+          severity="error"
+        />
+      )}
+
+      {cancelData && (
+        <MUIToast
+          initialValue={true}
+          message={cancelData.message}
+          severity="success"
+        />
+      )}
+      {cancelError && (
+        <MUIToast
+          initialValue={true}
+          message={cancelError.data.message}
+          severity="error"
+        />
+      )}
     </>
   );
 }
