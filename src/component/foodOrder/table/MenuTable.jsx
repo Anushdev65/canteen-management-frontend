@@ -2,25 +2,31 @@ import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import KeyboardDoubleArrowDownIcon from "@mui/icons-material/KeyboardDoubleArrowDown";
 import KeyboardDoubleArrowRightIcon from "@mui/icons-material/KeyboardDoubleArrowRight";
+import { Button } from "@mui/material";
 import {
   createTable,
   getCoreRowModel,
   getExpandedRowModel,
   useTableInstance,
 } from "@tanstack/react-table";
-import React, { useCallback, useMemo, useState } from "react";
+import dayjs from "dayjs";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import "../../../menuorder/menutable.css";
 import { useGetAllFoodItemQuery } from "../../../services/api/canteen/foodItem";
 import { useGetAllFoodCategoryQuery } from "../../../services/api/canteen/foodcategory";
-import CheckOut from "../popModel/CheckOut";
+import { useOrderFoodMutation } from "../../../services/api/foodOrder";
+import MUILoading from "../../MUILoading";
+import MUIToast from "../../MUIToast";
 import ImageModel from "../popModel/ImageModel";
-import dayjs from "dayjs";
 
 const table = createTable();
 
 const EditableCell = ({ getValue, instance, column, row }) => {
   const initialValue = getValue();
   const [value, setValue] = useState(initialValue || "");
+  const user = useSelector((state) => state.auth.user);
 
   const handleBlur = () => {
     instance.options.meta.updateData(row, column.id, value);
@@ -32,7 +38,9 @@ const EditableCell = ({ getValue, instance, column, row }) => {
         type="number"
         value={value}
         min={0}
-        onChange={(e) => setValue(e.target.value)}
+        onChange={(e) => {
+          setValue(e.target.value);
+        }}
         onBlur={handleBlur}
       />
     );
@@ -57,9 +65,12 @@ const MenuTable = () => {
   };
   const { data: foodItem } = useGetAllFoodItemQuery();
   const { data: category } = useGetAllFoodCategoryQuery();
-  const [userOrder, setUserOrder] = useState([]);
   const [expanded, setExpanded] = useState({});
   const [openModal, setOpenModal] = useState(false);
+  const navigate = useNavigate();
+  const [totalAmount, settotalAmount] = useState(0);
+  const [orderFood, { data, isSuccess, error, isLoading }] =
+    useOrderFoodMutation();
   const columns = useMemo(
     () => [
       table.createDataColumn("category", {
@@ -208,18 +219,23 @@ const MenuTable = () => {
   const handleChange = (value, row) => {
     const rowIncluded =
       selectedItem.length > 0
-        ? selectedItem.filter(
-            (item) => item.foodItem.email === row.original.email
-          )
+        ? selectedItem.filter((item) => item.foodItem._id === row.original._id)
         : [];
 
-    if (rowIncluded.length)
+    if (rowIncluded.length) {
       selectedItem.forEach((item) => {
-        if (item?.foodItem.email === row.original.email) item.quantity = value;
+        if (item?.foodItem._id === row.original._id) item.quantity = value;
       });
-
-    if (!rowIncluded.length)
+    } else if (!rowIncluded.length) {
       selectedItem.push({ foodItem: row.original, quantity: value });
+      // settotalAmount(row.original.rate * value);
+    }
+    const updatedAmount = selectedItem.reduce(
+      (sum, item) => sum + item.foodItem.rate * item.quantity,
+      0
+    );
+
+    // settotalAmount(updatedAmount);
   };
 
   const handleCloseModal = useCallback(() => {
@@ -234,49 +250,76 @@ const MenuTable = () => {
         quantity: item.quantity,
       })),
     ];
-    setUserOrder(finalOrder);
 
-    if (finalOrder.length > 0) setOpenModal(true);
+    orderFood(finalOrder);
   };
 
+  useEffect(() => {
+    if (isSuccess) {
+      setTimeout(() => {
+        navigate("/food-myorder");
+      }, 3000);
+    }
+  }, [isSuccess]);
+
   return (
-    <div>
-      <ImageModel
-        open={openImageModal}
-        handleClose={handleCloseImageModal}
-        imgSrc={imgSrc}
-      />
-      <CheckOut
-        open={openModal}
-        handleClose={handleCloseModal}
-        userOrder={userOrder}
-      />
-      <table className="menutable-container">
-        <thead>
-          {instance.getHeaderGroups().map((headerGroup) => (
-            <tr key={headerGroup.id}>
-              {headerGroup.headers.map((header) => (
-                <th key={header.id} colSpan={header.colSpan}>
-                  {header.isPlaceholder ? null : header.renderHeader()}
-                </th>
+    <>
+      {isLoading || data ? (
+        <MUILoading />
+      ) : (
+        <div>
+          <ImageModel
+            open={openImageModal}
+            handleClose={handleCloseImageModal}
+            imgSrc={imgSrc}
+          />
+          <table className="menutable-container">
+            <thead>
+              {instance.getHeaderGroups().map((headerGroup) => (
+                <tr key={headerGroup.id}>
+                  {headerGroup.headers.map((header) => (
+                    <th key={header.id} colSpan={header.colSpan}>
+                      {header.isPlaceholder ? null : header.renderHeader()}
+                    </th>
+                  ))}
+                </tr>
               ))}
-            </tr>
-          ))}
-        </thead>
-        <tbody>
-          {instance.getRowModel().rows.map((row) => (
-            <tr key={row.id} className={`depth-${row.depth}`}>
-              {row.getVisibleCells().map((cell) => (
-                <td key={cell.id}>{cell.renderCell()}</td>
+            </thead>
+            <tbody>
+              {instance.getRowModel().rows.map((row) => (
+                <tr key={row.id} className={`depth-${row.depth}`}>
+                  {row.getVisibleCells().map((cell) => (
+                    <td key={cell.id}>{cell.renderCell()}</td>
+                  ))}
+                </tr>
               ))}
-            </tr>
-          ))}
-        </tbody>
-      </table>
-      <button className="btn-button" onClick={handleSubmit}>
-        Place order
-      </button>
-    </div>
+            </tbody>
+          </table>
+          <Button
+            className="btn-button"
+            onClick={handleSubmit}
+            // disabled={totalAmount > 0 ? false : true}
+          >
+            {totalAmount > 0 ? `Rs: ${totalAmount}` : "Place order"}
+          </Button>
+        </div>
+      )}
+
+      {data && (
+        <MUIToast
+          initialValue={true}
+          message={data.message}
+          severity="success"
+        />
+      )}
+      {error && (
+        <MUIToast
+          initialValue={true}
+          message={error.data.message}
+          severity="error"
+        />
+      )}
+    </>
   );
 };
 

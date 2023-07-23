@@ -25,6 +25,7 @@ export const foodOrderApi = createApi({
           body: body,
         };
       },
+      invalidatesTags: ["getAllOrders"],
     }),
 
     getMyOrders: builder.query({
@@ -34,6 +35,7 @@ export const foodOrderApi = createApi({
           method: "GET",
         };
       },
+      providesTags: ["getAllOrders"],
     }),
 
     getAllOrders: builder.query({
@@ -52,6 +54,7 @@ export const foodOrderApi = createApi({
           method: "PATCH",
         };
       },
+      invalidatesTags: ["getAllOrders"],
     }),
 
     serveOrder: builder.mutation({
@@ -61,6 +64,7 @@ export const foodOrderApi = createApi({
           method: "PATCH",
         };
       },
+      invalidatesTags: ["getAllOrders"],
     }),
 
     getServedOrders: builder.query({
