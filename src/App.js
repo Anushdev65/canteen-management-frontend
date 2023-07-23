@@ -9,8 +9,9 @@ import FoodCategory from "./component/canteen/foodCategory/table/FoodCategory";
 import CreateFoodItem from "./component/canteen/foodItem/foodItem/CreateFoodItem";
 import FoodItemTable from "./component/canteen/foodItem/table/FoodItemTable";
 import GenerateMenu from "./component/canteen/generateMenu/table/GenerateMenu";
-import MyOrder from "./component/foodOrder/myOrder/MyOrder";
+import OrderDetails from "./component/foodOrder/component/OrderDetails";
 import MenuTable from "./component/foodOrder/table/MenuTable";
+import LandingContent from "./component/landingContent/LandingContent";
 import ConfirmPassword from "./pages/ConfirmPAssword";
 import ForgotPassword from "./pages/ForgotPassword";
 import LoginForm from "./pages/LoginForm";
@@ -20,7 +21,6 @@ import AdminsRoute from "./utils/AdminsRoute";
 import CanteenRoute from "./utils/CanteenRoute";
 import FoodOrderRoute from "./utils/FoodOrderRoute";
 import ProtectedRoute from "./utils/ProtectedRoute";
-import LandingContent from "./component/landingContent/LandingContent";
 
 function App() {
   return (
@@ -50,7 +50,7 @@ function App() {
 
           <Route element={<FoodOrderRoute />}>
             <Route path="/food-menu" index element={<MenuTable />} />
-            <Route path="/food-myorder" index element={<MyOrder />} />
+            <Route path="/food-myorder" index element={<OrderDetails />} />
           </Route>
         </Route>
       </Route>

@@ -12,7 +12,6 @@ import { styled } from "@mui/material/styles";
 import PropTypes from "prop-types";
 import React, { useEffect, useState } from "react";
 import "../../../styles/muimodal.css";
-import OrderDetails from "./OrderDetails";
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
@@ -117,7 +116,7 @@ export default function CheckOut({ open, handleClose, userOrder }) {
               // onSubmit={handleSubmit}
               sx={{ mt: 3 }}
             >
-              <OrderDetails />
+              {/* <OrderDetails /> */}
             </Box>
           </Container>
         </DialogContent>
