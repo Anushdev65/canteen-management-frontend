@@ -39,9 +39,11 @@ export const foodOrderApi = createApi({
     }),
 
     getAllOrders: builder.query({
-      query: () => {
+      query: (query) => {
         return {
-          url: `/order-food`,
+          url: `/order-food?today=${true}&user=${
+            query?._userId || ""
+          }&orderStatus=${query?._orderStatus || ""}`,
           method: "GET",
         };
       },
@@ -91,6 +93,7 @@ export const {
   useOrderFoodMutation,
   useGetMyOrdersQuery,
   useGetAllOrdersQuery,
+  useLazyGetAllOrdersQuery,
   useCancelOrderMutation,
   useServeOrderMutation,
   useGetServedOrdersQuery,

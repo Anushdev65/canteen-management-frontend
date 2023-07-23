@@ -72,7 +72,7 @@ export const foodItemApi = createApi({
     addFoodAmount: builder.mutation({
       query: ({ body, id }) => {
         return {
-          url: `/add-quantity/${id}`,
+          url: `/food/add-quantity/${id}`,
           method: "PATCH",
           body: body,
         };
