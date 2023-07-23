@@ -65,6 +65,13 @@ right: 6px;
 color: rgb(114, 113, 113);
 }
 
+.generate-pegnation{margin-top: 20px;
+display: flex;
+float: right;
+flex-direction: row;
+gap: 10px;
+}
+
 
 
 

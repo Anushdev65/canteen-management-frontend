@@ -211,7 +211,7 @@ const GenerateMenu = () => {
         </tbody>
       </table>
       <div
-        className="pegnation"
+        className="generate-pegnation"
         style={{
           display: "flex",
           justifyContent: "center",

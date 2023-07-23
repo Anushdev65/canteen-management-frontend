@@ -1,7 +1,8 @@
 import AddCircleOutlineOutlinedIcon from "@mui/icons-material/AddCircleOutlineOutlined";
 import { useCallback, useState } from "react";
 import DepositModel from "./depositAmount/model/DepositModel";
-
+import AddBusinessOutlinedIcon from "@mui/icons-material/AddBusinessOutlined";
+import "../menuorder/deposit.css";
 export const COLUMNS = [
   {
     Header: "First Name",
@@ -28,7 +29,12 @@ export const COLUMNS = [
     accessor: "roles",
   },
   {
-    Header: "Deposit",
+    Header: () => (
+      <>
+        <AddBusinessOutlinedIcon className="deposit-icon" />
+        Deposit
+      </>
+    ),
     accessor: "deposit",
     Cell: ({ row }) => {
       const [openModal, setOpenModal] = useState(false);

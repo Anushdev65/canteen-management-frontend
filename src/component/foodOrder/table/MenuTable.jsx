@@ -174,6 +174,7 @@ const MenuTable = () => {
     return category?.data?.results?.map((category) => {
       const matchingResults = foodItem?.data?.results
         .filter((result) => {
+          // console.log(result);
           return result.category._id === category._id;
         })
         .map((result) => {
@@ -183,10 +184,6 @@ const MenuTable = () => {
           };
         });
 
-      const newData = matchingResults?.filter(
-        (result) => result.isInMenu === true
-      );
-
       return {
         category: category.name,
         foodImage: "",
@@ -195,7 +192,7 @@ const MenuTable = () => {
         discountedRate: "",
         initialQuantity: "",
         availableQuantity: "",
-        subRows: newData?.length === 0 ? [] : newData,
+        subRows: matchingResults?.length === 0 ? [] : matchingResults,
       };
     });
   }, [category?.data?.results, foodItem?.data?.results]);

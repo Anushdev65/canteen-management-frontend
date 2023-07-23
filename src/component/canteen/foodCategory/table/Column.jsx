@@ -12,8 +12,6 @@ export const COLUMNS = [
     Header: "Category",
     accessor: "name",
     Cell: ({ row }) =>
-      // <div style={{ width: "210px" }}>
       capitalizeFirstLetter(row.values.name),
-      // </div>
   },
 ];
