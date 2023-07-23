@@ -84,7 +84,7 @@ BootstrapDialogTitle.propTypes = {
   onClose: PropTypes.func.isRequired,
 };
 
-export default function CheckOut({ open, handleClose, userOrder }) {
+export default function ImageModel({ open, handleClose, imgSrc }) {
   return (
     <div>
       <BootstrapDialog
@@ -99,24 +99,15 @@ export default function CheckOut({ open, handleClose, userOrder }) {
         maxWidth={"sm"}
         fullWidth={true}
       >
-        <BootstrapDialogTitle
-          id="customized-dialog-title"
-          onClose={() => {
-            handleClose();
-          }}
-        >
-          Your Order
-        </BootstrapDialogTitle>
         <DialogContent dividers className="custom-dialog">
-          <Container component="main" maxWidth="sm" sx={{ mb: 2 }}>
+          <Container component="main" maxWidth="sm">
             <CssBaseline />
-            <Box
-              component="form"
-              noValidate
-              // onSubmit={handleSubmit}
-              sx={{ mt: 3 }}
-            >
-              {/* <OrderDetails /> */}
+            <Box>
+              <img
+                src={imgSrc}
+                alt=""
+                style={{ width: "100%", height: "100%" }}
+              />
             </Box>
           </Container>
         </DialogContent>
