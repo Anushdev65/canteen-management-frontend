@@ -107,6 +107,11 @@ const navDataCanteen = [
     link: "/generate-menu",
   },
   {
+    name: "View Orders",
+    icon: <MenuBookOutlinedIcon />,
+    link: "/todays-order",
+  },
+  {
     name: "My Profile",
     icon: <AccountBoxIcon />,
     link: "/myprofile",
