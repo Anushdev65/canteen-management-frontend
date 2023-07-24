@@ -245,11 +245,18 @@ const MenuTable = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
     const finalOrder = [
-      ...selectedItem?.map((item) => ({
-        food: item.foodItem,
-        quantity: item.quantity,
-      })),
+      ...selectedItem
+        ?.filter((item, i) => {
+          if (item.quantity) {
+            return true;
+          }
+        })
+        .map((item) => ({
+          food: item.foodItem,
+          quantity: item.quantity,
+        })),
     ];
 
     orderFood(finalOrder);

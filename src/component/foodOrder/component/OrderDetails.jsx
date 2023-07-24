@@ -57,6 +57,7 @@ const OrderDetails = () => {
                   <TableCell>Item</TableCell>
                   <TableCell>Quantity</TableCell>
                   <TableCell>Price</TableCell>
+                  <TableCell>Total Price</TableCell>
                   <TableCell>Action</TableCell>
                 </TableRow>
               </TableHead>
@@ -66,6 +67,7 @@ const OrderDetails = () => {
                     <TableCell>{item.food.name}</TableCell>
                     <TableCell>{item.quantity}</TableCell>
                     <TableCell>{item.food.rate}</TableCell>
+                    <TableCell>{item.food.rate * item.quantity}</TableCell>
                     <TableCell>
                       <Button
                         variant="contained"
@@ -80,7 +82,7 @@ const OrderDetails = () => {
                   </TableRow>
                 ))}
                 <TableRow>
-                  <TableCell colSpan={2} align="right">
+                  <TableCell colSpan={3} align="right">
                     Total:
                   </TableCell>
                   <TableCell>
