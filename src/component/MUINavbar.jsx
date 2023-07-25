@@ -35,7 +35,7 @@ import { useLogOutMutation } from "../services/api/admin/auth";
 import "../styles/navbar.css";
 import MUILoading from "./MUILoading";
 import MUIToast from "./MUIToast";
-import MonetizationOnOutlinedIcon from "@mui/icons-material/MonetizationOnOutlined";
+// import MonetizationOnOutlinedIcon from "@mui/icons-material/MonetizationOnOutlined";
 
 const drawerWidth = 240;
 
@@ -390,7 +390,7 @@ export default function MUINavbar() {
                   >
                     Deerwalk Food System
                   </Typography>
-                  {isStudent && (
+                  {/* {isStudent && (
                     <List>
                       <ListItem disablePadding sx={{ display: "block" }}>
                         <ListItemButton
@@ -419,7 +419,7 @@ export default function MUINavbar() {
                         </ListItemButton>
                       </ListItem>
                     </List>
-                  )}
+                  )} */}
                   {myData && (
                     <img
                       src={`${myData?.profile}` || ""}
