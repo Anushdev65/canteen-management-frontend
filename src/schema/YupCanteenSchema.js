@@ -29,6 +29,7 @@ export const foodItemSchema = Yup.object({
     .test("rate-validation", "Rate is digit only.", function (value) {
       return numberRegex.test(value);
     }),
+
   discountedRate: Yup.string().test(
     "discountedRate-validation",
     "Rate must be a digit and less than or equal to the rate.",
@@ -40,6 +41,7 @@ export const foodItemSchema = Yup.object({
       return true;
     }
   ),
+
   category: Yup.string().required("Category required"),
   description: Yup.string(),
   tags: Yup.string().required("Tags required"),
