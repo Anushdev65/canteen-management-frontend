@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Josefin+Sans&family=Roboto+Mono&display=swap&family=Didact+Gothic&display=swap');
 .menu-button{
     border: none;
     background-color:transparent;  
@@ -8,7 +9,7 @@
     right:5px;
     color:rgb(143, 142, 142)
 }
-.btn-button{
+#order-btn {
     float:right ;
     margin-top: 10px;
     padding: 10px;
@@ -16,41 +17,80 @@
     font-weight: bold;
     border-radius: 10px;
     border: none;
-    background-color:rgba(124, 53, 118, 0.9);
+    background-color: rgba(124, 53, 118, 0.9);
     color:white;
     cursor: pointer;
+}
+#order-btn:hover{
+    background-color: rgba(194, 107, 187, 0.9);
 }
 .menutable-container {
 width: 100%;
 border-radius: 10px;
-height: 90vh;
+height: 25vh;
 box-shadow: 7px 7px 3px 0 rgba(182, 184, 184, 0.7);
-    transition: box-shadow 0.3;
+ transition: box-shadow 0.3;
 }
 .menutable-container:hover{
     box-shadow: 10px 10px 6px 0 rgba(90, 90, 90, 0.7);
 }
-.menutable-container tbody{
- 
+.menutable-container .custom-tr{  
+
+font-family: 'Didact Gothic', sans-serif;
+
+}
+.menutable-container th{
+background-color: rgb(139, 72, 139);
+color:white;
 }
 .menutable-container thead{
     text-align: center;
-    background-color: rgb(209, 207, 207);
+   
+    font-family: 'Josefin Sans', sans-serif;
+    font-size: 16px;
 }
 
-.menutable-container tr:nth-child(even) {
+.menutable-container tr {
     background-color: #f5f3f3;
 
 }
+
+.menutable-container td:nth-child(even) {
+    background-color: #f5f3f3;
+
+}
+
 
 .menutable-container tr:hover {
     background-color: #f3e6e6;
 }
 
-.table-data th,
+.menutable-container th,
 tfoot td {
-    padding-top: 12px;
-    padding-bottom: 12px;
+    padding-top: 1px;
+    padding-bottom: 1px;
+    padding-right: 2px;
+    padding-left: 2px;
     text-align: center;
+
+}
+.food-quantity{
+    width: 50px;
+   margin-left: 15px;
+}
+.food-image{
+    margin-left: 15px;
+}
+.available-time{
+    margin-left: 20px;
+}
+.avl-quantity-column{
+   
+    width: 40px;
+    margin-left: 30px;
+}
+.header-cell{
+width: 65px;
+margin-left: 20px;
 
 }

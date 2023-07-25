@@ -38,6 +38,7 @@ const EditableCell = ({ getValue, instance, column, row }) => {
         type="number"
         value={value}
         min={0}
+        className="food-quantity"
         onChange={(e) => {
           setValue(e.target.value);
         }}
@@ -109,10 +110,16 @@ const MenuTable = () => {
                   )}
                 </button>
               ) : (
-                "🤲"
+                ""
               )}
 
-              {props.getValue()}
+              {props.row.depth === 0 ? (
+                <>
+                  <strong>(Category)</strong> {props.getValue()}
+                </>
+              ) : (
+                props.getValue()
+              )}
             </div>
           );
         },
@@ -126,7 +133,8 @@ const MenuTable = () => {
                 src={props.row.original.foodImage}
                 alt=""
                 height={30}
-                width={30}
+                width={60}
+                className="food-image"
                 onClick={() => handleImageEnlarge(props.row.original.foodImage)}
               />
             );
@@ -137,7 +145,7 @@ const MenuTable = () => {
         cell: (props) => {
           if (!props.row.getCanExpand() && !props.row.originalSubRows)
             return (
-              <div>
+              <div className="available-time">
                 {dayjs(props.row.original.availableTime.from).format("HH:mm A")}
                 {" -"}
                 {dayjs(props.row.original.availableTime.to).format("HH:mm A")}
@@ -148,18 +156,33 @@ const MenuTable = () => {
 
       table.createDataColumn("rate", {
         id: "Rate",
+        header: <div className="header-cell">Rate</div>,
+        cell: (props) => (
+          <div className="avl-quantity-column">{props.getValue()}</div>
+        ),
       }),
 
       table.createDataColumn("discountedRate", {
         id: "Sub rate",
+        header: <div className="header-cell">Sub rate</div>,
+        cell: (props) => (
+          <div className="avl-quantity-column">{props.getValue()}</div>
+        ),
       }),
       table.createDataColumn("initialQuantity", {
         id: "Int Quantity",
+        header: <div className="header-cell">Int Quantity</div>,
+        cell: (props) => (
+          <div className="avl-quantity-column">{props.getValue()}</div>
+        ),
       }),
 
       table.createDataColumn("availableQuantity", {
         id: "avlQuantity",
-        header: "Avl Quantity",
+        header: <div className="header-cell">Avl Quantity</div>,
+        cell: (props) => (
+          <div className="avl-quantity-column">{props.getValue()}</div>
+        ),
       }),
 
       table.createDataColumn("quantity", {
@@ -170,20 +193,53 @@ const MenuTable = () => {
     []
   );
 
-  const filteredResults = useMemo(() => {
-    return category?.data?.results?.map((category) => {
-      const matchingResults = foodItem?.data?.results
-        .filter((result) => {
-          // console.log(result);
-          return result.category._id === category._id;
-        })
-        .map((result) => {
-          return {
-            ...result,
-            category: result.name,
-          };
-        });
+  // const filteredResults = useMemo(() => {
+  //   return category?.data?.results?.map((category) => {
+  //     const matchingResults = foodItem?.data?.results
+  //       .filter((result) => {
+  //         // console.log(result);
+  //         return result.category._id === category._id;
+  //       })
+  //       .map((result) => {
+  //         return {
+  //           ...result,
+  //           category: result.name,
+  //         };
+  //       });
 
+  //     return {
+  //       category: category.name,
+  //       foodImage: "",
+  //       availableTime: "",
+  //       rate: "",
+  //       discountedRate: "",
+  //       initialQuantity: "",
+  //       availableQuantity: "",
+  //       subRows: matchingResults?.length === 0 ? [] : matchingResults,
+  //     };
+  //   });
+  // }, [category?.data?.results, foodItem?.data?.results]);
+
+  const filteredResults = useMemo(() => {
+    // Check if category and foodItem data is available
+    if (!category?.data?.results || !foodItem?.data?.results) {
+      // If either data is missing, return an empty array
+      return [];
+    }
+
+    // Map through the categories
+    return category.data.results.map((category) => {
+      // Filter food items that belong to the current category
+      const matchingResults = foodItem.data.results
+        .filter(
+          (result) => result.category && result.category._id === category._id
+        )
+        .map((result) => ({
+          ...result,
+          category: result.name,
+        }));
+
+      // Create an object for the category with subRows as matching food items
       return {
         category: category.name,
         foodImage: "",
@@ -192,7 +248,7 @@ const MenuTable = () => {
         discountedRate: "",
         initialQuantity: "",
         availableQuantity: "",
-        subRows: matchingResults?.length === 0 ? [] : matchingResults,
+        subRows: matchingResults.length === 0 ? [] : matchingResults,
       };
     });
   }, [category?.data?.results, foodItem?.data?.results]);
@@ -295,7 +351,7 @@ const MenuTable = () => {
             </thead>
             <tbody>
               {instance.getRowModel().rows.map((row) => (
-                <tr key={row.id} className={`depth-${row.depth}`}>
+                <tr key={row.id} className={`depth-${row.depth} custom-tr`}>
                   {row.getVisibleCells().map((cell) => (
                     <td key={cell.id}>{cell.renderCell()}</td>
                   ))}
@@ -304,7 +360,7 @@ const MenuTable = () => {
             </tbody>
           </table>
           <Button
-            className="btn-button"
+            id="order-btn"
             onClick={handleSubmit}
             // disabled={totalAmount > 0 ? false : true}
           >

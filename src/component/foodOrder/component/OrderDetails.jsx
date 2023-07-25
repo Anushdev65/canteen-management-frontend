@@ -13,7 +13,7 @@ import {
   useServeOrderMutation,
 } from "../../../services/api/foodOrder";
 import MUIToast from "../../MUIToast";
-
+import "../../../menuorder/myorder.css";
 const OrderDetails = () => {
   const { data } = useGetMyOrdersQuery();
   const [cancelOrder, { data: cancelData, error: cancelError }] =
@@ -96,47 +96,49 @@ const OrderDetails = () => {
               </TableBody>
             </Table>
 
-            <Button
-              variant="contained"
-              color="primary"
-              size="small"
-              sx={{ mt: 2, ml: 2 }}
-              onClick={handleServeOrder}
-              disabled={!onProcessOrder}
-            >
-              {onProcessOrder ? "Serve Me" : "Served"}
-            </Button>
+              <Button
+                id="order-servebtn"
+                variant="contained"
+                color="primary"
+                size="small"
+                sx={{ mt: 2, ml: 2 }}
+                onClick={handleServeOrder}
+                disabled={!onProcessOrder}
+              >
+                {onProcessOrder ? "Serve Me" : "Served"}
+              </Button>
+            </div>
           </div>
-        </div>
-      )}
-      {serveData && (
-        <MUIToast
-          initialValue={true}
-          message={serveData.message}
-          severity="success"
-        />
-      )}
-      {serveError && (
-        <MUIToast
-          initialValue={true}
-          message={serveError.data.message}
-          severity="error"
-        />
-      )}
-      {cancelData && (
-        <MUIToast
-          initialValue={true}
-          message={cancelData.message}
-          severity="success"
-        />
-      )}
-      {cancelError && (
-        <MUIToast
-          initialValue={true}
-          message={cancelError.data.message}
-          severity="error"
-        />
-      )}
+        )}
+        {serveData && (
+          <MUIToast
+            initialValue={true}
+            message={serveData.message}
+            severity="success"
+          />
+        )}
+        {serveError && (
+          <MUIToast
+            initialValue={true}
+            message={serveError.data.message}
+            severity="error"
+          />
+        )}
+        {cancelData && (
+          <MUIToast
+            initialValue={true}
+            message={cancelData.message}
+            severity="success"
+          />
+        )}
+        {cancelError && (
+          <MUIToast
+            initialValue={true}
+            message={cancelError.data.message}
+            severity="error"
+          />
+        )}
+      </div>
     </>
   );
 };
