@@ -143,7 +143,11 @@ const MenuTable = () => {
       table.createDataColumn("availableTime.from", {
         id: "Available Time",
         cell: (props) => {
-          if (!props.row.getCanExpand() && !props.row.originalSubRows)
+          if (
+            !props.row.getCanExpand() &&
+            !props.row.originalSubRows &&
+            props.row.original.availableTime
+          ) {
             return (
               <div className="available-time">
                 {dayjs(props.row.original.availableTime.from).format("HH:mm A")}
@@ -151,6 +155,9 @@ const MenuTable = () => {
                 {dayjs(props.row.original.availableTime.to).format("HH:mm A")}
               </div>
             );
+          } else {
+            return null;
+          }
         },
       }),
 
