@@ -173,7 +173,11 @@ const MenuTable = () => {
       table.createDataColumn("availableTime.from", {
         id: "Available Time",
         cell: (props) => {
-          if (!props.row.getCanExpand() && !props.row.originalSubRows)
+          if (
+            !props.row.getCanExpand() &&
+            !props.row.originalSubRows &&
+            props.row.original.availableTime
+          ) {
             return (
               <div className="available-time">
                 {dayjs(props.row.original.availableTime.from).format("HH:mm A")}
@@ -181,6 +185,9 @@ const MenuTable = () => {
                 {dayjs(props.row.original.availableTime.to).format("HH:mm A")}
               </div>
             );
+          } else {
+            return null;
+          }
         },
       }),
 
@@ -223,20 +230,53 @@ const MenuTable = () => {
     []
   );
 
-  const filteredResults = useMemo(() => {
-    return category?.data?.results?.map((category) => {
-      const matchingResults = foodItem?.data?.results
-        .filter((result) => {
-          // console.log(result);
-          return result.category._id === category._id;
-        })
-        .map((result) => {
-          return {
-            ...result,
-            category: result.name,
-          };
-        });
+  // const filteredResults = useMemo(() => {
+  //   return category?.data?.results?.map((category) => {
+  //     const matchingResults = foodItem?.data?.results
+  //       .filter((result) => {
+  //         // console.log(result);
+  //         return result.category._id === category._id;
+  //       })
+  //       .map((result) => {
+  //         return {
+  //           ...result,
+  //           category: result.name,
+  //         };
+  //       });
 
+  //     return {
+  //       category: category.name,
+  //       foodImage: "",
+  //       availableTime: "",
+  //       rate: "",
+  //       discountedRate: "",
+  //       initialQuantity: "",
+  //       availableQuantity: "",
+  //       subRows: matchingResults?.length === 0 ? [] : matchingResults,
+  //     };
+  //   });
+  // }, [category?.data?.results, foodItem?.data?.results]);
+
+  const filteredResults = useMemo(() => {
+    // Check if category and foodItem data is available
+    if (!category?.data?.results || !foodItem?.data?.results) {
+      // If either data is missing, return an empty array
+      return [];
+    }
+
+    // Map through the categories
+    return category.data.results.map((category) => {
+      // Filter food items that belong to the current category
+      const matchingResults = foodItem.data.results
+        .filter(
+          (result) => result.category && result.category._id === category._id
+        )
+        .map((result) => ({
+          ...result,
+          category: result.name,
+        }));
+
+      // Create an object for the category with subRows as matching food items
       return {
         category: category.name,
         foodImage: "",
@@ -245,7 +285,7 @@ const MenuTable = () => {
         discountedRate: "",
         initialQuantity: "",
         availableQuantity: "",
-        subRows: matchingResults?.length === 0 ? [] : matchingResults,
+        subRows: matchingResults.length === 0 ? [] : matchingResults,
       };
     });
   }, [category?.data?.results, foodItem?.data?.results]);
@@ -298,11 +338,18 @@ const MenuTable = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
     const finalOrder = [
-      ...selectedItem?.map((item) => ({
-        food: item.foodItem,
-        quantity: item.quantity,
-      })),
+      ...selectedItem
+        ?.filter((item, i) => {
+          if (item.quantity) {
+            return true;
+          }
+        })
+        .map((item) => ({
+          food: item.foodItem,
+          quantity: item.quantity,
+        })),
     ];
 
     orderFood(finalOrder);

@@ -31,7 +31,7 @@ export const foodOrderApi = createApi({
     getMyOrders: builder.query({
       query: () => {
         return {
-          url: `/order-food/my-order`,
+          url: `/order-food/my-order?today=true`,
           method: "GET",
         };
       },
@@ -57,7 +57,7 @@ export const foodOrderApi = createApi({
           method: "PATCH",
         };
       },
-      invalidatesTags: ["getAllOrders"],
+      invalidatesTags: ["getAllOrders", "getMyOrders"],
     }),
 
     serveOrder: builder.mutation({
