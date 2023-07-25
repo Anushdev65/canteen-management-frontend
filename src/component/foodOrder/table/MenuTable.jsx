@@ -72,6 +72,32 @@ const MenuTable = () => {
   const [totalAmount, settotalAmount] = useState(0);
   const [orderFood, { data, isSuccess, error, isLoading }] =
     useOrderFoodMutation();
+
+  // const capitalizeFirstLetter = (str) => {
+  //   return str.charAt(0).toUpperCase() + str.slice(1);
+  // };
+  const capitalizeFirstThreeWords = (str) => {
+    const words = str.split(" ");
+    for (let i = 0; i < Math.min(3, words.length); i++) {
+      words[i] = words[i].charAt(0).toUpperCase() + words[i].slice(1);
+    }
+    return words.join(" ");
+  };
+
+  // const capitalizeFirstThreeWords = (str) => {
+  //   const words = str.split(" ");
+  //   if (words.length >= 3) {
+  //     words[0] = words[0].charAt(0).toUpperCase() + words[0].slice(1);
+  //     words[1] = words[1].charAt(0).toUpperCase() + words[1].slice(1);
+  //     words[2] = words[2].charAt(0).toUpperCase() + words[2].slice(1);
+  //   } else if (words.length >= 2) {
+  //     words[0] = words[0].charAt(0).toUpperCase() + words[0].slice(1);
+  //     words[1] = words[1].charAt(0).toUpperCase() + words[1].slice(1);
+  //   } else if (words.length >= 1) {
+  //     words[0] = words[0].charAt(0).toUpperCase() + words[0].slice(1);
+  //   }
+  //   return words.join(" ");
+  // };
   const columns = useMemo(
     () => [
       table.createDataColumn("category", {
@@ -93,7 +119,10 @@ const MenuTable = () => {
             Item
           </>
         ),
+
         cell: (props) => {
+          const capitalzedValue = capitalizeFirstThreeWords(props.getValue());
+
           return (
             <div style={{ paddingLeft: `${props.row.depth * 2}rem` }}>
               {props.row.getCanExpand() ? (
@@ -112,14 +141,15 @@ const MenuTable = () => {
               ) : (
                 ""
               )}
-
-              {props.row.depth === 0 ? (
+              {capitalzedValue}
+              {/* {props.getValue()} */}
+              {/* {props.row.depth === 0 ? (
                 <>
                   <strong>(Category)</strong> {props.getValue()}
                 </>
               ) : (
                 props.getValue()
-              )}
+              )} */}
             </div>
           );
         },

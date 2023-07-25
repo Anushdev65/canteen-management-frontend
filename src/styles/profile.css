@@ -1,13 +1,12 @@
-.myprofile{
+.myprofile {
   display: flex;
- align-items: center;
+  align-items: center;
 
-white-space: nowrap;
-  max-width: 100px; 
- margin: 0 auto;
-width:100%;
-padding-right: 600px;
-
+  white-space: nowrap;
+  max-width: 100px;
+  margin: 0 auto;
+  width: 100%;
+  padding-right: 600px;
 }
 /* .wrap-lastName{
   white-space: normal;
@@ -19,10 +18,9 @@ padding-right: 600px;
   word-wrap: break-word;
 } */
 
-.button-btn{
+.button-btn {
   max-width: 400px;
-position: sticky;
-left:345px;
-top:-30px;
+  position: sticky;
+  left: 345px;
+  top: -30px;
 }
-

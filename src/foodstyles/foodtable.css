@@ -1,87 +1,86 @@
-@import url('https://fonts.googleapis.com/css2?family=Josefin+Sans&family=Roboto+Mono&display=swap&family=Didact+Gothic&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Josefin+Sans&family=Roboto+Mono&display=swap&family=Didact+Gothic&display=swap");
 
 .foodItem-container {
-    border-collapse: collapse;
-    width: 100%;
+  border-collapse: collapse;
+  width: 100%;
 }
 
 .foodItem-container td,
 .foodtable-container th {
-    border: 1px solid #ebe3e3;
-    padding: 8px;
+  border: 1px solid #ebe3e3;
+  padding: 8px;
 }
 
- .foodItem-container tr:nth-child(even) {
-     background-color: rgb(212, 211, 211);
- }
- .foodItem-container .Item-header{
-    background-color: rgb(218, 219, 219);
-    color:rgb(61, 61, 61);
-    font-family: 'Josefin Sans', sans-serif;
-    font-size: 17px;
- }
+.foodItem-container tr:nth-child(even) {
+  background-color: rgb(212, 211, 211);
+}
+.foodItem-container .Item-header {
+  background-color: rgb(218, 219, 219);
+  color: rgb(61, 61, 61);
+  font-family: "Josefin Sans", sans-serif;
+  font-size: 17px;
+}
 
- .foodItem-container.td,
- .foodItem-container th {
-     border: 1px solid #ebe3e3;
-     padding: 8px;
- }
+.foodItem-container.td,
+.foodItem-container th {
+  border: 1px solid #ebe3e3;
+  padding: 8px;
+}
 
- .foodItem-container tr:hover {
-     background-color: #ddcccc;
- }
+.foodItem-container tr:hover {
+  background-color: #ddcccc;
+}
 
- .foodItem-container th,
- tfoot td {
-     padding-top: 12px;
-     padding-bottom: 12px;
-     text-align: center;
- }
- .foodItem-container tbody{
-    font-family: 'Didact Gothic', sans-serif;
-    font-weight: 550;
-    font-size: 17px;
- }
-  
- #icon-add{
-    color: white;
-        background-color: rgb(165, 44, 165);
- }
+.foodItem-container th,
+tfoot td {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: center;
+}
+.foodItem-container tbody {
+  font-family: "Didact Gothic", sans-serif;
+  font-weight: 550;
+  font-size: 17px;
+}
 
- #icon-add:hover{
-    background-color:rgb(59, 207, 66);
- }
+#icon-add {
+  color: white;
+  background-color: rgb(165, 44, 165);
+}
 
- #icon-edit {
-     color: white;
-     background-color: rgb(165, 44, 165);
- }
+#icon-add:hover {
+  background-color: rgb(59, 207, 66);
+}
 
- #icon-edit:hover {
-     background-color: rgb(59, 207, 66);
- }
+#icon-edit {
+  color: white;
+  background-color: rgb(165, 44, 165);
+}
 
- #icon-delete {
-     color: white;
-     background-color: rgb(165, 44, 165);
- }
+#icon-edit:hover {
+  background-color: rgb(59, 207, 66);
+}
 
- #icon-delete:hover {
-     background-color: red;
- }
+#icon-delete {
+  color: white;
+  background-color: rgb(165, 44, 165);
+}
 
- .pegnation-foodtable {
-     margin-top: 20px;
-     display: flex;
-     float: right;
-     flex-direction: row;
-     gap: 10px;  
- }
+#icon-delete:hover {
+  background-color: red;
+}
 
-.icon-fooditem{
-     position: relative;
- top:5px;
- right:6px;
- color: rgb(150, 148, 148);
+.pegnation-foodtable {
+  margin-top: 20px;
+  display: flex;
+  float: right;
+  flex-direction: row;
+  gap: 10px;
+}
 
+.icon-fooditem {
+  position: relative;
+  top: 5px;
+  right: 6px;
+  color: rgb(150, 148, 148);
 }
