@@ -193,20 +193,53 @@ const MenuTable = () => {
     []
   );
 
-  const filteredResults = useMemo(() => {
-    return category?.data?.results?.map((category) => {
-      const matchingResults = foodItem?.data?.results
-        .filter((result) => {
-          // console.log(result);
-          return result.category._id === category._id;
-        })
-        .map((result) => {
-          return {
-            ...result,
-            category: result.name,
-          };
-        });
+  // const filteredResults = useMemo(() => {
+  //   return category?.data?.results?.map((category) => {
+  //     const matchingResults = foodItem?.data?.results
+  //       .filter((result) => {
+  //         // console.log(result);
+  //         return result.category._id === category._id;
+  //       })
+  //       .map((result) => {
+  //         return {
+  //           ...result,
+  //           category: result.name,
+  //         };
+  //       });
 
+  //     return {
+  //       category: category.name,
+  //       foodImage: "",
+  //       availableTime: "",
+  //       rate: "",
+  //       discountedRate: "",
+  //       initialQuantity: "",
+  //       availableQuantity: "",
+  //       subRows: matchingResults?.length === 0 ? [] : matchingResults,
+  //     };
+  //   });
+  // }, [category?.data?.results, foodItem?.data?.results]);
+
+  const filteredResults = useMemo(() => {
+    // Check if category and foodItem data is available
+    if (!category?.data?.results || !foodItem?.data?.results) {
+      // If either data is missing, return an empty array
+      return [];
+    }
+
+    // Map through the categories
+    return category.data.results.map((category) => {
+      // Filter food items that belong to the current category
+      const matchingResults = foodItem.data.results
+        .filter(
+          (result) => result.category && result.category._id === category._id
+        )
+        .map((result) => ({
+          ...result,
+          category: result.name,
+        }));
+
+      // Create an object for the category with subRows as matching food items
       return {
         category: category.name,
         foodImage: "",
@@ -215,7 +248,7 @@ const MenuTable = () => {
         discountedRate: "",
         initialQuantity: "",
         availableQuantity: "",
-        subRows: matchingResults?.length === 0 ? [] : matchingResults,
+        subRows: matchingResults.length === 0 ? [] : matchingResults,
       };
     });
   }, [category?.data?.results, foodItem?.data?.results]);
