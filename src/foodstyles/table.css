@@ -1,53 +1,57 @@
- @import url('https://fonts.googleapis.com/css2?family=Josefin+Sans&family=Roboto+Mono&display=swap&family=Didact+Gothic&display=swap');
-.foodtable-container{
-   
+@import url("https://fonts.googleapis.com/css2?family=Josefin+Sans&family=Roboto+Mono&display=swap&family=Didact+Gothic&display=swap");
+.foodtable-container {
   border-collapse: collapse;
   width: 100%;
   box-shadow: 7px 7px 3px 0 rgba(182, 184, 184, 0.7);
-    transition: box-shadow 0.3;
-    color:rgb(34, 34, 34)
-  }
-
-  .foodtable-container:hover{
-    box-shadow: 10px 10px 6px 0 rgba(90, 90, 90, 0.7);
-  }
-
-  .foodtable-container .food-header{
-    background-color: rgb(218, 219, 219);
-    font-family: 'Josefin Sans', sans-serif;
-    
-  }
-
-  .foodtable-container td,.foodtable-container th{
-border: 1px solid #ebe3e3;
-  padding: 8px;
-  }
-    .foodtable-container tr:nth-child(even) {
-      background-color: rgb(212, 211, 211);
-    }
-.foodtable-container tr:hover{background-color: #c5b6b6;}
-
-.foodtable-container th, tfoot td {
- padding-top: 12px ;
- padding-bottom:12px ;
- text-align:center ;
+  transition: box-shadow 0.3;
+  color: rgb(34, 34, 34);
 }
-.foodtable-container tbody{
-font-family: 'Didact Gothic', sans-serif;
-font-weight: 550;
-font-size: 17px;
-} 
-#addicon{
-color: white;
+
+.foodtable-container:hover {
+  box-shadow: 10px 10px 6px 0 rgba(90, 90, 90, 0.7);
+}
+
+.foodtable-container .food-header {
+  background-color: rgb(218, 219, 219);
+  font-family: "Josefin Sans", sans-serif;
+}
+
+.foodtable-container td,
+.foodtable-container th {
+  border: 1px solid #ebe3e3;
+  padding: 8px;
+}
+
+.foodtable-container tr:nth-child(even) {
+  background-color: rgb(212, 211, 211);
+}
+
+.foodtable-container tr:hover {
+  background-color: #c5b6b6;
+}
+
+.foodtable-container th,
+tfoot td {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: center;
+}
+.foodtable-container tbody {
+  font-family: "Didact Gothic", sans-serif;
+  font-weight: 550;
+  font-size: 17px;
+}
+#addicon {
+  color: white;
   background-color: rgb(165, 44, 165);
 }
-#addicon:hover{
+#addicon:hover {
   background-color: rgb(59, 207, 66);
 }
 
-#editIcon{
+#editIcon {
   color: white;
-    background-color: rgb(165, 44, 165);
+  background-color: rgb(165, 44, 165);
 }
 
 #editIcon:hover {
@@ -58,35 +62,23 @@ color: white;
   color: white;
   background-color: rgb(165, 44, 165);
 }
-#deleteIcon:hover{
-  background-color: rgb(250, 3, 16) ;
+#deleteIcon:hover {
+  background-color: rgb(250, 3, 16);
 }
 
-.icons{
+.icons {
   color: rgb(150, 148, 148);
-
 }
-.header-icon{
-  display:flex;
-  gap:6px;
+.header-icon {
+  display: flex;
+  gap: 6px;
   justify-content: center;
   font-size: 18px;
 }
-.pegnation-category{
+.pegnation-category {
   margin-top: 20px;
-    display: flex;
-    float: right;
-    flex-direction: row;
-    gap: 10px;
+  display: flex;
+  float: right;
+  flex-direction: row;
+  gap: 10px;
 }
-
-
-
-
-
-
-
-
-
-
-   
