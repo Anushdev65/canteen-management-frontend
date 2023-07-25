@@ -28,15 +28,17 @@ export const COLUMNS = [
     Header: "Role",
     accessor: "roles",
   },
+
   {
     Header: () => (
       <>
         <AddBusinessOutlinedIcon className="deposit-icon" />
-        Deposit
+        Balance
       </>
     ),
-    accessor: "deposit",
-    Cell: ({ row }) => {
+    accessor: "totalBalance",
+
+    Cell: ({ row, state, toggleRowSelected }) => {
       const [openModal, setOpenModal] = useState(false);
 
       const handleCloseModal = useCallback(() => {
@@ -44,22 +46,34 @@ export const COLUMNS = [
       }, []);
 
       const handleClick = () => {
+        if (!row.isSelected) {
+          toggleRowSelected(row.id);
+        }
         setOpenModal(true);
       };
+      const handleFundLoadSuccess = (updatedBalance) => {
+        row.original.totalBalance = updatedBalance;
 
-      if (row.isSelected) {
-        return (
-          <>
+        handleCloseModal();
+      };
+      return (
+        <>
+          {state.selectedRowIds[row.id] && !row.original.totalBalance && (
             <AddCircleOutlineOutlinedIcon onClick={handleClick} />
-            <DepositModel
-              open={openModal}
-              handleClose={handleCloseModal}
-              label={"Load Fund"}
-              row={row}
-            />
-          </>
-        );
-      }
+          )}
+          {!row.original.totalBalance !== undefined ? (
+            <span onClick={handleClick}>{row.original.totalBalance || ""}</span>
+          ) : null}
+          <DepositModel
+            open={openModal}
+            handleClose={handleCloseModal}
+            label={"Load Fund"}
+            row={row}
+            totalBalance={row.original.totalBalance}
+            onFundLoadSuccess={handleFundLoadSuccess}
+          />
+        </>
+      );
     },
   },
 ];

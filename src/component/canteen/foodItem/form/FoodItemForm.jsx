@@ -2,6 +2,7 @@ import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Grid from "@mui/material/Grid";
 import TextField from "@mui/material/TextField";
+
 import * as React from "react";
 import { useGetAllFoodCategoryQuery } from "../../../../services/api/canteen/foodcategory";
 import DropZoneComp from "../../../DropZoneComp";
@@ -14,6 +15,7 @@ import StyleIcon from "@mui/icons-material/Style";
 import DiscountIcon from "@mui/icons-material/Discount";
 import CurrencyRupeeIcon from "@mui/icons-material/CurrencyRupee";
 import "../../../../foodstyles/fooditem.css";
+import { TextareaAutosize } from "@mui/material";
 
 export const tags = [
   { label: "breakfast" },
@@ -113,7 +115,10 @@ export default function FoodItemForm({
                   <div className="description">
                     <DescriptionIcon className="Icon" />
                     <div className="text">
-                      <TextField
+                      <TextareaAutosize
+                        minRows={5}
+                        maxRows={10}
+                        multiline
                         error={Boolean(
                           touched.description && errors.description
                         )}
@@ -125,6 +130,7 @@ export default function FoodItemForm({
                         onChange={handleChange}
                         onBlur={handleBlur}
                         value={values.description}
+                        className="my-textarea"
                       />
                       <MUIError
                         touch={touched.description}
