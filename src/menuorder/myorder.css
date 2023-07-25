@@ -1,20 +1,19 @@
-.myorder{
-    background-color: rgb(245, 239, 232);
-    width:40%;
-    border-radius: 10px;
-    margin-left: 350px;
-    box-shadow: 7px 7px 3px 0 rgba(182, 184, 184, 0.7);
-        transition: box-shadow 0.3;
-        color: rgb(34, 34, 34);
-        padding: 20px;
+.myorder {
+  background-color: rgb(245, 239, 232);
+  width: 40%;
+  border-radius: 10px;
+  margin-left: 360px;
+  box-shadow: 7px 7px 3px 0 rgba(182, 184, 184, 0.7);
+  transition: box-shadow 0.3;
+  color: rgb(34, 34, 34);
+  padding: 20px;
 }
- .myorder:hover {
-     box-shadow: 10px 10px 6px 0 rgba(90, 90, 90, 0.7);
- }
-.myorder h2{
-    text-align: center;
+.myorder:hover {
+  box-shadow: 10px 10px 6px 0 rgba(90, 90, 90, 0.7);
 }
-.myorder #order-servebtn{
-    float: right;
+.myorder h2 {
+  text-align: center;
 }
-
+.myorder #order-servebtn {
+  float: right;
+}

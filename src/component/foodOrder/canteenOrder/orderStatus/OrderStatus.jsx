@@ -15,10 +15,11 @@ import {
   useLazyGetAllOrdersQuery,
   useServeOrderMutation,
 } from "../../../../services/api/foodOrder";
-import "./order.css";
+import "../../../../menuorder/order.css";
 import MUIToast from "../../../MUIToast";
 
 function OrderStatus({ user }) {
+  const [userIdCounter, setUserIdCounter] = useState(1);
   const [userState, setuserState] = useState("");
   const [showTable, setShowTable] = useState(true);
   const [buttonStatus, setButtonStatus] = useState("onProcess");
@@ -86,23 +87,25 @@ function OrderStatus({ user }) {
   const renderButton = (id) => {
     return (
       buttonStatus !== "expired" && (
-        <React.Fragment>
-          {buttonStatus === "onProcess" && (
-            <Button variant="contained" onClick={() => handleServe(id)}>
-              Serve
-            </Button>
-          )}
-          {buttonStatus === "served" && (
-            <Button variant="contained" onClick={() => handleDeliver(id)}>
-              Deliver
-            </Button>
-          )}
-          {(buttonStatus === "onProcess" || buttonStatus === "served") && (
-            <Button variant="contained" onClick={() => handleCancel(id)}>
-              Cancel
-            </Button>
-          )}
-        </React.Fragment>
+        <div className="order-button">
+          <React.Fragment>
+            {buttonStatus === "onProcess" && (
+              <Button variant="contained" onClick={() => handleServe(id)}>
+                Serve
+              </Button>
+            )}
+            {buttonStatus === "served" && (
+              <Button variant="contained" onClick={() => handleDeliver(id)}>
+                Deliver
+              </Button>
+            )}
+            {(buttonStatus === "onProcess" || buttonStatus === "served") && (
+              <Button variant="contained" onClick={() => handleCancel(id)}>
+                Cancel
+              </Button>
+            )}
+          </React.Fragment>
+        </div>
       )
     );
   };
@@ -111,8 +114,10 @@ function OrderStatus({ user }) {
     trigger();
     setShowTable(true);
   };
-
-  const renderData = () => {
+  const capitalizeFirstLetter = (str) => {
+    return str.charAt(0).toUpperCase() + str.slice(1);
+  };
+  const renderUserData = () => {
     let filteredData = [];
 
     if (buttonStatus === "onProcess") {
@@ -126,29 +131,35 @@ function OrderStatus({ user }) {
     }
 
     return filteredData.map((result) => (
-      <TableRow key={result._id}>
-        <TableCell>{result._id}</TableCell>
-        <TableCell>{result.user.firstName}</TableCell>
-        <TableCell>{result.food.name}</TableCell>
+      <TableRow id="item-row" key={result.user.userId || result.user._id}>
+        <TableCell className="item-row">{result.user.userId}</TableCell>
+        <TableCell className="item-row">
+          {capitalizeFirstLetter(result.user.firstName)}
+        </TableCell>
+        <TableCell className="item-row">
+          {capitalizeFirstLetter(result.food.name)}
+        </TableCell>
 
-        <TableCell>{renderButton(result._id)}</TableCell>
+        <TableCell className="item-row">{renderButton(result._id)}</TableCell>
       </TableRow>
     ));
   };
 
   return (
     <>
-      <div className="container">
+      <div className="todayorder-container">
         <div className="order">
           <h3>Today's Order</h3>
-          <Button onClick={handleAllUsers}>All users</Button>
+          <Button id="todayorder-btn" onClick={handleAllUsers}>
+            All users
+          </Button>
           <div>
             {user.map((user) => (
               <button
+                id="user-btn"
                 key={user._id}
                 variant="contained"
                 onClick={() => handleIdClicked(user._id)}
-                style={{ margin: "5px", padding: "10px", fontSize: "16px" }}
               >
                 {user.userId || user._id}
               </button>
@@ -157,7 +168,7 @@ function OrderStatus({ user }) {
         </div>
 
         <div className="section">
-          <Stack className="button" direction="row" spacing={2}>
+          <Stack className="todayorder-button" direction="row" spacing={2}>
             <Button
               variant="contained"
               onClick={() => handleButtonStatus("onProcess")}
@@ -187,15 +198,16 @@ function OrderStatus({ user }) {
             <TableContainer>
               <Table>
                 <TableHead>
-                  <TableRow>
-                    <TableCell>Customer ID</TableCell>
-                    <TableCell>Employee Name</TableCell>
-                    <TableCell>Item</TableCell>
+                  <TableRow id="tablerow">
+                    <TableCell className="tablerow">Customer ID</TableCell>
+                    <TableCell className="tablerow">Employee Name</TableCell>
+                    <TableCell className="tablerow">Item</TableCell>
 
-                    <TableCell>Actions</TableCell>
+                    <TableCell className="tablerow">Actions</TableCell>
                   </TableRow>
                 </TableHead>
-                <TableBody>{renderData()}</TableBody>
+                {/* <TableBody>{renderData()}</TableBody> */}
+                <TableBody>{renderUserData()}</TableBody>
               </Table>
             </TableContainer>
           )}

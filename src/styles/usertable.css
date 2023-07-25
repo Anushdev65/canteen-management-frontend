@@ -1,110 +1,105 @@
-@import url('https://fonts.googleapis.com/css2?family=Josefin+Sans&family=Roboto+Mono&display=swap&family=Didact+Gothic&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Josefin+Sans&family=Roboto+Mono&display=swap&family=Didact+Gothic&display=swap");
 
 .table-data {
-    border-collapse: collapse;
-    width: 100%; 
-    box-shadow: 7px 7px 3px 0 rgba(182, 184, 184, 0.7);
-      transition: box-shadow 0.3;
-  }
-.table-data:hover{
+  border-collapse: collapse;
+  width: 100%;
+  box-shadow: 7px 7px 3px 0 rgba(182, 184, 184, 0.7);
+  transition: box-shadow 0.3;
+}
+.table-data:hover {
   box-shadow: 10px 10px 6px 0 rgba(90, 90, 90, 0.7);
 }
-  .header{
-    background-color: rgb(218, 219, 219);
-    
-  }
-  .table-data td, .table-data th {
-    border: 1px solid #ddd;
-      padding: 8px;
-      
-  }
-  
-  .table-data tr:nth-child(even){
-    background-color: #f5f3f3;
-    
-  }
-  
-  .table-data tr:hover {
+.header {
+  background-color: rgb(218, 219, 219);
+}
+.table-data td,
+.table-data th {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+.table-data tr:nth-child(even) {
+  background-color: #f5f3f3;
+}
+
+.table-data tr:hover {
   background-color: #f3e6e6;
-  }
+}
 
- .table-data th, tfoot td{
-    padding-top: 12px;
-    padding-bottom: 12px; 
-     text-align: center;  
-   
-  } 
-  
-  /*DeleteIcon*/
-   #delete{
-    color:white;
-   background-color: rgb(165, 44, 165);
-   }
+.table-data th,
+tfoot td {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: center;
+}
 
-   #delete:hover{
-    background-color: red;
-   }
+/*DeleteIcon*/
+#delete {
+  color: white;
+  background-color: rgb(165, 44, 165);
+}
 
-   /*Edit*/
+#delete:hover {
+  background-color: red;
+}
 
-   #editIcon{
-    color: white;
-      background-color: rgb(165, 44, 165);
-   }
-   #editIcon:hover{
+/*Edit*/
+
+#editIcon {
+  color: white;
+  background-color: rgb(165, 44, 165);
+}
+#editIcon:hover {
   background-color: rgb(59, 207, 66);
-   }
+}
 
-   /*addIcon*/
-     #addIcon {
-       color: white;
-       background-color: rgb(165, 44, 165);
-     }
-  
-     #addIcon:hover {
-       background-color: rgb(59, 207, 66);
-     }
+/*addIcon*/
+#addIcon {
+  color: white;
+  background-color: rgb(165, 44, 165);
+}
 
-     /*visibityIcon*/
-     #visibityIcon{
-      color: white;
-      background-color: rgb(165, 44, 165);
-     }
+#addIcon:hover {
+  background-color: rgb(59, 207, 66);
+}
 
-     #visibityIcon:hover {
-       background-color: rgb(209, 230, 134);
-     }
+/*visibityIcon*/
+#visibityIcon {
+  color: white;
+  background-color: rgb(165, 44, 165);
+}
 
-  /*pegnation*/
-  .pegnation{
-    margin-top: 20px;
-      display: flex;
-      float: right;
-      flex-direction: row;
-      gap: 10px;
-  }
+#visibityIcon:hover {
+  background-color: rgb(209, 230, 134);
+}
 
-  /*header*/
-  .table-container .header{
-    font-family: 'Josefin Sans', sans-serif;
-    font-weight: bold;
-   text-align: end;
-    font-size: 17px;
+/*pegnation*/
+.pegnation {
+  margin-top: 20px;
+  display: flex;
+  float: right;
+  flex-direction: row;
+  gap: 10px;
+}
+
+/*header*/
+.table-container .header {
+  font-family: "Josefin Sans", sans-serif;
+  font-weight: bold;
+  text-align: end;
+  font-size: 17px;
   /* display: inline-block; */
-  /* vertical-align: middle; */ 
- padding-left:20px;
-  };
+  /* vertical-align: middle; */
+  padding-left: 20px;
+}
 
-  .table-container #table-body{
-    font-family: 'Didact Gothic', sans-serif;
-  }
-  /*Icon*/
-  .Icon{
-   position: relative;
-   top:5px;
-   right:6px;
-   color: rgb(114, 113, 113);
-  }
-  
-
-    
+.table-container #table-body {
+  font-family: "Didact Gothic", sans-serif;
+}
+/*Icon*/
+.Icon {
+  position: relative;
+  top: 5px;
+  right: 6px;
+  color: rgb(114, 113, 113);
+}

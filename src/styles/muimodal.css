@@ -1,15 +1,14 @@
-
-.dialogTitle{
-color:white;
-background-color: rgba(124, 53, 118, 0.9);
-transition: background-color 0.3s ease-in-out;
+.dialogTitle {
+  color: white;
+  background-color: rgba(124, 53, 118, 0.9);
+  transition: background-color 0.3s ease-in-out;
 }
 .dialogTitle.scrolled {
-    background-color: rgba(184, 122, 178, 0.9);
-    transition: background-color 0.2s linear;
-    backdrop-filter: blur(10px);
-} 
+  background-color: rgba(184, 122, 178, 0.9);
+  transition: background-color 0.2s linear;
+  backdrop-filter: blur(10px);
+}
 
-.custom-dialog{
-    background-color: rgb(236, 238, 238);
+.custom-dialog {
+  background-color: rgb(236, 238, 238);
 }
