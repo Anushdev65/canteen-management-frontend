@@ -13,6 +13,20 @@ export const foodCategoryNameSchema = Yup.object({
       }
     ),
 });
+// const categoryNameRegex = /^[a-z]{3,30}( [a-z]{3,30}){0,2}$/;
+// const numberRegex = /^[0-9]*$/;
+
+// export const foodCategoryNameSchema = Yup.object({
+//   name: Yup.string()
+//     .required("Food Name Required")
+//     .test(
+//       "categoryName-validation",
+//       "Category names must begin with a small letter and have a minimum of three characters.",
+//       function (value) {
+//         return categoryNameRegex.test(value);
+//       }
+//     ),
+// });
 export const foodItemSchema = Yup.object({
   name: Yup.string()
     .required("Food Name Required")
@@ -32,11 +46,11 @@ export const foodItemSchema = Yup.object({
 
   discountedRate: Yup.string().test(
     "discountedRate-validation",
-    "Rate must be a digit and less than or equal to the rate.",
+    "Rate must be less than or equal to the rate.",
     function (value) {
       const { rate } = this.parent;
       if (value && value.trim() !== "") {
-        return numberRegex.test(value) && parseFloat(value) < parseFloat(rate);
+        return numberRegex.test(value) && parseFloat(value) <= parseFloat(rate);
       }
       return true;
     }

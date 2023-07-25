@@ -35,6 +35,8 @@ import { useLogOutMutation } from "../services/api/admin/auth";
 import "../styles/navbar.css";
 import MUILoading from "./MUILoading";
 import MUIToast from "./MUIToast";
+// import MonetizationOnOutlinedIcon from "@mui/icons-material/MonetizationOnOutlined";
+
 const drawerWidth = 240;
 
 const navDataAdmin = [
@@ -238,6 +240,8 @@ export default function MUINavbar() {
 
   const dispatch = useDispatch();
 
+  const isStudent = myData?.roles?.includes("student");
+
   React.useEffect(() => {
     const myData = getUserInfo();
     if (myData?.user?._id) {
@@ -386,6 +390,36 @@ export default function MUINavbar() {
                   >
                     Deerwalk Food System
                   </Typography>
+                  {/* {isStudent && (
+                    <List>
+                      <ListItem disablePadding sx={{ display: "block" }}>
+                        <ListItemButton
+                          sx={{
+                            minHeight: 48,
+                            justifyContent: open ? "initial" : "center",
+                            px: 2.5,
+                          }}
+                        >
+                          <ListItemIcon
+                            sx={{
+                              minWidth: 0,
+                              mr: open ? 3 : "auto",
+                              justifyContent: "center",
+                              color: "rgb(148, 147, 147)",
+                            }}
+                          >
+                            <MonetizationOnOutlinedIcon />
+                          </ListItemIcon>
+                          <ListItemText
+                            primary={`Available Balance: ${
+                              myData?.totalBalance || 0
+                            }`}
+                            sx={{ opacity: open ? 1 : 0 }}
+                          />
+                        </ListItemButton>
+                      </ListItem>
+                    </List>
+                  )} */}
                   {myData && (
                     <img
                       src={`${myData?.profile}` || ""}

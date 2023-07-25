@@ -1,4 +1,3 @@
-
 .dropzone-container {
   margin-top: 25px;
   margin-right: 20px;
@@ -21,7 +20,6 @@
   display: flex;
   align-items: center;
   gap: 10px;
-
 }
 
 .description {
@@ -34,7 +32,6 @@
   display: flex;
   align-items: center;
   gap: 10px;
-
 }
 
 .category .MuiAutocomplete-root {
@@ -48,7 +45,6 @@
 .category .MuiAutocomplete-inputRoot[class*="MuiInput-root"] {
   width: 100%;
 }
-
 
 .tags {
   display: flex;
@@ -82,30 +78,28 @@
 
 .Icon {
   color: rgb(153, 153, 153);
-
 }
 
 .text {
   display: flex;
   flex-direction: column;
   width: 100%;
-  max-height: 50px;
-}
 
+
+}
 /*createitemfoo*/
 .food-item {
   margin-top: 20px;
 }
 .my-textarea {
- 
   padding: 10px;
   font-size: 18px;
-outline: none;
-border-radius: 5px;
+  outline: none;
+  border-radius: 5px;
 
   transition: border-color 0.3s ease;
 }
-.my-textarea:hover{
- border: 2px solid rgb(99, 87, 255);
-    border-color:  rgb(107, 97, 252);
+.my-textarea:hover {
+  border: 2px solid rgb(99, 87, 255);
+  border-color: rgb(107, 97, 252);
 }
