@@ -30,8 +30,10 @@ export const foodItemApi = createApi({
 
     getAllFoodItem: builder.query({
       query: (query) => {
+
+        
         return {
-          url: `/food?_page=${query?._page}&_brake=${query?._brake}&_sort=${query?._sort}`,
+          url: `/food?_page=${query?._page}&_brake=${query?._brake}&_sort=${query?._sort}&showTodayMenu=${query?.showTodayMenu||"false"}`,
           method: "GET",
         };
       },
