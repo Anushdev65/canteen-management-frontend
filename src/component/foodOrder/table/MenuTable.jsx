@@ -235,7 +235,7 @@ const MenuTable = () => {
       const matchingResults = foodItem?.data?.results
         .filter((result) => {
           // console.log(result);
-          return result.category._id === category._id;
+          return result.category?._id === category?._id;
         })
         .map((result) => {
           return {
@@ -313,12 +313,14 @@ const MenuTable = () => {
   const handleChange = (value, row) => {
     const rowIncluded =
       selectedItem.length > 0
-        ? selectedItem.filter((item) => item.foodItem._id === row.original._id)
+        ? selectedItem.filter(
+            (item) => item.foodItem?._id === row.original?._id
+          )
         : [];
 
     if (rowIncluded.length) {
       selectedItem.forEach((item) => {
-        if (item?.foodItem._id === row.original._id) item.quantity = value;
+        if (item?.foodItem?._id === row.original?._id) item.quantity = value;
       });
     } else if (!rowIncluded.length) {
       selectedItem.push({ foodItem: row.original, quantity: value });
